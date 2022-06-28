@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="example" tests="2" failures="0" time="2.0">
+  <testsuite name="Hello Automation">
+    <testcase classname="Hello Automation" name="Test Case One" time="1.00"/>
+    <testcase classname="Hello Automation" name="Test Case Two" time="1.00">
+      <failure type="Exception" message="Something unexpected happened"/>
+    </testcase>
+  </testsuite>
+</testsuites>
