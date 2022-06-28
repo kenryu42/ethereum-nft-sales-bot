@@ -1,0 +1,15 @@
+name: CI
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: testspace-com/setup-testspace@v1
+        with:
+          domain: ${{ github.repository_owner }}
+      - name: Push result to Testspace server
+        run: |
+          testspace "[automated results]results.xml"
+        if: always()
