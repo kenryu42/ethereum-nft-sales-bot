@@ -2,6 +2,9 @@
 
 NFT sales monitoring bot of the Ethereum blockchain. (ERC721, ERC1155)
 
+[![GitHub license](https://img.shields.io/github/license/kenryu42/ethereum-nft-sales-bot)](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/main/LICENSE)
+![GitHub branch checks state](https://img.shields.io/github/checks-status/kenryu42/ethereum-nft-sales-bot/main)
+
 ## Market Coverage
 
 - [Opensea](https://opensea.io/)
