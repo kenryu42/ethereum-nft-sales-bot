@@ -6,7 +6,7 @@ import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 
 // Toggle for debug / discord / twitter / GIF (for bundle or aggregator sales)
-const DISCORD_ENABLED = true;
+const DISCORD_ENABLED = false;
 const TWITTER_ENABLED = false;
 const GIF_ENABLED = true;
 

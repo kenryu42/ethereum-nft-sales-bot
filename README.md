@@ -41,7 +41,9 @@ NFT sales monitoring bot of the Ethereum blockchain. (ERC721, ERC1155)
 
 - Discord
 
-Notification is optional. You can turn it on or off in the configuration file. (`config/setup.js`)
+Notification is optional. You can turn it on or off in the configuration file.
+
+`config/setup.js` (Default is off).
 
 ## Twitter Guide
 
