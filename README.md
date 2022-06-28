@@ -8,20 +8,20 @@ NFT sales monitoring bot of the Ethereum blockchain. (ERC721, ERC1155)
 ## Market Coverage
 
 - [Opensea](https://opensea.io/)
-  <img src="https://pbs.twimg.com/profile_images/1533843334946508806/kleAruEh_400x400.png" width="11"/>
+  <img src="https://pbs.twimg.com/profile_images/1533843334946508806/kleAruEh_400x400.png" width="13"/>
   (Wyvren & Seaport)
 
 - [Looksrare](https://looksrare.org/)
-  <img src="https://pbs.twimg.com/profile_images/1493172984240308225/Nt6RFdmb_400x400.jpg" width="11"/>
+  <img src="https://pbs.twimg.com/profile_images/1493172984240308225/Nt6RFdmb_400x400.jpg" width="13"/>
 
 - [X2Y2](https://x2y2.io/)
-  <img src="https://pbs.twimg.com/profile_images/1482386069891198978/mMFwXNj8_400x400.jpg" width="11"/>
+  <img src="https://pbs.twimg.com/profile_images/1482386069891198978/mMFwXNj8_400x400.jpg" width="13"/>
 
 - [Gem](https://gem.xyz/)
-  <img src="https://pbs.twimg.com/profile_images/1469735318488293380/AuOdfwvH_400x400.jpg" width="11"/>
+  <img src="https://pbs.twimg.com/profile_images/1469735318488293380/AuOdfwvH_400x400.jpg" width="13"/>
 
 - [Genie](https://www.genie.xyz/)
-  <img src="https://pbs.twimg.com/profile_images/1486044157017788419/cqdhpZBX_400x400.png" width="11"/>
+  <img src="https://pbs.twimg.com/profile_images/1486044157017788419/cqdhpZBX_400x400.png" width="13"/>
 
 ## GIF Generator for Bundle Sale
 
