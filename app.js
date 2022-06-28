@@ -43,7 +43,6 @@ async function main() {
 	if (options.test) {
 		try {
 			const contractData = await getContractData();
-			// const contractName = contractData.name;
 			const tokenType = contractData.schema_name;
 			console.log(`Running test for tx: ${options.test}`);
 			await runApp(WEB3, options.test, CONTRACT_ADDRESS, tokenType);

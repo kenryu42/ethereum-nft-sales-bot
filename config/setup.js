@@ -21,6 +21,26 @@ const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY;
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
+const checkConfig = (config) => {
+	let configError = false;
+
+	for (const [key, value] of Object.entries(config)) {
+		if (!value) {
+			console.log(`Please make sure you enter a valid ${key} at (file:./.env)`);
+			configError = true;
+		}
+	}
+
+	return configError ? process.exit(1) : configError;
+};
+
+checkConfig({
+	CONTRACT_ADDRESS: CONTRACT_ADDRESS,
+	OPENSEA_API_KEY: OPENSEA_API_KEY,
+	ALCHEMY_API_KEY: ALCHEMY_API_KEY,
+	ETHERSCAN_API_KEY: ETHERSCAN_API_KEY
+});
+
 // Twitter api settings if enable (optional)
 const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
 const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET;

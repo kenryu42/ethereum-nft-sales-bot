@@ -5,10 +5,10 @@ import _ from 'lodash';
 import retry from 'async-retry';
 
 import {
+	OPENSEA_API_KEY,
 	ALCHEMY_API_KEY,
 	CONTRACT_ADDRESS,
-	ETHERSCAN_API_KEY,
-	OPENSEA_API_KEY
+	ETHERSCAN_API_KEY
 } from '../config/setup.js';
 
 const openseaNftApi = async (tokenId, contractAddress = CONTRACT_ADDRESS) => {
