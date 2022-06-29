@@ -3,6 +3,7 @@ import axios from 'axios';
 import { createGif, createNaImage, resizeImage } from '../utils/image.js';
 import { formatPrice, getReadableName } from '../utils/api.js';
 import {
+	TWITTER_ENABLED,
 	DISCORD_ENABLED,
 	CONTRACT_ADDRESS,
 	TWITTER_API_KEY,
@@ -12,14 +13,19 @@ import {
 	GIF_ENABLED
 } from '../config/setup.js';
 
-const client = new TwitterApi({
-	appKey: TWITTER_API_KEY,
-	appSecret: TWITTER_API_SECRET,
-	accessToken: TWITTER_ACCESS_TOKEN,
-	accessSecret: TWITTER_ACCESS_SECRET
-});
+let client;
+let rwClient;
 
-const rwClient = client.readWrite;
+if (TWITTER_ENABLED) {
+	client = new TwitterApi({
+		appKey: TWITTER_API_KEY,
+		appSecret: TWITTER_API_SECRET,
+		accessToken: TWITTER_ACCESS_TOKEN,
+		accessSecret: TWITTER_ACCESS_SECRET
+	});
+
+	rwClient = client.readWrite;
+}
 
 const tweet = async (tweetConfig) => {
 	const {
