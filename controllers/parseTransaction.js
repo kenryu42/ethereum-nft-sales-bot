@@ -12,11 +12,15 @@ import {
 
 function reducer(previous, current) {
 	const currency = currencies[current.token.toLowerCase()];
-	const result =
-		previous +
-		Number(ethers.utils.formatUnits(current.amount, currency.decimals));
+	if (currency !== undefined) {
+		const result =
+			previous +
+			Number(ethers.utils.formatUnits(current.amount, currency.decimals));
 
-	return result;
+		return result;
+	} else {
+		return previous;
+	}
 }
 async function parseTransaction(
 	web3,
