@@ -29,6 +29,8 @@ const openseaNftApi = async (tokenId, contractAddress = CONTRACT_ADDRESS) => {
 		} else {
 			console.error(error.message);
 		}
+
+		return null;
 	}
 };
 
@@ -39,6 +41,10 @@ const retryOnOpenseaNftApi = async (
 	const result = await retry(
 		async () => {
 			const res = await openseaNftApi(tokenId, contractAddress);
+
+			if (res === null) {
+				throw new Error('Might hitting rate limit, try again');
+			}
 
 			const data = _.get(res, 'data');
 
