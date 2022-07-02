@@ -16,14 +16,14 @@ const IMAGE_SIZE = {
 };
 
 // Twitter api settings if enable (optional)
-const TWITTER_ENABLED = false;
+const TWITTER_ENABLED = process.env.TWITTER_ENABLED;
 const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
 const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET;
 const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN;
 const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET;
 
 // Discord webhook settings if enable (optional)
-const DISCORD_ENABLED = false;
+const DISCORD_ENABLED = process.env.DISCORD_ENABLED;
 const WEBHOOK_1 = process.env.WEBHOOK_URL;
 const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== undefined);
 
