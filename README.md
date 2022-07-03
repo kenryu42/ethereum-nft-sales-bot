@@ -50,8 +50,6 @@ TWITTER_ENABLED=1
 DISCORD_ENABLED=1
 ```
 
-`config/setup.js` (Default is off).
-
 ## Twitter Guide
 
 1. Register Twitter developer account with Elevated access. [🔗 Link](https://developer.twitter.com/en/portal/petition/essential/basic-info)
