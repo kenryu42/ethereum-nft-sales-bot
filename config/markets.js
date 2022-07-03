@@ -87,7 +87,7 @@ const markets = {
 		site: 'https://opensea.io/assets/',
 		account_site: 'https://opensea.io/',
 		iconURL:
-			'https://pbs.twimg.com/profile_images/1507124730750406658/gZhU60h4_400x400.png',
+			'https://pbs.twimg.com/profile_images/1533843334946508806/kleAruEh_400x400.png',
 		logDecoder: [
 			{
 				type: 'bytes32',
