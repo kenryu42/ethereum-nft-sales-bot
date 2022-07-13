@@ -76,7 +76,7 @@ DISCORD_ENABLED=1
 
 ## Configuration
 
-> Create an `.env` file in the root directory of the project with the following contents:
+> Create an `.env` file in the root directory of the project with the content in `.env.example` file.
 
 ```
 CONTRACT_ADDRESS=
@@ -88,6 +88,8 @@ TWITTER_API_SECRET=
 TWITTER_ACCESS_TOKEN=
 TWITTER_ACCESS_SECRET=
 WEBHOOK_URL=
+TWITTER_ENABLED=
+DISCORD_ENABLED=
 ```
 
 **Do not commit/include your .env file in your repository.**
