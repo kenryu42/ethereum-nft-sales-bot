@@ -8,7 +8,7 @@ NFT sales monitoring bot of the Ethereum blockchain. (ERC721, ERC1155)
 ## Market Coverage
 
 - [Opensea](https://opensea.io/)
-  <img src="https://pbs.twimg.com/profile_images/1533843334946508806/kleAruEh_400x400.png" width="13"/>
+  <img src="https://pbs.twimg.com/profile_images/1544105652330631168/ZuvjfGkT_400x400.png" width="13"/>
   (Wyvren & Seaport)
 
 - [Looksrare](https://looksrare.org/)
