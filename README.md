@@ -124,6 +124,18 @@ To test a certain transaction for debugging purposes, run the following command:
 node app.js -t <transaction hash>
 ```
 
+## Heroku
+
+- Register a [Heroku](https://heroku.com/) account & create a new app then set the project as a remote branch of your git repo (see [Heroku](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) [Remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote))
+- In the setting menu of your app, you can find the **Config vars**, after pressing **Reveal Config Vars** you can set them one by one.
+- Now the application is ready to be deployed via pushing it to the Heroku remote (see [Heroku Remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) if not sure how)
+- Make sure to use worker dynos not web dynos - it can be set via the Heroku CLI.
+
+```
+heroku ps:scale web=0
+heroku ps:scale worker=1
+```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
