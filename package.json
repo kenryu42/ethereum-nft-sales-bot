@@ -1,42 +1,42 @@
 {
-  "name": "ethereum-nft-sales-bot",
-  "version": "1.0.0",
-  "description": "An ethereum NFT sales monitoring bot.",
-  "main": "app.js",
-  "type": "module",
-  "scripts": {
-    "format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
-    "lint": "eslint '**/*.{js,jsx,ts,tsx}' --fix",
-    "fix": "npm run format && npm run lint",
-    "unit": "npx mocha test/unit --timeout 60000",
-    "integration": "npx mocha test/integration --timeout 90000",
-    "test": "npm run unit && npm run integration"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kenryu42/ethereum-nft-sales-bot.git"
-  },
-  "author": "Kenryu (@kenryu42)",
-  "license": "MIT",
-  "dependencies": {
-    "@alch/alchemy-web3": "^1.1.9",
-    "async-retry": "^1.3.3",
-    "axios": "^0.24.0",
-    "commander": "^9.3.0",
-    "discord.js": "^13.7.0",
-    "ethers": "^5.5.4",
-    "jimp-compact": "^0.16.1-2",
-    "lodash": "^4.17.21",
-    "make-a-gif": "^4.1.2",
-    "twitter-api-v2": "^1.12.2"
-  },
-  "devDependencies": {
-    "chai": "^4.3.6",
-    "dotenv": "^16.0.0",
-    "eslint": "^8.18.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "mocha": "^10.0.0",
-    "prettier": "^2.7.1"
-  }
+    "name": "ethereum-nft-sales-bot",
+    "version": "1.0.0",
+    "description": "An ethereum NFT sales monitoring bot.",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
+        "lint": "eslint '**/*.{js,jsx,ts,tsx}' --fix",
+        "fix": "npm run format && npm run lint",
+        "unit": "npx mocha test/unit --timeout 60000",
+        "integration": "npx mocha test/integration --timeout 120000",
+        "test": "npm run unit && npm run integration"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kenryu42/ethereum-nft-sales-bot.git"
+    },
+    "author": "Kenryu (@kenryu42)",
+    "license": "MIT",
+    "dependencies": {
+        "@alch/alchemy-web3": "^1.1.9",
+        "async-retry": "^1.3.3",
+        "axios": "^0.24.0",
+        "commander": "^9.3.0",
+        "discord.js": "^13.7.0",
+        "dotenv": "^16.0.1",
+        "ethers": "^5.5.4",
+        "jimp-compact": "^0.16.1-2",
+        "lodash": "^4.17.21",
+        "make-a-gif": "^4.1.2",
+        "twitter-api-v2": "^1.12.2"
+    },
+    "devDependencies": {
+        "chai": "^4.3.6",
+        "eslint": "^8.18.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "mocha": "^10.0.0",
+        "prettier": "^2.7.1"
+    }
 }
