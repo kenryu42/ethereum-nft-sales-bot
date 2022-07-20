@@ -6,7 +6,7 @@
 <div align="center">
 
   <br />
-  <img src="https://i.postimg.cc/y8hQjDNK/eth-nft-sales-bot-01.jpg" alt="Logo" width="800">
+  <img src="https://i.postimg.cc/bwfk6tFy/nft-sales-bot-banner-002.jpg" alt="Logo" width="800">
 
   <h3 align="center">Ethereum-NFT-Sales-Bot</h3>
 
@@ -68,7 +68,7 @@
 ## GIF Generator
 
 <img src="https://media2.giphy.com/media/sjKGGbK6CnM3AnJZ25/giphy.gif?cid=790b76110714c67c573d4cc5887b69aa0074c0b663666fbf&rid=giphy.gif&ct=g" />
-<img src="https://media3.giphy.com/media/jeoa96YwKzoyhaTAy1/giphy.gif?cid=790b761194e5a58a96f6108bfefe498617d64390d72ad2bb&rid=giphy.gif&ct=g" />
+<img src="https://media0.giphy.com/media/ajlODzWh2qCuypxT1q/giphy.gif?cid=790b76114a9ed6d608c47cabda6b83300ec036eb7e4c602b&rid=giphy.gif&ct=g" />
 
 <br/>
 <p align="right">(<a href="#top">back to top</a>)</p>
