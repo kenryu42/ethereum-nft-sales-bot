@@ -57,8 +57,11 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
 
         frames.push({ src: buffer, duration: GIF_DURATION });
 
+        let i = 0;
         for (const asset of swap[address].receivedAssets) {
             const tokenData = await getTokenData(asset.tokenId, asset.contractAddress);
+            const tokenName = tokenData.name || `${tokenData.symbol} #${asset.tokenId}`;
+            swap[address].receivedAssets[i].name = tokenName;
             const image = !tokenData.image
                 ? await createNaImage()
                 : await Jimp.read(tokenData.image);
@@ -71,10 +74,11 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
             const buffer = await addTextToImage(image, text, -20, 20, false, true);
 
             frames.push({ src: buffer, duration: GIF_DURATION });
+            i++;
         }
-        if (parseFloat(swap[address].receivedValue) > 0) {
+        if (parseFloat(swap[address].receivedAmount) > 0) {
             const image = new Jimp(width, height, 'white');
-            const buffer = await addTextToImage(image, `${swap[address].receivedValue} ETH`, 0, 0);
+            const buffer = await addTextToImage(image, `${swap[address].receivedAmount} ETH`, 0, 0);
 
             frames.push({ src: buffer, duration: GIF_DURATION });
         } else if (!swap[address].receivedAssets) {
