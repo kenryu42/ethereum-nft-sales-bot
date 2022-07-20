@@ -19,8 +19,8 @@ describe('NFT Trader Integration Test', function () {
                 parseResult;
             const makerReceivedAssets = swap[addressMaker].receivedAssets;
             const takerReceivedAssets = swap[addressTaker].receivedAssets;
-            const makerReceivedEth = swap[addressMaker].receivedValue;
-            const takerReceivedEth = swap[addressTaker].receivedValue;
+            const makerReceivedEth = swap[addressMaker].receivedAmount;
+            const takerReceivedEth = swap[addressTaker].receivedAmount;
             const oneIds = ['8297', '4315', '85317'];
             const twoIds = ['3429'];
 
@@ -59,8 +59,8 @@ describe('NFT Trader Integration Test', function () {
                 parseResult;
             const makerReceivedAssets = swap[addressMaker].receivedAssets;
             const takerReceivedAssets = swap[addressTaker].receivedAssets;
-            const makerReceivedEth = swap[addressMaker].receivedValue;
-            const takerReceivedEth = swap[addressTaker].receivedValue;
+            const makerReceivedEth = swap[addressMaker].receivedAmount;
+            const takerReceivedEth = swap[addressTaker].receivedAmount;
             const oneIds = ['1590'];
             const oneQuantities = ['1'];
             const twoIds = ['1715'];
@@ -104,8 +104,8 @@ describe('NFT Trader Integration Test', function () {
                 parseResult;
             const makerReceivedAssets = swap[addressMaker].receivedAssets;
             const takerReceivedAssets = swap[addressTaker].receivedAssets;
-            const makerReceivedEth = swap[addressMaker].receivedValue;
-            const takerReceivedEth = swap[addressTaker].receivedValue;
+            const makerReceivedEth = swap[addressMaker].receivedAmount;
+            const takerReceivedEth = swap[addressTaker].receivedAmount;
             const oneIds = ['16510'];
             const oneTokenTypes = ['ERC721'];
             const oneQuantities = [];
