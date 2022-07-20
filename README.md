@@ -1,7 +1,8 @@
 <div id="top"></div>
 
 [![GitHub license](https://img.shields.io/github/license/kenryu42/ethereum-nft-sales-bot)](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/main/LICENSE)
-![GitHub branch checks state](https://img.shields.io/github/checks-status/kenryu42/ethereum-nft-sales-bot/main)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kenryu42/ethereum-nft-sales-bot/run-tests)
+![GitHub issues](https://img.shields.io/github/issues-raw/kenryu42/ethereum-nft-sales-bot)
 
 <div align="center">
 
