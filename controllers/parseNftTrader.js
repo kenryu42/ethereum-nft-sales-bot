@@ -4,6 +4,9 @@ import { getReadableName } from '../utils/api.js';
 
 const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) => {
     const swapStatus = web3.eth.abi.decodeParameter('uint8', log.topics[3]);
+    // if swap status is not 1 (closed), then skip parsing.
+    // this check might be unnecessary for the new nft trader contract
+    // because there is no transfer event for swap status other than 1
     if (swapStatus !== '1') return [null, null];
 
     const swapId = decodedLogData._swapId;
@@ -16,10 +19,7 @@ const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) =
     const addressTaker = swapIntent.addressTaker.toLowerCase();
     const valueMaker = swapIntent.valueMaker;
     const valueTaker = swapIntent.valueTaker;
-    const flagFlatFee = swapIntent.flagFlatFee;
     const flagRoyalties = swapIntent.flagRoyalties;
-    const flatFeeMaker = flagFlatFee ? swapIntent.flatFeeMaker : '0';
-    const flatFeeTaker = flagFlatFee ? swapIntent.flatFeeTaker : '0';
     const royaltiesMaker = flagRoyalties ? swapIntent.royaltiesMaker : '0';
     const royaltiesTaker = flagRoyalties ? swapIntent.royaltiesTaker : '0';
     const platformFeeMaker =
@@ -29,6 +29,7 @@ const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) =
     const maker = await getReadableName(addressMaker);
     const taker = await getReadableName(addressTaker);
 
+    swap.id = swapId;
     swap[addressMaker]
         ? (swap[addressMaker].name = maker)
         : (swap[addressMaker] = { name: maker, receivedAssets: [] });
@@ -38,19 +39,23 @@ const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) =
     swap[addressMaker] = {
         ...swap[addressMaker],
         ...{
-            receivedValue: ethers.utils.formatEther(
-                BigInt(valueTaker - flatFeeTaker - royaltiesTaker - platformFeeTaker)
+            receivedAmount: ethers.utils.formatEther(
+                BigInt(valueTaker - royaltiesTaker - platformFeeTaker)
             )
         }
     };
     swap[addressTaker] = {
         ...swap[addressTaker],
         ...{
-            receivedValue: ethers.utils.formatEther(
-                BigInt(valueMaker - flatFeeMaker - royaltiesMaker - platformFeeMaker)
+            receivedAmount: ethers.utils.formatEther(
+                BigInt(valueMaker - royaltiesMaker - platformFeeMaker)
             )
         }
     };
+    swap[addressMaker].spentAssets = [...swap[addressTaker].receivedAssets];
+    swap[addressMaker].spentAmount = ethers.utils.formatEther(valueMaker);
+    swap[addressTaker].spentAssets = [...swap[addressMaker].receivedAssets];
+    swap[addressTaker].spentAmount = ethers.utils.formatEther(valueTaker);
 
     return [addressMaker, addressTaker];
 };
