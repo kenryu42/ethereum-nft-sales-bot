@@ -20,17 +20,34 @@ const runApp = async (provider, transactionHash, contractAddress, tokenType) => 
         } = txConfig;
 
         if (isSwap) {
-            console.log(`${tokenData.collectionName} swap on NFT Trader`);
-            console.log(`1. ${swap[addressMaker].name}`);
-            console.log(`Received Assets: ${JSON.stringify(swap[addressMaker].receivedAssets)}`);
-            console.log(`Received Eth: ${swap[addressMaker].receivedValue}`);
-            console.log(`2. ${swap[addressTaker].name}`);
-            console.log(`Received Assets: ${JSON.stringify(swap[addressTaker].receivedAssets)}`);
-            console.log(`Received Eth: ${swap[addressTaker].receivedValue}`);
+            console.log(
+                '--------------------------------------------------------------------------------'
+            );
+            console.log(`${tokenData.collectionName} Swap on NFTTrader.io #${swap.id}`);
+            console.log(`Maker: ${swap[addressMaker].name}`);
+            console.log(`Spent Assets: ${JSON.stringify(swap[addressMaker].spentAssets, 0, 2)}`);
+            console.log(`Spent Value: ${swap[addressMaker].spentAmount} ETH`);
+            console.log(
+                `Received Assets: ${JSON.stringify(swap[addressMaker].receivedAssets, 0, 2)}`
+            );
+            console.log(`Received Value: ${swap[addressMaker].receivedAmount} ETH`);
+            console.log('🔄');
+            console.log(`Taker: ${swap[addressTaker].name}`);
+            console.log(`Spent Assets: ${JSON.stringify(swap[addressTaker].spentAssets, 0, 2)}`);
+            console.log(`Spent Value: ${swap[addressTaker].spentAmount} ETH`);
+            console.log(
+                `Received Assets: ${JSON.stringify(swap[addressTaker].receivedAssets, 0, 2)}`
+            );
+            console.log(`Received Value: ${swap[addressTaker].receivedAmount} ETH`);
+            console.log(`\nhttps://etherscan.io/tx/${transactionHash}`);
+            console.log(
+                '--------------------------------------------------------------------------------'
+            );
         } else {
             console.log(
-                `${quantity} ${tokenData.collectionName} sold on ${market.name} for ${totalPrice} ${currency.name}\n`
+                `${quantity} ${tokenData.collectionName} sold on ${market.name} for ${totalPrice} ${currency.name}`
             );
+            console.log(`https://etherscan.io/tx/${transactionHash}\n`);
         }
     }
 
