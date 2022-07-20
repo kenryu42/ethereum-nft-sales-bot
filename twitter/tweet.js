@@ -72,12 +72,12 @@ https://etherscan.io/tx/${tx.transactionHash}
 			`;
     } else if (tx.isSwap) {
         tweetContent = `
-${tx.tokenData.collectionName} Swap on NFTTrader.io
+New ${tx.tokenData.collectionName} Swap on NFTTrader.io
 
-【 Address 1: ${tx.swap[tx.addressMaker].name} 】
+【 Maker: ${tx.swap[tx.addressMaker].name} 】
 ${tx.market.accountPage}${tx.addressMaker}
 			
-【 Address 2: ${tx.swap[tx.addressTaker].name} 】
+【 Taker: ${tx.swap[tx.addressTaker].name} 】
 ${tx.market.accountPage}${tx.addressTaker}
 			
 【 Link 】
