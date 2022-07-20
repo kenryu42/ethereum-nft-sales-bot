@@ -2,7 +2,7 @@ import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, CONTRACT_ADDRESS, GIF_ENABLED } from '../config/setup.js';
 import { formatPrice, getReadableName } from '../utils/api.js';
 import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
-import { formatBundleField, formatSweepField } from './formatField.js';
+import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
 
 const sendEmbedMessage = async (tx) => {
     let file;
@@ -10,27 +10,23 @@ const sendEmbedMessage = async (tx) => {
     const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
 
     if (tx.isSwap) {
+        const gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
+        embed.addField(
+            'Maker',
+            `[${tx.swap[tx.addressMaker].name}](${tx.market.accountPage}${tx.addressMaker})`
+        );
+        await formatSwapField(tx.swap, tx.addressMaker, embed);
+        embed.addField(
+            'Taker',
+            `[${tx.swap[tx.addressTaker].name}](${tx.market.accountPage}${tx.addressTaker})`
+        );
+        await formatSwapField(tx.swap, tx.addressTaker, embed);
         embed
             .setTitle(`New ${tx.tokenData.collectionName} Swap on NFTTrader.io`)
             .setURL(`${tx.market.site}${tx.transactionHash}`)
-            .addFields([
-                {
-                    name: 'Maker',
-                    value: `[${tx.swap[tx.addressMaker].name}](${tx.market.accountPage}${
-                        tx.addressMaker
-                    })`
-                },
-                {
-                    name: 'Taker',
-                    value: `[${tx.swap[tx.addressTaker].name}](${tx.market.accountPage}${
-                        tx.addressTaker
-                    })`
-                }
-            ])
             .setFooter({ text: tx.market.name, iconURL: tx.market.iconURL })
             .setColor(tx.market.color)
             .setTimestamp();
-        const gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
         tx.gifImage = gifImage;
         file = new MessageAttachment(gifImage, 'image.gif');
         embed.setImage('attachment://image.gif');

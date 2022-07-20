@@ -1,4 +1,5 @@
 import { CONTRACT_ADDRESS } from '../config/setup.js';
+import { getEthUsdPrice } from '../utils/api.js';
 
 const formatSweepField = (tokens, prices, currency, marketList, embed) => {
     const customField = {};
@@ -48,4 +49,28 @@ const formatBundleField = (tokens, market, embed) => {
     embed.addField('Token Id', values);
 };
 
-export { formatSweepField, formatBundleField };
+const formatSwapField = async (swap, address, embed) => {
+    let values = '';
+    const sep = '\n';
+    for (const asset of swap[address].spentAssets) {
+        const value =
+            `[${asset.name}](https://opensea.io/assets/ethereum/${asset.contractAddress}/${asset.tokenId})` +
+            sep;
+        if ((values + value).length > 1024) {
+            embed.addField('Spent Assets', values);
+            values = '';
+        }
+        values += value;
+    }
+    values = values || '`-`';
+    embed.addField('Spent Assets', values);
+    const usdValue = await getEthUsdPrice(swap[address].spentAmount);
+    const usdPrice = usdValue !== '0' ? ` ($ ${usdValue})` : '';
+    const spentAmount =
+        swap[address].spentAmount !== '0.0'
+            ? `\`${swap[address].spentAmount} ETH${usdPrice}\``
+            : '`-`';
+    embed.addField('Spent Amount', spentAmount);
+};
+
+export { formatSweepField, formatBundleField, formatSwapField };
