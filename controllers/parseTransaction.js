@@ -32,9 +32,9 @@ async function parseTransaction(web3, transactionHash, contractAddress, tokenTyp
     let toAddr;
     let tokenId;
     let fromAddr;
+    let tokens = [];
     let addressMaker;
     let addressTaker;
-    let tokens = [];
     let totalPrice = 0;
     let currency = {
         name: 'ETH',
@@ -123,9 +123,11 @@ async function parseTransaction(web3, transactionHash, contractAddress, tokenTyp
         : await getTokenData(tokenId, contractAddress);
     const tokenName = tokenData.name || `${tokenData.symbol} #${tokenId}`;
     const sweeper = isSweep ? await getReadableName(fromAddr) : null;
-    const usdPrice = !isSwap ? await getEthUsdPrice(totalPrice) : null;
-    const ethUsdValue =
-        currency.name === 'ETH' || currency.name === 'WETH' ? `($ ${usdPrice})` : '';
+    const usdPrice =
+        !isSwap && (currency.name === 'ETH' || currency.name === 'WETH')
+            ? await getEthUsdPrice(totalPrice)
+            : null;
+    const ethUsdValue = usdPrice ? `($ ${usdPrice})` : '';
 
     return {
         market: market,
