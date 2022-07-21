@@ -86,7 +86,7 @@ ${tx.market.site}${tx.transactionHash}
     } else {
         const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
         const field =
-            tx.tokenType !== 'ERC1155' && tx.quantity > 1
+            tx.tokenType === 'ERC721' && tx.quantity > 1
                 ? `
 【 Sweeper: ${tx.to} 】
 ${tx.market.accountPage}${tx.toAddr}${isX2Y2}

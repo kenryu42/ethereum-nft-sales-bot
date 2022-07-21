@@ -7,7 +7,6 @@ import { formatBundleField, formatSweepField, formatSwapField } from './formatFi
 const sendEmbedMessage = async (tx) => {
     let file;
     const embed = new MessageEmbed();
-    const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
 
     if (tx.isSwap) {
         const gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
@@ -31,8 +30,10 @@ const sendEmbedMessage = async (tx) => {
         file = new MessageAttachment(gifImage, 'image.gif');
         embed.setImage('attachment://image.gif');
     } else {
+        const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
+
         embed
-            .setURL(`${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokens[0]}`)
+            .setURL(`${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokenId}`)
             .addField(
                 priceTitle,
                 `\`${formatPrice(tx.totalPrice)} ${tx.currency.name} ${tx.ethUsdValue}\``,
@@ -44,9 +45,7 @@ const sendEmbedMessage = async (tx) => {
 
         if (tx.quantity > 1) {
             embed.setTitle(
-                `${tx.quantity} ${tx.tokenData.collectionName} ${
-                    tx.isSweep ? 'SWEPT! 🧹' : 'SOLD!'
-                }`
+                `${tx.quantity} ${tx.tokenData.collectionName} ${tx.isSweep ? 'SWEPT!' : 'SOLD!'}`
             );
         } else {
             embed.setTitle(`${tx.tokenName} SOLD!`);
@@ -88,20 +87,24 @@ const sendEmbedMessage = async (tx) => {
                 embed.addField('Quantity', `\`${tx.quantity}\``, false);
             if (tx.tokenType === 'ERC721' && tx.quantity > 1) {
                 formatBundleField(tx.tokens, tx.market, embed);
-            }
-            if (tx.tokenType !== 'ERC1155' && tx.quantity === 1) {
                 embed.addField(
-                    'From',
-                    `[${tx.from}](${tx.market.accountPage}${tx.fromAddr}${isX2Y2})`,
+                    'Sweeper',
+                    `[${tx.to}](${tx.market.accountPage}${tx.toAddr}${isX2Y2})`,
                     true
                 );
+            } else {
+                embed
+                    .addField(
+                        'From',
+                        `[${tx.from}](${tx.market.accountPage}${tx.fromAddr}${isX2Y2})`,
+                        true
+                    )
+                    .addField(
+                        'To',
+                        `[${tx.to}](${tx.market.accountPage}${tx.toAddr}${isX2Y2})`,
+                        true
+                    );
             }
-            const toField = tx.tokenType !== 'ERC1155' && tx.quantity > 1 ? 'Sweeper' : 'To';
-            embed.addField(
-                toField,
-                `[${tx.to}](${tx.market.accountPage}${tx.toAddr}${isX2Y2})`,
-                true
-            );
         }
     }
 
