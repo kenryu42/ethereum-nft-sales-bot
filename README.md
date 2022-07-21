@@ -12,7 +12,7 @@
   <h3 align="center">Ethereum-NFT-Sales-Bot</h3>
 
   <p align="center">
-    NFT sales monitoring bot of the Ethereum blockchain. (ERC721, ERC1155)
+    NFT sales monitoring bot for the Ethereum blockchain. (ERC721, ERC1155)
   </p>
   <br />
   <br />
@@ -23,6 +23,7 @@
   <ol>
     <li><a href="#market-coverage">Market Coverage</a></li>
     <li><a href="#gif-generator">GIF Generator</a></li>
+    <li><a href="#live-demo">Live Demo</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -51,7 +52,7 @@
 
 ## Market Coverage
 
--   [Opensea](https://opensea.io/)(Wyvren & Seaport)
+-   [Opensea](https://opensea.io/) (Wyvren & Seaport)
 
 -   [Looksrare](https://looksrare.org/)
 
@@ -68,10 +69,24 @@
 
 ## GIF Generator
 
-<img src="https://media2.giphy.com/media/sjKGGbK6CnM3AnJZ25/giphy.gif?cid=790b76110714c67c573d4cc5887b69aa0074c0b663666fbf&rid=giphy.gif&ct=g" />
-<img src="https://media0.giphy.com/media/ajlODzWh2qCuypxT1q/giphy.gif?cid=790b76114a9ed6d608c47cabda6b83300ec036eb7e4c602b&rid=giphy.gif&ct=g" />
+![gif_1](https://media2.giphy.com/media/sjKGGbK6CnM3AnJZ25/giphy.gif?cid=790b76110714c67c573d4cc5887b69aa0074c0b663666fbf&rid=giphy.gif&ct=g)
+![gif_2](https://media0.giphy.com/media/ajlODzWh2qCuypxT1q/giphy.gif?cid=790b76114a9ed6d608c47cabda6b83300ec036eb7e4c602b&rid=giphy.gif&ct=g)
 
 <br/>
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Live Demo
+
+### Twitter
+
+-   [Azuki Sales](https://twitter.com/azukisalebot)
+-   [BAYC Sales](https://twitter.com/bayc_sales)
+-   [Murakami.Flowers Sales](https://twitter.com/mftm_sales)
+
+### Discord
+
+-   [Live Demo Discord Server](https://discord.gg/GjkH7qdP8X)
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Getting Started
@@ -94,20 +109,27 @@ npm install
 
 ## Configuration
 
-> Create an `.env` file in the root directory of the project with the content in `.env.example` file.
+> Create an `.env` file in the root directory of the project with the following contents:
+
+**Mandatory**
 
 ```
 CONTRACT_ADDRESS=
 OPENSEA_API_KEY=
 ALCHEMY_API_KEY=
 ETHERSCAN_API_KEY=
+```
+
+**Optional**
+
+```
+TWITTER_ENABLED=
 TWITTER_API_KEY=
 TWITTER_API_SECRET=
 TWITTER_ACCESS_TOKEN=
 TWITTER_ACCESS_SECRET=
-WEBHOOK_URL=
-TWITTER_ENABLED=
 DISCORD_ENABLED=
+WEBHOOK_URL=
 ```
 
 **Do not commit/include your .env file in your repository.**
@@ -148,7 +170,7 @@ node app.js -t <transaction-hash>
 
 -   <a href="#discord">Discord</a>
 
-Notification is optional. You can turn it on in the `./.env` file.
+Notification is optional. You can turn it on in the `./.env` file by setting the `TWITTER_ENABLED` or `DISCORD_ENABLED` value to `1`.
 
 For example:
 
@@ -201,6 +223,7 @@ DISCORD_ENABLED=1
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Please make sure to update tests as appropriate.
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
