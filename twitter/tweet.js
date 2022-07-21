@@ -85,17 +85,29 @@ ${tx.market.site}${tx.transactionHash}
             `;
     } else {
         const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
+        const field =
+            tx.tokenType !== 'ERC1155' && tx.quantity > 1
+                ? `
+【 Sweeper: ${tx.to} 】
+${tx.market.accountPage}${tx.toAddr}${isX2Y2}
+        `
+                : `
+【 From: ${tx.from} 】
+${tx.market.accountPage}${tx.fromAddr}${isX2Y2}
+                    
+【 To: ${tx.to} 】
+${tx.market.accountPage}${tx.toAddr}${isX2Y2}
+        `;
+
         tweetContent = `
-${tx.tokenName} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue}
+${
+    tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenName
+} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue}
 
 【 Marketplace 】
 ${tx.market.name}
 			
-【 From: ${tx.from} 】
-${tx.market.accountPage}${tx.fromAddr}${isX2Y2}
-			
-【 To: ${tx.to} 】
-${tx.market.accountPage}${tx.toAddr}${isX2Y2}
+${field}
 			
 【 Link 】
 ${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokens[0]}	

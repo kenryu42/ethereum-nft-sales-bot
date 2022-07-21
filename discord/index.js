@@ -1,7 +1,7 @@
+import { formatPrice } from '../utils/api.js';
+import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, CONTRACT_ADDRESS, GIF_ENABLED } from '../config/setup.js';
-import { formatPrice, getReadableName } from '../utils/api.js';
-import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
 
 const sendEmbedMessage = async (tx) => {
@@ -82,30 +82,26 @@ const sendEmbedMessage = async (tx) => {
             embed.addFields(fields);
             formatSweepField(tx.tokens, tx.prices, tx.currency, tx.marketList, embed);
         } else {
-            const from = await getReadableName(tx.fromAddr);
-            const to = await getReadableName(tx.toAddr);
             const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
-            const fields = [
-                {
-                    name: 'From',
-                    value: `[${from}](${tx.market.accountPage}${tx.fromAddr}${isX2Y2})`,
-                    inline: true
-                },
-                {
-                    name: 'To',
-                    value: `[${to}](${tx.market.accountPage}${tx.toAddr}${isX2Y2})`,
-                    inline: true
-                }
-            ];
 
             if (tx.tokenType === 'ERC1155' || tx.quantity > 1)
                 embed.addField('Quantity', `\`${tx.quantity}\``, false);
             if (tx.tokenType === 'ERC721' && tx.quantity > 1) {
                 formatBundleField(tx.tokens, tx.market, embed);
             }
-            embed.addFields(fields);
-            tx.from = from;
-            tx.to = to;
+            if (tx.tokenType !== 'ERC1155' && tx.quantity === 1) {
+                embed.addField(
+                    'From',
+                    `[${tx.from}](${tx.market.accountPage}${tx.fromAddr}${isX2Y2})`,
+                    true
+                );
+            }
+            const toField = tx.tokenType !== 'ERC1155' && tx.quantity > 1 ? 'Sweeper' : 'To';
+            embed.addField(
+                toField,
+                `[${tx.to}](${tx.market.accountPage}${tx.toAddr}${isX2Y2})`,
+                true
+            );
         }
     }
 
