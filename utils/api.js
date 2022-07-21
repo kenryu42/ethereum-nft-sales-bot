@@ -181,7 +181,10 @@ https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API
 };
 
 const formatPrice = (price) => {
-    let formatedPrice = price.toFixed(3);
+    let formatedPrice = price.toLocaleString('en-US', {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3
+    });
     const lastChar = formatedPrice.length - 1;
 
     formatedPrice = formatedPrice[lastChar] === '0' ? formatedPrice.slice(0, -1) : formatedPrice;
