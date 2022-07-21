@@ -114,9 +114,11 @@ describe('Unit Test', function () {
         it('should return price with 3 decimal', function () {
             const priceOne = formatPrice(0.42444445);
             const priceTwo = formatPrice(0.611999999999999);
+            const priceThree = formatPrice(15000000.12499);
 
             assert.strictEqual(priceOne, '0.424');
             assert.strictEqual(priceTwo, '0.612');
+            assert.strictEqual(priceThree, '15,000,000.125');
         });
     });
 });
