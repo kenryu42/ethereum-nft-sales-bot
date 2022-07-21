@@ -60,7 +60,7 @@ const tweet = async (tx) => {
 
     if (tx.isSweep) {
         tweetContent = `
-${tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenData.name} \
+${tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenName} \
 swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
 
@@ -86,7 +86,7 @@ ${tx.market.site}${tx.transactionHash}
     } else {
         const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
         tweetContent = `
-${tx.tokenData.name} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue}
+${tx.tokenName} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue}
 
 【 Marketplace 】
 ${tx.market.name}

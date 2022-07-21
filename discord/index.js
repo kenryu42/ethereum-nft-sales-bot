@@ -49,7 +49,7 @@ const sendEmbedMessage = async (tx) => {
                 }`
             );
         } else {
-            embed.setTitle(`${tx.tokenData.name || `${tx.tokenData.symbol} #${tx.tokenId}`} SOLD!`);
+            embed.setTitle(`${tx.tokenName} SOLD!`);
         }
 
         if (tx.tokenType === 'ERC721' && tx.quantity > 1 && GIF_ENABLED) {
