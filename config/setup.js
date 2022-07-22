@@ -6,6 +6,9 @@ import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
     ? process.env.CONTRACT_ADDRESS.toLowerCase()
     : null;
+const CONTRACT_ADDRESSES = process.env.CONTRACT_ADDRESSES
+    ? process.env.CONTRACT_ADDRESSES.toLowerCase()
+    : null;
 const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY;
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
@@ -31,8 +34,8 @@ const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== undefined);
 
 // Alchemy provider settings
 const require = createRequire(import.meta.url);
-const abi = require('./abi.json');
-const nftTraderAbi = require('./NFTTraderSwap.json');
+const ABI = require('./abi.json');
+const NFT_TRADER_ABI = require('./NFTTraderSwap.json');
 const options = {
     reconnect: {
         auto: true,
@@ -42,13 +45,18 @@ const options = {
     }
 };
 const WEB3 = createAlchemyWeb3(`wss://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`, options);
-const CONTRACT = new WEB3.eth.Contract(abi, CONTRACT_ADDRESS);
 
+// Error handler for configuration
 const checkConfig = (config) => {
     let configError = false;
 
     for (const [key, value] of Object.entries(config)) {
-        if (!value) {
+        if (Array.isArray(value) && !value[0] && !value[1]) {
+            console.log(
+                'Please make sure you have set either CONTRACT_ADDRESS or CONTRACT_ADDRESSES at (file:./.env)'
+            );
+            configError = true;
+        } else if (!value) {
             console.log(`Please make sure you enter a valid ${key} at (file:./.env)`);
             configError = true;
         }
@@ -61,7 +69,7 @@ const checkConfig = (config) => {
 };
 
 checkConfig({
-    CONTRACT_ADDRESS: CONTRACT_ADDRESS,
+    CONTRACT: [CONTRACT_ADDRESS, CONTRACT_ADDRESSES],
     OPENSEA_API_KEY: OPENSEA_API_KEY,
     ALCHEMY_API_KEY: ALCHEMY_API_KEY,
     ETHERSCAN_API_KEY: ETHERSCAN_API_KEY,
@@ -73,9 +81,9 @@ checkConfig({
 });
 
 export {
+    ABI,
     WEB3,
-    CONTRACT,
-    nftTraderAbi,
+    NFT_TRADER_ABI,
     WEBHOOK_URLS,
     IMAGE_SIZE,
     GIF_ENABLED,
@@ -85,6 +93,7 @@ export {
     ALCHEMY_API_KEY,
     ETHERSCAN_API_KEY,
     CONTRACT_ADDRESS,
+    CONTRACT_ADDRESSES,
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
