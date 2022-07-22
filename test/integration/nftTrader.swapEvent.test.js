@@ -93,25 +93,24 @@ describe('NFT Trader Integration Test', function () {
         });
     });
 
-    /*
     describe('ERC721 & ERC1155 swap event', function () {
-        const mayc = '0x60e4d786628fea6478f785a6d7e704777c86a7c6';
+        const gutterCat = '0xedb61f74b0d09b2558f1eeb79b247c1f363ae452';
 
         it('should get the correct data', async function () {
-            const txHash = '0xa4053393f2897162b9c7de76e8dac711a159d70393318e4a41ac7b070ce60ec3';
-            const parseResult = await parseTransaction(WEB3, txHash, mayc, token_type);
+            const txHash = '0xf31708233d600e253e1fffe4c5f82dadd5ce1acc47d823082fca00f7f1aa763d';
+            const parseResult = await parseTransaction(WEB3, txHash, gutterCat, 'ERC1155');
             const { isSwap, swap, addressMaker, addressTaker, tokenData, market, transactionHash } =
                 parseResult;
             const makerReceivedAssets = swap[addressMaker].receivedAssets;
             const takerReceivedAssets = swap[addressTaker].receivedAssets;
             const makerReceivedEth = swap[addressMaker].receivedAmount;
             const takerReceivedEth = swap[addressTaker].receivedAmount;
-            const oneIds = ['16510'];
-            const oneTokenTypes = ['ERC721'];
-            const oneQuantities = [];
-            const twoIds = ['1'];
-            const twoTokenTypes = ['ERC1155'];
-            const twoQuantities = ['4'];
+            const oneIds = ['2636', '1899', '1719', '754', '222', '2174'];
+            const oneTokenTypes = ['ERC721', 'ERC721', 'ERC721', 'ERC721', 'ERC721', 'ERC1155'];
+            const oneQuantities = [undefined, undefined, undefined, undefined, undefined, '1'];
+            const twoIds = ['1590', '2632'];
+            const twoTokenTypes = ['ERC1155', 'ERC1155'];
+            const twoQuantities = ['1', '1'];
 
             for (let i = 0; i < makerReceivedAssets.length; i++) {
                 assert.strictEqual(makerReceivedAssets[i].tokenId, oneIds[i]);
@@ -133,11 +132,10 @@ describe('NFT Trader Integration Test', function () {
             expect(ethers.utils.isAddress(addressMaker)).to.be.true;
             expect(ethers.utils.isAddress(addressTaker)).to.be.true;
             assert.strictEqual(makerReceivedEth, '0.0');
-            assert.strictEqual(takerReceivedEth, '3.0');
+            assert.strictEqual(takerReceivedEth, '0.0');
             assert.strictEqual(market.name, 'NFT Trader 🔄');
             assert.strictEqual(transactionHash, txHash);
             assert.strictEqual(tokenData.status, 200);
         });
     });
-    */
 });
