@@ -31,7 +31,14 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#configuration">Configuration</a></li>
+    <li>
+      <a href="#configuration">Configuration</a>
+      <ul>
+        <li><a href="#mandatory">Mandatory</a></li>
+        <li><a href="#optional">Optional</a></li>
+        <li><a href="#multi-monitoring">Multi Monitoring</a></li>
+      </ul>
+    </li>
     <li><a href="#run-test">Run Test</a></li>
     <li><a href="#usage">Usage</a></li>
     <li>
@@ -111,7 +118,7 @@ npm install
 
 > Create an `.env` file in the root directory of the project with the following contents:
 
-**Mandatory**
+### Mandatory
 
 ```
 CONTRACT_ADDRESS=
@@ -120,7 +127,7 @@ ALCHEMY_API_KEY=
 ETHERSCAN_API_KEY=
 ```
 
-**Optional**
+### Optional
 
 ```
 TWITTER_ENABLED=
@@ -132,7 +139,21 @@ DISCORD_ENABLED=
 WEBHOOK_URL=
 ```
 
-**Do not commit/include your .env file in your repository.**
+### Multi Monitoring
+
+For monitoring multiple NFTs at the same time, use `CONTRACT_ADDRESSES` in the `.env` file.
+
+Example:
+
+```
+CONTRACT_ADDRESSES=["0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D","0x60E4d786628Fea6478F785A6d7e704777c86a7c6"]
+```
+
+If `CONTRACT_ADDRESS` and `CONTRACT_ADDRESSES` are both set, `CONTRACT_ADDRESSES` will take the priority.
+
+<br />
+
+**🚨🚨🚨 Do not commit/include your .env file in your repository. 🚨🚨🚨**
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
