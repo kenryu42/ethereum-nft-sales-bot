@@ -170,6 +170,10 @@ https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API
             const ethusd = _.get(result, 'ethusd');
             const usdPrice = (ethPrice * ethusd).toFixed(2);
 
+            if (!response || !result || !ethusd || !usdPrice) {
+                throw new Error('Might hitting rate limit, try again');
+            }
+
             return parseFloat(usdPrice).toLocaleString('en-US');
         },
         {
