@@ -1,174 +1,161 @@
-import { ethers } from 'ethers';
-import _ from 'lodash';
-import { markets } from '../config/markets.js';
-import { currencies } from '../config/currencies.js';
-import { transferEventTypes, saleEventTypes } from '../config/logEventTypes.js';
 import {
-	formatPrice,
-	getTokenData,
-	getTransactionReceipt,
-	getEthUsdPrice
+    formatPrice,
+    getTokenData,
+    getReadableName,
+    getTransactionReceipt,
+    getEthUsdPrice
 } from '../utils/api.js';
+import _ from 'lodash';
+import { ethers } from 'ethers';
+import { markets } from '../config/markets.js';
+import { parseSeaport } from './parseSeaport.js';
+import { parseNftTrader } from './parseNftTrader.js';
+import { parseSaleToken } from './parseSaleToken.js';
+import { parseSwapToken } from './parseSwapToken.js';
+import { currencies } from '../config/currencies.js';
+import { saleEventTypes } from '../config/logEventTypes.js';
 
-function reducer(previous, current) {
-	const currency = currencies[current.token.toLowerCase()];
-	if (currency !== undefined) {
-		const result =
-			previous +
-			Number(ethers.utils.formatUnits(current.amount, currency.decimals));
+async function parseTransaction(web3, transactionHash, contractAddress, tokenType) {
+    const receipt = await getTransactionReceipt(web3, transactionHash);
+    const recipient = receipt.to.toLowerCase();
 
-		return result;
-	} else {
-		return previous;
-	}
-}
-async function parseTransaction(
-	web3,
-	transactionHash,
-	contractAddress,
-	tokenType
-) {
-	const receipt = await getTransactionReceipt(web3, transactionHash);
-	const recipient = receipt.to.toLowerCase();
+    if (!(recipient in markets)) {
+        return null;
+    }
 
-	if (!(recipient in markets)) {
-		return null;
-	}
+    const swap = {};
+    const prices = [];
+    const marketList = [];
+    const market = _.get(markets, recipient);
+    const isSwap = market.name === 'NFT Trader 🔄';
+    const isSweep = market.name === 'Gem.XYZ 💎' || market.name === 'Genie 🧞‍♂️';
+    let toAddr;
+    let tokenId;
+    let fromAddr;
+    let tokens = [];
+    let addressMaker;
+    let addressTaker;
+    let totalPrice = 0;
+    let currency = {
+        name: 'ETH',
+        decimals: 18
+    };
 
-	const prices = [];
-	const marketList = [];
-	const market = _.get(markets, recipient);
-	const isSweep = market.name === 'Gem.XYZ 💎' || market.name === 'Genie 🧞‍♂️';
-	let tokens = [];
-	let tokenId;
-	let totalPrice = 0;
-	let fromAddr = '';
-	let toAddr = '';
-	let currency = {
-		name: 'ETH',
-		decimals: 18
-	};
+    for (const log of receipt.logs) {
+        const logAddress = log.address.toLowerCase();
+        const logMarket = _.get(markets, logAddress);
 
-	for (const log of receipt.logs) {
-		const logAddress = log.address.toLowerCase();
-		const logMarket = _.get(markets, logAddress);
+        if (logAddress in currencies && !isSweep) {
+            currency = currencies[logAddress];
+        }
 
-		if (logAddress in currencies && !isSweep) {
-			currency = currencies[logAddress];
-		}
+        if (isSwap) {
+            tokenId = parseSwapToken({
+                web3,
+                log,
+                logAddress,
+                isSwap,
+                swap,
+                tokenId,
+                contractAddress
+            });
+        } else {
+            ({ tokens, tokenId, fromAddr, toAddr } = parseSaleToken({
+                web3,
+                log,
+                logAddress,
+                tokenType,
+                tokens,
+                tokenId,
+                fromAddr,
+                toAddr,
+                contractAddress
+            }));
+        }
 
-		if (
-			log.data === '0x' &&
-			transferEventTypes[tokenType] === log.topics[0] &&
-			logAddress === contractAddress.toLowerCase()
-		) {
-			fromAddr = web3.eth.abi.decodeParameter('address', log.topics[1]);
-			toAddr = web3.eth.abi.decodeParameter('address', log.topics[2]);
-			tokenId = web3.utils.hexToNumberString(log.topics[3]);
-			tokens.push(tokenId);
-			tokens = _.uniq(tokens);
-		} else if (
-			transferEventTypes[tokenType] === log.topics[0] &&
-			logAddress === contractAddress.toLowerCase()
-		) {
-			fromAddr = web3.eth.abi.decodeParameter('address', log.topics[2]);
-			toAddr = web3.eth.abi.decodeParameter('address', log.topics[3]);
-			const decodeData = web3.eth.abi.decodeLog(
-				[
-					{ type: 'uint256', name: 'id' },
-					{ type: 'uint256', name: 'value' }
-				],
-				log.data,
-				[]
-			);
-			tokenId = decodeData.id;
-			tokens.push(Number(decodeData.value));
-		}
+        const isSale = logAddress === recipient && saleEventTypes.includes(log.topics[0]);
+        const isAggregatorSale = logAddress in markets && saleEventTypes.includes(log.topics[0]);
 
-		const isSale =
-			logAddress === recipient && saleEventTypes.includes(log.topics[0]);
-		const isAggregatorSale =
-			logAddress in markets && saleEventTypes.includes(log.topics[0]);
+        if (isSale || isAggregatorSale) {
+            const marketLogDecoder = isSale ? market.logDecoder : markets[logAddress].logDecoder;
+            const decodedLogData = web3.eth.abi.decodeLog(marketLogDecoder, log.data, []);
 
-		if (isSale || isAggregatorSale) {
-			const marketLogDecoder = isSale
-				? market.logDecoder
-				: markets[logAddress].logDecoder;
-			const decodedLogData = web3.eth.abi.decodeLog(
-				marketLogDecoder,
-				log.data,
-				[]
-			);
+            if (logMarket.name === 'Opensea: Seaport ⚓️') {
+                const [price, skip] = parseSeaport({
+                    decodedLogData,
+                    contractAddress
+                });
+                if (skip) continue;
+                totalPrice += price;
+                marketList.push(logMarket);
+                prices.push(formatPrice(price));
+            } else if (logMarket.name === 'NFT Trader 🔄') {
+                [addressMaker, addressTaker] = await parseNftTrader({
+                    web3,
+                    log,
+                    swap,
+                    logAddress,
+                    decodedLogData
+                });
+                if (!addressMaker && !addressTaker) return null;
+            } else if (marketList.length + 1 === tokens.length) {
+                const decodedPrice =
+                    logMarket.name === 'X2Y2 ⭕️' ? decodedLogData.amount : decodedLogData.price;
 
-			if (logMarket.name === 'Opensea: Seaport ⚓️') {
-				const offer = decodedLogData.offer;
-				const consideration = decodedLogData.consideration;
-				const nftOnOfferSide = offer.some(
-					(item) => item.token.toLowerCase() === contractAddress.toLowerCase()
-				);
-				const nftOnConsiderationSide = consideration.some(
-					(item) => item.token.toLowerCase() === contractAddress.toLowerCase()
-				);
+                const price = Number(ethers.utils.formatUnits(decodedPrice, currency.decimals));
+                totalPrice += price;
+                marketList.push(logMarket);
+                prices.push(formatPrice(price));
+            }
+        }
+    }
 
-				// Skip if the target token is not on both sides (offer & consideration)
-				if (!nftOnOfferSide && !nftOnConsiderationSide) continue;
+    const quantity = tokenType === 'ERC721' ? tokens.length : _.sum(tokens);
 
-				// if target nft on offer side, then consideration is the total price
-				// else offer is the total price
-				if (nftOnOfferSide) {
-					const totalConsiderationAmount = consideration.reduce(reducer, 0);
-					totalPrice += totalConsiderationAmount;
-					prices.push(formatPrice(totalConsiderationAmount));
-				} else {
-					const totalOfferAmount = offer.reduce(reducer, 0);
-					totalPrice += totalOfferAmount;
-					prices.push(formatPrice(totalOfferAmount));
-				}
-				marketList.push(logMarket);
-			} else if (marketList.length + 1 === tokens.length) {
-				const decodedPrice =
-					logMarket.name === 'X2Y2 ⭕️'
-						? decodedLogData.amount
-						: decodedLogData.price;
+    if ((!isSwap && quantity === 0) || (isSwap && !swap.monitorTokenId)) {
+        console.error('No tokens found. Please check the contract address is correct.');
+        return null;
+    }
+    const to = !isSwap ? await getReadableName(toAddr) : null;
+    const from = !isSwap ? await getReadableName(fromAddr) : null;
+    const tokenData = swap.monitorTokenId
+        ? await getTokenData(swap.monitorTokenId, contractAddress)
+        : await getTokenData(tokenId, contractAddress);
+    const tokenName = tokenData.name || `${tokenData.symbol} #${tokenId}`;
+    const sweeper = isSweep ? await getReadableName(fromAddr) : null;
+    const usdPrice =
+        !isSwap && (currency.name === 'ETH' || currency.name === 'WETH')
+            ? await getEthUsdPrice(totalPrice)
+            : null;
+    const ethUsdValue = usdPrice ? `($ ${usdPrice})` : '';
 
-				const price = Number(
-					ethers.utils.formatUnits(decodedPrice, currency.decimals)
-				);
-				totalPrice += price;
-				prices.push(formatPrice(price));
-				marketList.push(logMarket);
-			}
-		}
-	}
-
-	const quantity = tokenType === 'ERC721' ? tokens.length : _.sum(tokens);
-
-	if (quantity === 0) {
-		console.error(
-			'No tokens found. Please check the contract address is correct.'
-		);
-		return null;
-	}
-	const tokenData = await getTokenData(tokenId, contractAddress);
-	const usdPrice = await getEthUsdPrice(totalPrice);
-
-	return {
-		market: market,
-		tokens: tokens,
-		tokenType: tokenType,
-		quantity: quantity,
-		marketList: marketList,
-		prices: prices,
-		totalPrice: totalPrice,
-		currency: currency,
-		usdPrice: usdPrice,
-		fromAddr: fromAddr,
-		toAddr: toAddr,
-		tokenData: tokenData,
-		isSweep: isSweep,
-		sweeperAddr: receipt.from,
-		transactionHash: transactionHash
-	};
+    return {
+        market: market,
+        tokens: tokens,
+        tokenId: tokenId,
+        tokenName: tokenName,
+        tokenType: tokenType,
+        quantity: quantity,
+        marketList: marketList,
+        prices: prices,
+        totalPrice: totalPrice,
+        currency: currency,
+        usdPrice: usdPrice,
+        ethUsdValue: ethUsdValue,
+        fromAddr: fromAddr,
+        toAddr: toAddr,
+        from: from,
+        to: to,
+        tokenData: tokenData,
+        isSweep: isSweep,
+        isSwap: isSwap,
+        swap: swap,
+        addressMaker: addressMaker,
+        addressTaker: addressTaker,
+        sweeperAddr: receipt.from,
+        sweeper: sweeper,
+        transactionHash: transactionHash
+    };
 }
 
 export { parseTransaction };

@@ -1,130 +1,124 @@
 import { TwitterApi, EUploadMimeType } from 'twitter-api-v2';
 import axios from 'axios';
-import { createGif, createNaImage, resizeImage } from '../utils/image.js';
-import { formatPrice, getReadableName } from '../utils/api.js';
+import { createGif, createSwapGif, createNaImage, resizeImage } from '../utils/image.js';
+import { formatPrice } from '../utils/api.js';
 import {
-	TWITTER_ENABLED,
-	DISCORD_ENABLED,
-	CONTRACT_ADDRESS,
-	TWITTER_API_KEY,
-	TWITTER_API_SECRET,
-	TWITTER_ACCESS_TOKEN,
-	TWITTER_ACCESS_SECRET,
-	GIF_ENABLED
+    GIF_ENABLED,
+    TWITTER_ENABLED,
+    DISCORD_ENABLED,
+    CONTRACT_ADDRESS,
+    TWITTER_API_KEY,
+    TWITTER_API_SECRET,
+    TWITTER_ACCESS_TOKEN,
+    TWITTER_ACCESS_SECRET
 } from '../config/setup.js';
 
-let client;
-let rwClient;
+const client = TWITTER_ENABLED
+    ? new TwitterApi({
+          appKey: TWITTER_API_KEY,
+          appSecret: TWITTER_API_SECRET,
+          accessToken: TWITTER_ACCESS_TOKEN,
+          accessSecret: TWITTER_ACCESS_SECRET
+      })
+    : null;
 
-if (TWITTER_ENABLED) {
-	client = new TwitterApi({
-		appKey: TWITTER_API_KEY,
-		appSecret: TWITTER_API_SECRET,
-		accessToken: TWITTER_ACCESS_TOKEN,
-		accessSecret: TWITTER_ACCESS_SECRET
-	});
+const rwClient = TWITTER_ENABLED ? client.readWrite : null;
 
-	rwClient = client.readWrite;
-}
+const tweet = async (tx) => {
+    let mediaId;
+    let tweetContent;
 
-const tweet = async (tweetConfig) => {
-	const {
-		isSweep,
-		quantity,
-		tokens,
-		tokenType,
-		tokenData,
-		market,
-		usdPrice,
-		totalPrice,
-		currency,
-		sweeperAddr,
-		fromAddr,
-		toAddr,
-		transactionHash
-	} = tweetConfig;
-	let { sweeper, gifImage, from, to, ethUsdValue } = tweetConfig;
-	let mediaId;
+    if (tx.isSwap && !DISCORD_ENABLED) {
+        tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
+    } else if (tx.isSweep && !DISCORD_ENABLED) {
+        tx.gifImage = await createGif(tx.tokens);
+    }
 
-	if (!DISCORD_ENABLED) {
-		ethUsdValue =
-			currency.name === 'ETH' || currency.name === 'WETH'
-				? `($ ${usdPrice})`
-				: '';
-	}
-	if (!DISCORD_ENABLED && isSweep) {
-		sweeper = await getReadableName(sweeperAddr);
-		gifImage = await createGif(tokens);
-	} else if (!DISCORD_ENABLED) {
-		from = await getReadableName(fromAddr);
-		to = await getReadableName(toAddr);
-	}
+    if (!tx.tokenData.image) {
+        const naImage = await createNaImage(true);
+        mediaId = await client.v1.uploadMedia(naImage, {
+            mimeType: EUploadMimeType.Png
+        });
+    } else if (tx.isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
+        mediaId = await client.v1.uploadMedia(tx.gifImage, {
+            mimeType: EUploadMimeType.Gif
+        });
+    } else {
+        const response = await axios.get(tx.tokenData.image, {
+            responseType: 'arraybuffer'
+        });
+        let buffer = Buffer.from(response.data, 'utf-8');
 
-	if (!tokenData.image) {
-		const naImage = await createNaImage(true);
-		mediaId = await client.v1.uploadMedia(naImage, {
-			mimeType: EUploadMimeType.Png
-		});
-	} else if (GIF_ENABLED && quantity > 1 && tokenType === 'ERC721') {
-		mediaId = await client.v1.uploadMedia(gifImage, {
-			mimeType: EUploadMimeType.Gif
-		});
-	} else {
-		const response = await axios.get(tokenData.image, {
-			responseType: 'arraybuffer'
-		});
-		let buffer = Buffer.from(response.data, 'utf-8');
+        // if image size exceeds 5MB, resize it
+        if (buffer.length > 5242880) {
+            buffer = await resizeImage(tx.tokenData.image);
+        }
+        mediaId = await client.v1.uploadMedia(buffer, {
+            mimeType: EUploadMimeType.Png
+        });
+    }
 
-		// if image size exceeds 5MB, resize it
-		if (buffer.length > 5242880) {
-			buffer = await resizeImage(tokenData.image);
-		}
-		mediaId = await client.v1.uploadMedia(buffer, {
-			mimeType: EUploadMimeType.Png
-		});
-	}
+    if (tx.isSweep) {
+        tweetContent = `
+${tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenName} \
+swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
+${tx.currency.name} ${tx.ethUsdValue}
 
-	if (isSweep) {
-		try {
-			const tweetContent = `
-			${quantity > 1 ? `${quantity} ${tokenData.collectionName}` : tokenData.name} \
-			swept on ${market.name} for ${formatPrice(totalPrice)} \
-			${currency.name} ${ethUsdValue}
+【 Sweeper: ${tx.sweeper} 】
+${tx.market.accountPage}${tx.sweeperAddr}
 
-			【 Sweeper: ${sweeper} 】
-			${market.account_site}${sweeperAddr}
-
-			【 Transaction 】
-			https://etherscan.io/tx/${transactionHash}	
+【 Transaction 】
+https://etherscan.io/tx/${tx.transactionHash}	
 			`;
-			await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
-		} catch (error) {
-			console.log(error);
-		}
-	} else {
-		try {
-			const isX2Y2 = market.name === 'X2Y2 ⭕️' ? '/items' : '';
-			const tweetContent = `
-			${tokenData.name} sold for ${formatPrice(totalPrice)} ETH ${ethUsdValue}
+    } else if (tx.isSwap) {
+        tweetContent = `
+New ${tx.tokenData.collectionName} Swap on NFTTrader.io
 
-			【 Marketplace 】
-			${market.name}
+【 Maker: ${tx.swap[tx.addressMaker].name} 】
+${tx.market.accountPage}${tx.addressMaker}
 			
-			【 From: ${from} 】
-			${market.account_site}${fromAddr}${isX2Y2}
+【 Taker: ${tx.swap[tx.addressTaker].name} 】
+${tx.market.accountPage}${tx.addressTaker}
 			
-			【 To: ${to} 】
-			${market.account_site}${toAddr}${isX2Y2}
+【 Link 】
+${tx.market.site}${tx.transactionHash}
+            `;
+    } else {
+        const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
+        const field =
+            tx.tokenType === 'ERC721' && tx.quantity > 1
+                ? `
+【 Sweeper: ${tx.to} 】
+${tx.market.accountPage}${tx.toAddr}${isX2Y2}
+        `
+                : `
+【 From: ${tx.from} 】
+${tx.market.accountPage}${tx.fromAddr}${isX2Y2}
+                    
+【 To: ${tx.to} 】
+${tx.market.accountPage}${tx.toAddr}${isX2Y2}
+        `;
+
+        tweetContent = `
+${
+    tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenName
+} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue}
+
+【 Marketplace 】
+${tx.market.name}
 			
-			【 Link 】
-			${market.site}${CONTRACT_ADDRESS}/${tokens[0]}	
+${field}
+			
+【 Link 】
+${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokens[0]}	
 			`;
+    }
 
-			await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
-		} catch (error) {
-			console.log(error);
-		}
-	}
+    try {
+        await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 export { tweet };
