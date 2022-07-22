@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { nftTraderAbi } from '../config/setup.js';
+import { NFT_TRADER_ABI } from '../config/setup.js';
 import { getReadableName } from '../utils/api.js';
 
 const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) => {
@@ -10,7 +10,7 @@ const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) =
     if (swapStatus !== '1') return [null, null];
 
     const swapId = decodedLogData._swapId;
-    const nftTraderSwap = new web3.eth.Contract(nftTraderAbi, logAddress);
+    const nftTraderSwap = new web3.eth.Contract(NFT_TRADER_ABI, logAddress);
     const swapIntent = await nftTraderSwap.methods.getSwapIntentById(swapId).call();
     const payment = await nftTraderSwap.methods.payment().call();
     const bps = payment.bps;
