@@ -1,7 +1,8 @@
 import Jimp from 'jimp-compact';
 import { Gif } from 'make-a-gif';
+import axios from 'axios';
 import { getTokenData } from './api.js';
-import { IMAGE_SIZE } from '../config/setup.js';
+import { IMAGE_SIZE, COLLECTION_SVG } from '../config/setup.js';
 
 const GIF_DURATION = 1500;
 const { width, height } = IMAGE_SIZE;
@@ -14,6 +15,29 @@ const resizeImage = async (image) => {
     return buffer;
 };
 
+const checkSVG = async (tokenDataImg) =>{
+    let image;
+    if(COLLECTION_SVG){
+        if(tokenDataImg){
+            const response = await axios.get(tokenDataImg);
+            try{
+                image = await svgToImg.from(response.data).toJpeg();
+                let buffer = await Buffer.from(image, 'utf-8')
+                image = await Jimp.read(buffer);
+            } catch{
+                // I've noticed sometimes grabbing an SVG can fail
+                // and the whole GIF will be invalid so its best
+                // to have a fallback
+                image = await createNaImage()
+            }
+        } else {
+            image = await createNaImage()
+        }
+    } else {
+        image = !image ? await createNaImage() : await Jimp.read(tokenDataImg);
+    }
+    return image;
+}
 const createGif = async (tokens) => {
     console.log('Creating GIF...');
     const frames = [];
@@ -21,7 +45,7 @@ const createGif = async (tokens) => {
     for (const token of tokens) {
         const tokenData = await getTokenData(token);
         const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
-        const image = !tokenData.image ? await createNaImage() : await Jimp.read(tokenData.image);
+        const image = await checkSVG(tokenData.image);
         image.resize(width, Jimp.AUTO);
         const tokenIdText = {
             text: `# ${String(token).padStart(4, '0')}`,
@@ -63,9 +87,7 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
             const tokenName =
                 tokenData.name || `${tokenData.symbol} #${String(asset.tokenId).padStart(4, '0')}`;
             swap[address].receivedAssets[i].name = tokenName;
-            const image = !tokenData.image
-                ? await createNaImage()
-                : await Jimp.read(tokenData.image);
+            const image = await checkSVG(tokenData.image);
             image.resize(width, Jimp.AUTO);
             const quantity = asset.quantity > 1 ? ` Quantity: ${asset.quantity}` : '';
             const text = `${tokenName}${quantity}`;
