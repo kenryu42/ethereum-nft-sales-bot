@@ -8,8 +8,8 @@
         "format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
         "lint": "eslint '**/*.{js,jsx,ts,tsx}' --fix",
         "fix": "npm run format && npm run lint",
-        "unit": "npx mocha test/unit --timeout 60000",
-        "integration": "npx mocha test/integration --timeout 120000",
+        "unit": "npx mocha test/unit --timeout 120000",
+        "integration": "npx mocha test/integration --timeout 240000",
         "test": "npm run unit && npm run integration"
     },
     "repository": {
