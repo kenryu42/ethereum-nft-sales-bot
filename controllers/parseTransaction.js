@@ -122,7 +122,7 @@ async function parseTransaction(web3, transactionHash, contractAddress, tokenTyp
         ? await getTokenData(swap.monitorTokenId, contractAddress)
         : await getTokenData(tokenId, contractAddress);
     const tokenName = tokenData.name || `${tokenData.symbol} #${tokenId}`;
-    const sweeper = isSweep ? await getReadableName(fromAddr) : null;
+    const sweeper = isSweep ? await getReadableName(receipt.from) : null;
     const usdPrice =
         !isSwap && (currency.name === 'ETH' || currency.name === 'WETH')
             ? await getEthUsdPrice(totalPrice)
