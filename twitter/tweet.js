@@ -1,8 +1,10 @@
 import { TwitterApi, EUploadMimeType } from 'twitter-api-v2';
 import axios from 'axios';
+import svgToImg from 'svg-to-img';
 import { createGif, createSwapGif, createNaImage, resizeImage } from '../utils/image.js';
 import { formatPrice } from '../utils/api.js';
 import {
+    COLLECTION_SVG,
     GIF_ENABLED,
     TWITTER_ENABLED,
     DISCORD_ENABLED,
@@ -47,15 +49,22 @@ const tweet = async (tx) => {
         const response = await axios.get(tx.tokenData.image, {
             responseType: 'arraybuffer'
         });
-        let buffer = Buffer.from(response.data, 'utf-8');
-
-        // if image size exceeds 5MB, resize it
-        if (buffer.length > 5242880) {
-            buffer = await resizeImage(tx.tokenData.image);
+        let buffer;
+        if(COLLECTION_SVG){
+            buffer = await svgToImg.from(response.data).toJpeg();
+            mediaId = await client.v1.uploadMedia(buffer, {
+                mimeType: EUploadMimeType.Jpeg
+            });
+        } else {
+            buffer = Buffer.from(response.data, 'utf-8');
+             // if image size exceeds 5MB, resize it
+            if (buffer.length > 5242880) {
+                buffer = await resizeImage(tx.tokenData.image);
+            }
+            mediaId = await client.v1.uploadMedia(buffer, {
+                mimeType: EUploadMimeType.Png
+            });
         }
-        mediaId = await client.v1.uploadMedia(buffer, {
-            mimeType: EUploadMimeType.Png
-        });
     }
 
     if (tx.isSweep) {
