@@ -1,7 +1,9 @@
 import { formatPrice } from '../utils/api.js';
+import svgToImg from 'svg-to-img';
+import axios from 'axios';
 import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
-import { WEBHOOK_URLS, CONTRACT_ADDRESS, GIF_ENABLED } from '../config/setup.js';
+import { WEBHOOK_URLS, CONTRACT_ADDRESS, GIF_ENABLED, COLLECTION_SVG } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
 
 const sendEmbedMessage = async (tx) => {
@@ -61,7 +63,14 @@ const sendEmbedMessage = async (tx) => {
             file = new MessageAttachment(naImage, 'image.png');
             embed.setImage('attachment://image.png');
         } else {
-            embed.setImage(tx.tokenData.image);
+            const response = await axios.get(tx.tokenData.image);
+            if(COLLECTION_SVG){
+                const image = await svgToImg.from(response.data).toJpeg();
+                file = new MessageAttachment(image, 'image.png');
+                embed.setImage('attachment://image.png');
+            } else {
+                embed.setImage(tx.tokenData.image);
+            }
         }
 
         if (tx.isSweep) {
