@@ -13,6 +13,8 @@ const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY;
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
 
+const COLLECTION_SVG = process.env.COLLECTION_SVG === '1';
+
 // Image size for the GIF
 const GIF_ENABLED = true;
 const IMAGE_SIZE = {
@@ -87,6 +89,7 @@ export {
     WEBHOOK_URLS,
     IMAGE_SIZE,
     GIF_ENABLED,
+    COLLECTION_SVG,
     TWITTER_ENABLED,
     DISCORD_ENABLED,
     OPENSEA_API_KEY,
