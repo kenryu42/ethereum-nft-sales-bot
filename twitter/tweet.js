@@ -64,53 +64,47 @@ ${tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenNa
 swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
 
-【 Sweeper: ${tx.sweeper} 】
+Sweeper: ${tx.sweeper}
 ${tx.market.accountPage}${tx.sweeperAddr}
 
-【 Transaction 】
-https://etherscan.io/tx/${tx.transactionHash}	
+🔍 https://etherscan.io/tx/${tx.transactionHash}	
 			`;
     } else if (tx.isSwap) {
         tweetContent = `
-New ${tx.tokenData.collectionName} Swap on NFTTrader.io
+New ${tx.tokenData.collectionName} Swap on NFT Trader
 
-【 Maker: ${tx.swap[tx.addressMaker].name} 】
+Maker: ${tx.swap[tx.addressMaker].name}
 ${tx.market.accountPage}${tx.addressMaker}
 			
-【 Taker: ${tx.swap[tx.addressTaker].name} 】
+Taker: ${tx.swap[tx.addressTaker].name}
 ${tx.market.accountPage}${tx.addressTaker}
 			
-【 Link 】
-${tx.market.site}${tx.transactionHash}
+🔍 ${tx.market.site}${tx.transactionHash}
             `;
     } else {
         const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
         const field =
             tx.tokenType === 'ERC721' && tx.quantity > 1
                 ? `
-【 Sweeper: ${tx.to} 】
+Sweeper: ${tx.to}
 ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
         `
                 : `
-【 From: ${tx.from} 】
+From: ${tx.from}
 ${tx.market.accountPage}${tx.fromAddr}${isX2Y2}
                     
-【 To: ${tx.to} 】
+To: ${tx.to}
 ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
         `;
 
         tweetContent = `
 ${
     tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenName
-} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue}
-
-【 Marketplace 】
-${tx.market.name}
+} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.name}
 			
 ${field}
 			
-【 Link 】
-${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokens[0]}	
+🔍 ${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokens[0]}	
 			`;
     }
 
