@@ -3,6 +3,7 @@
 [![GitHub license](https://img.shields.io/github/license/kenryu42/ethereum-nft-sales-bot)](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/main/LICENSE)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kenryu42/ethereum-nft-sales-bot/run-tests)
 ![GitHub issues](https://img.shields.io/github/issues-raw/kenryu42/ethereum-nft-sales-bot)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/kenryu42/ethereum-nft-sales-bot)
 
 <div align="center">
 
