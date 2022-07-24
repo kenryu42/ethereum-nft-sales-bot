@@ -86,7 +86,7 @@
 
 ### Twitter
 
--   [Azuki Sales](https://twitter.com/azukisalebot)
+-   [Azuki Sales](https://twitter.com/azuki_sale_bot)
 -   [BAYC Sales](https://twitter.com/bayc_sales)
 -   [Murakami.Flowers Sales](https://twitter.com/mftm_sales)
 
