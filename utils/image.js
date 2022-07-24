@@ -2,6 +2,8 @@ import Jimp from 'jimp-compact';
 import { Gif } from 'make-a-gif';
 import { getTokenData } from './api.js';
 import { IMAGE_SIZE } from '../config/setup.js';
+import axios from 'axios';
+import sharp from 'sharp';
 
 const GIF_DURATION = 1500;
 const { width, height } = IMAGE_SIZE;
@@ -19,9 +21,19 @@ const createGif = async (tokens) => {
     const frames = [];
 
     for (const token of tokens) {
+        let imageData;
         const tokenData = await getTokenData(token);
         const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
-        const image = !tokenData.image ? await createNaImage() : await Jimp.read(tokenData.image);
+        const isSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
+        if (isSvg) {
+            const response = await axios.get(tokenData.image, { responseType: 'arraybuffer' });
+            const buffer = Buffer.from(response.data, 'utf8');
+            const imageBuffer = await sharp(buffer).png().toBuffer();
+            imageData = imageBuffer;
+        } else {
+            imageData = tokenData.image;
+        }
+        const image = !imageData ? await createNaImage() : await Jimp.read(imageData);
         image.resize(width, Jimp.AUTO);
         const tokenIdText = {
             text: `# ${String(token).padStart(4, '0')}`,
@@ -59,13 +71,21 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
 
         let i = 0;
         for (const asset of swap[address].receivedAssets) {
+            let imageData;
             const tokenData = await getTokenData(asset.tokenId, asset.contractAddress);
+            const isSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
             const tokenName =
                 tokenData.name || `${tokenData.symbol} #${String(asset.tokenId).padStart(4, '0')}`;
             swap[address].receivedAssets[i].name = tokenName;
-            const image = !tokenData.image
-                ? await createNaImage()
-                : await Jimp.read(tokenData.image);
+            if (isSvg) {
+                const response = await axios.get(tokenData.image, { responseType: 'arraybuffer' });
+                const buffer = Buffer.from(response.data, 'utf8');
+                const imageBuffer = await sharp(buffer).png().toBuffer();
+                imageData = imageBuffer;
+            } else {
+                imageData = tokenData.image;
+            }
+            const image = !imageData ? await createNaImage() : await Jimp.read(imageData);
             image.resize(width, Jimp.AUTO);
             const quantity = asset.quantity > 1 ? ` Quantity: ${asset.quantity}` : '';
             const text = `${tokenName}${quantity}`;

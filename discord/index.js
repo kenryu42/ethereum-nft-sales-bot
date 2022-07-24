@@ -3,6 +3,8 @@ import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, CONTRACT_ADDRESS, GIF_ENABLED } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
+import sharp from 'sharp';
+import axios from 'axios';
 
 const sendEmbedMessage = async (tx) => {
     let file;
@@ -21,7 +23,7 @@ const sendEmbedMessage = async (tx) => {
         );
         await formatSwapField(tx.swap, tx.addressTaker, embed);
         embed
-            .setTitle(`New ${tx.tokenData.collectionName} Swap on NFTTrader.io`)
+            .setTitle(`New ${tx.tokenData.collectionName} Swap on NFT Trader`)
             .setURL(`${tx.market.site}${tx.transactionHash}`)
             .setFooter({ text: tx.market.name, iconURL: tx.market.iconURL })
             .setColor(tx.market.color)
@@ -59,6 +61,12 @@ const sendEmbedMessage = async (tx) => {
         } else if (!tx.tokenData.image) {
             const naImage = await createNaImage(true);
             file = new MessageAttachment(naImage, 'image.png');
+            embed.setImage('attachment://image.png');
+        } else if (tx.tokenData.image.endsWith('.svg')) {
+            const response = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
+            const buffer = Buffer.from(response.data, 'utf8');
+            const image = await sharp(buffer).png().toBuffer();
+            file = new MessageAttachment(image, 'image.png');
             embed.setImage('attachment://image.png');
         } else {
             embed.setImage(tx.tokenData.image);
