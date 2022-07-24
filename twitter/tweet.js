@@ -1,5 +1,6 @@
 import { TwitterApi, EUploadMimeType } from 'twitter-api-v2';
 import axios from 'axios';
+import sharp from 'sharp';
 import { createGif, createSwapGif, createNaImage, resizeImage } from '../utils/image.js';
 import { formatPrice } from '../utils/api.js';
 import {
@@ -44,16 +45,24 @@ const tweet = async (tx) => {
             mimeType: EUploadMimeType.Gif
         });
     } else {
-        const response = await axios.get(tx.tokenData.image, {
-            responseType: 'arraybuffer'
-        });
-        let buffer = Buffer.from(response.data, 'utf-8');
-
-        // if image size exceeds 5MB, resize it
-        if (buffer.length > 5242880) {
-            buffer = await resizeImage(tx.tokenData.image);
+        let imageData;
+        const isSvg = tx.tokenData.image ? tx.tokenData.image.endsWith('.svg') : false;
+        if (isSvg) {
+            const response = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
+            const buffer = Buffer.from(response.data, 'utf8');
+            const imageBuffer = await sharp(buffer).png().toBuffer();
+            imageData = imageBuffer;
+        } else {
+            const response = await axios.get(tx.tokenData.image, {
+                responseType: 'arraybuffer'
+            });
+            imageData = Buffer.from(response.data, 'utf-8');
+            // if image size exceeds 5MB, resize it
+            if (imageData.length > 5242880) {
+                imageData = await resizeImage(tx.tokenData.image);
+            }
         }
-        mediaId = await client.v1.uploadMedia(buffer, {
+        mediaId = await client.v1.uploadMedia(imageData, {
             mimeType: EUploadMimeType.Png
         });
     }
