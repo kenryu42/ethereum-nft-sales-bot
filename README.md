@@ -166,7 +166,7 @@ To ensure your configuration(`.env`) is correct, run the following command:
 npm test
 ```
 
-The test should take less than a minute to run. If it fails, either APIs are down or your configuration is incorrect.
+The test should take less than 2 minutes to run. If it fails, either APIs are down or your configuration is incorrect.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
