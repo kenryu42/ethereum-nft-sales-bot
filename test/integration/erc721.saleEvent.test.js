@@ -156,7 +156,7 @@ describe('ERC 721 Integration Test', function () {
 
             expect(isSameSize).to.be.true;
             expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
-            assert.strictEqual(market.name, 'Gem.XYZ 💎');
+            assert.strictEqual(market.name, 'Gem 💎');
             assert.strictEqual(transactionHash, txHash);
             assert.strictEqual(tokenData.status, 200);
         });
@@ -196,7 +196,7 @@ describe('ERC 721 Integration Test', function () {
 
             expect(isSameSize).to.be.true;
             expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
-            assert.strictEqual(market.name, 'Gem.XYZ 💎');
+            assert.strictEqual(market.name, 'Gem 💎');
             assert.strictEqual(transactionHash, txHash);
             assert.strictEqual(tokenData.status, 200);
         });

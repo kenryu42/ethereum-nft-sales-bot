@@ -28,7 +28,7 @@ async function parseTransaction(web3, transactionHash, contractAddress, tokenTyp
     const marketList = [];
     const market = _.get(markets, recipient);
     const isSwap = market.name === 'NFT Trader 🔄';
-    const isSweep = market.name === 'Gem.XYZ 💎' || market.name === 'Genie 🧞‍♂️';
+    const isSweep = market.name === 'Gem 💎' || market.name === 'Genie 🧞‍♂️';
     let toAddr;
     let tokenId;
     let fromAddr;
