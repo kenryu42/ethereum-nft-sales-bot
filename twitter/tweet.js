@@ -26,42 +26,47 @@ const client = TWITTER_ENABLED
 const rwClient = TWITTER_ENABLED ? client.readWrite : null;
 
 const tweet = async (tx) => {
-    let mediaId;
+    let imageType;
+    let imageBuffer;
     let tweetContent;
 
     if (tx.isSwap && !DISCORD_ENABLED) {
         tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
     } else if (tx.isSweep && !DISCORD_ENABLED) {
-        tx.gifImage = await createGif(tx.tokens);
+        tx.gifImage = await createGif(tx.tokens, CONTRACT_ADDRESS, tx.tokenType);
     }
 
     if (!tx.tokenData.image) {
-        const naImage = await createNaImage(true);
-        mediaId = await client.v1.uploadMedia(naImage, {
-            mimeType: EUploadMimeType.Png
-        });
+        imageBuffer = await createNaImage(true);
+        imageType = EUploadMimeType.Png;
     } else if (tx.isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
-        mediaId = await client.v1.uploadMedia(tx.gifImage, {
-            mimeType: EUploadMimeType.Gif
-        });
-    } else {
-        const response = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
-        const buffer = Buffer.from(response.data, 'utf8');
-        const isSvg = tx.tokenData.image.endsWith('.svg');
-        let imageData = isSvg ? await sharp(buffer).png().toBuffer() : buffer;
+        imageBuffer = tx.gifImage;
+        imageType = EUploadMimeType.Gif;
+    } else if (tx.tokenData.image.endsWith('.svg')) {
+        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
+        imageBuffer = await sharp(buffer.data).png().toBuffer();
+        imageType = EUploadMimeType.Png;
+    } else if (tx.tokenData.image.startsWith('data:image/svg+xml;base64,')) {
+        const base64Image = tx.tokenData.image.replace('data:image/svg+xml;base64,', '');
+        const buffer = Buffer.from(base64Image, 'base64');
 
-        // if image size exceeds 5MB, resize it
-        if (imageData.length > 5242880) {
-            imageData = await resizeImage(tx.tokenData.image);
-        }
-        mediaId = await client.v1.uploadMedia(imageData, {
-            mimeType: EUploadMimeType.Png
-        });
+        imageBuffer = await sharp(buffer).png().toBuffer();
+        imageType = EUploadMimeType.Png;
+    } else {
+        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
+        imageBuffer = buffer.data;
     }
+    // if image size exceeds 5MB, resize it
+    if (imageBuffer.length > 5242880) {
+        imageBuffer = await resizeImage(tx.tokenData.image);
+    }
+    const mediaId = await client.v1.uploadMedia(imageBuffer, {
+        mimeType: imageType
+    });
 
     if (tx.isSweep) {
         tweetContent = `
-${tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenName} \
+${tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName} \
 swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
 
@@ -72,7 +77,7 @@ ${tx.market.accountPage}${tx.sweeperAddr}
 			`;
     } else if (tx.isSwap) {
         tweetContent = `
-New ${tx.tokenData.collectionName} Swap on NFT Trader
+New ${tx.contractName} Swap on NFT Trader
 
 Maker: ${tx.swap[tx.addressMaker].name}
 ${tx.market.accountPage}${tx.addressMaker}
@@ -100,7 +105,7 @@ ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
 
         tweetContent = `
 ${
-    tx.quantity > 1 ? `${tx.quantity} ${tx.tokenData.collectionName}` : tx.tokenName
+    tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
 } sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.name}
 			
 ${field}
