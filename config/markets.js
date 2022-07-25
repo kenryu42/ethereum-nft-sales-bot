@@ -23,7 +23,7 @@ const markets = {
     },
     // GemSwap Contract Address
     '0x83c8f28c26bf6aaca652df1dbbe0e1b56f8baba2': {
-        name: 'Gem.XYZ 💎',
+        name: 'Gem 💎',
         color: '#f07a9d',
         site: 'https://www.gem.xyz/asset/',
         accountPage: 'https://www.gem.xyz/profile/',
@@ -31,7 +31,7 @@ const markets = {
     },
     // Gem Single Contract Checkout 1 Address
     '0x0000000031f7382a812c64b604da4fc520afef4b': {
-        name: 'Gem.XYZ 💎',
+        name: 'Gem 💎',
         color: '#f07a9d',
         site: 'https://www.gem.xyz/asset/',
         accountPage: 'https://www.gem.xyz/profile/',
@@ -39,7 +39,7 @@ const markets = {
     },
     // Gem Single Contract Checkout 2 Address
     '0x0000000035634b55f3d99b071b5a354f48e10bef': {
-        name: 'Gem.XYZ 💎',
+        name: 'Gem 💎',
         color: '#f07a9d',
         site: 'https://www.gem.xyz/asset/',
         accountPage: 'https://www.gem.xyz/profile/',
@@ -47,7 +47,7 @@ const markets = {
     },
     // Gem Single Contract Checkout 3 Address
     '0x00000000a50bb64b4bbeceb18715748dface08af': {
-        name: 'Gem.XYZ 💎',
+        name: 'Gem 💎',
         color: '#f07a9d',
         site: 'https://www.gem.xyz/asset/',
         accountPage: 'https://www.gem.xyz/profile/',
@@ -55,7 +55,7 @@ const markets = {
     },
     // Gem Single Contract Checkout 4 Address
     '0xae9c73fd0fd237c1c6f66fe009d24ce969e98704': {
-        name: 'Gem.XYZ 💎',
+        name: 'Gem 💎',
         color: '#f07a9d',
         site: 'https://www.gem.xyz/asset/',
         accountPage: 'https://www.gem.xyz/profile/',
