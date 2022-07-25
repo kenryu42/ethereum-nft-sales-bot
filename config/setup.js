@@ -9,9 +9,14 @@ const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
 const CONTRACT_ADDRESSES = process.env.CONTRACT_ADDRESSES
     ? process.env.CONTRACT_ADDRESSES.toLowerCase()
     : null;
-const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY;
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+
+// Optional settings
+const TOKEN_TYPE = process.env.TOKEN_TYPE;
+const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY;
+
+const DEFAULT_NFT_API = OPENSEA_API_KEY ? 'Opensea' : 'Alchemy';
 
 // Image size for the GIF
 const GIF_ENABLED = true;
@@ -70,7 +75,6 @@ const checkConfig = (config) => {
 
 checkConfig({
     CONTRACT: [CONTRACT_ADDRESS, CONTRACT_ADDRESSES],
-    OPENSEA_API_KEY: OPENSEA_API_KEY,
     ALCHEMY_API_KEY: ALCHEMY_API_KEY,
     ETHERSCAN_API_KEY: ETHERSCAN_API_KEY,
     WEBHOOK_URL: DISCORD_ENABLED ? WEBHOOK_1 : 'Disable',
@@ -84,8 +88,10 @@ export {
     ABI,
     WEB3,
     NFT_TRADER_ABI,
+    DEFAULT_NFT_API,
     WEBHOOK_URLS,
     IMAGE_SIZE,
+    TOKEN_TYPE,
     GIF_ENABLED,
     TWITTER_ENABLED,
     DISCORD_ENABLED,
