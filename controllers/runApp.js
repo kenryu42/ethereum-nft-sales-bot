@@ -1,14 +1,15 @@
 import { parseTransaction } from './parseTransaction.js';
-import { sendEmbedMessage } from '../discord/index.js';
+import { sendEmbedMessage } from '../discord/embed.js';
 import { tweet } from '../twitter/tweet.js';
 import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup.js';
 
-const runApp = async (provider, transactionHash, contractAddress, tokenType) => {
-    const txConfig = await parseTransaction(provider, transactionHash, contractAddress, tokenType);
+const runApp = async (provider, transactionHash, contractAddress, contractData) => {
+    const txData = await parseTransaction(provider, transactionHash, contractAddress, contractData);
 
-    if (txConfig) {
+    if (txData) {
         const {
-            tokenData,
+            tokenName,
+            contractName,
             isSwap,
             swap,
             addressMaker,
@@ -17,13 +18,13 @@ const runApp = async (provider, transactionHash, contractAddress, tokenType) => 
             totalPrice,
             currency,
             quantity
-        } = txConfig;
+        } = txData;
 
         if (isSwap) {
             console.log(
                 '--------------------------------------------------------------------------------'
             );
-            console.log(`${tokenData.collectionName} Swap on NFTTrader.io #${swap.id}`);
+            console.log(`${contractName} Swap on NFTTrader.io #${swap.id}`);
             console.log(`Maker: ${swap[addressMaker].name}`);
             console.log(`Spent Assets: ${JSON.stringify(swap[addressMaker].spentAssets, 0, 2)}`);
             console.log(`Spent Value: ${swap[addressMaker].spentAmount} ETH`);
@@ -39,25 +40,27 @@ const runApp = async (provider, transactionHash, contractAddress, tokenType) => 
                 `Received Assets: ${JSON.stringify(swap[addressTaker].receivedAssets, 0, 2)}`
             );
             console.log(`Received Value: ${swap[addressTaker].receivedAmount} ETH`);
-            console.log(`\nhttps://etherscan.io/tx/${transactionHash}`);
+            console.log(`\nhttps://etherscan.io/txData/${transactionHash}`);
             console.log(
                 '--------------------------------------------------------------------------------'
             );
         } else {
             console.log(
-                `${quantity} ${tokenData.collectionName} sold on ${market.name} for ${totalPrice} ${currency.name}`
+                `${quantity} ${contractName || tokenName} sold on ${
+                    market.name
+                } for ${totalPrice} ${currency.name}`
             );
-            console.log(`https://etherscan.io/tx/${transactionHash}\n`);
+            console.log(`https://etherscan.io/txData/${transactionHash}\n`);
         }
     }
 
-    if (DISCORD_ENABLED && TWITTER_ENABLED && txConfig) {
-        const tweetConfig = await sendEmbedMessage(txConfig);
+    if (DISCORD_ENABLED && TWITTER_ENABLED && txData) {
+        const tweetConfig = await sendEmbedMessage(txData);
         await tweet(tweetConfig);
-    } else if (DISCORD_ENABLED && txConfig) {
-        await sendEmbedMessage(txConfig);
-    } else if (TWITTER_ENABLED && txConfig) {
-        await tweet(txConfig);
+    } else if (DISCORD_ENABLED && txData) {
+        await sendEmbedMessage(txData);
+    } else if (TWITTER_ENABLED && txData) {
+        await tweet(txData);
     }
 };
 

@@ -2,12 +2,12 @@ import { ethers } from 'ethers';
 import { NFT_TRADER_ABI } from '../config/setup.js';
 import { getReadableName } from '../utils/api.js';
 
-const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) => {
+const parseNftTrader = async ({ tx, web3, log, logAddress, decodedLogData }) => {
     const swapStatus = web3.eth.abi.decodeParameter('uint8', log.topics[3]);
-    // if swap status is not 1 (closed), then skip parsing.
+    // if tx.swap status is not 1 (closed), then skip parsing.
     // this check might be unnecessary for the new nft trader contract
-    // because there is no transfer event for swap status other than 1
-    if (swapStatus !== '1') return [null, null];
+    // because there is no transfer event for tx.swap status other than 1
+    if (swapStatus !== '1') return null;
 
     const swapId = decodedLogData._swapId;
     const nftTraderSwap = new web3.eth.Contract(NFT_TRADER_ABI, logAddress);
@@ -29,35 +29,35 @@ const parseNftTrader = async ({ web3, log, swap, logAddress, decodedLogData }) =
     const maker = await getReadableName(addressMaker);
     const taker = await getReadableName(addressTaker);
 
-    swap.id = swapId;
-    swap[addressMaker]
-        ? (swap[addressMaker].name = maker)
-        : (swap[addressMaker] = { name: maker, receivedAssets: [] });
-    swap[addressTaker]
-        ? (swap[addressTaker].name = taker)
-        : (swap[addressTaker] = { name: taker, receivedAssets: [] });
-    swap[addressMaker] = {
-        ...swap[addressMaker],
+    tx.swap.id = swapId;
+    tx.swap[addressMaker]
+        ? (tx.swap[addressMaker].name = maker)
+        : (tx.swap[addressMaker] = { name: maker, receivedAssets: [] });
+    tx.swap[addressTaker]
+        ? (tx.swap[addressTaker].name = taker)
+        : (tx.swap[addressTaker] = { name: taker, receivedAssets: [] });
+    tx.swap[addressMaker] = {
+        ...tx.swap[addressMaker],
         ...{
             receivedAmount: ethers.utils.formatEther(
                 BigInt(valueTaker - royaltiesTaker - platformFeeTaker)
             )
         }
     };
-    swap[addressTaker] = {
-        ...swap[addressTaker],
+    tx.swap[addressTaker] = {
+        ...tx.swap[addressTaker],
         ...{
             receivedAmount: ethers.utils.formatEther(
                 BigInt(valueMaker - royaltiesMaker - platformFeeMaker)
             )
         }
     };
-    swap[addressMaker].spentAssets = [...swap[addressTaker].receivedAssets];
-    swap[addressMaker].spentAmount = ethers.utils.formatEther(valueMaker);
-    swap[addressTaker].spentAssets = [...swap[addressMaker].receivedAssets];
-    swap[addressTaker].spentAmount = ethers.utils.formatEther(valueTaker);
-
-    return [addressMaker, addressTaker];
+    tx.swap[addressMaker].spentAssets = [...tx.swap[addressTaker].receivedAssets];
+    tx.swap[addressMaker].spentAmount = ethers.utils.formatEther(valueMaker);
+    tx.swap[addressTaker].spentAssets = [...tx.swap[addressMaker].receivedAssets];
+    tx.swap[addressTaker].spentAmount = ethers.utils.formatEther(valueTaker);
+    tx.addressMaker = addressMaker;
+    tx.addressTaker = addressTaker;
 };
 
 export { parseNftTrader };

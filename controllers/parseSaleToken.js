@@ -1,33 +1,23 @@
 import { transferEventTypes } from '../config/logEventTypes.js';
 import _ from 'lodash';
 
-const parseSaleToken = ({
-    web3,
-    log,
-    logAddress,
-    tokenType,
-    tokens,
-    tokenId,
-    fromAddr,
-    toAddr,
-    contractAddress
-}) => {
+const parseSaleToken = ({ tx, web3, log, logAddress }) => {
     if (
         log.data === '0x' &&
-        transferEventTypes[tokenType] === log.topics[0] &&
-        logAddress === contractAddress
+        transferEventTypes[tx.tokenType] === log.topics[0] &&
+        logAddress === tx.contractAddress
     ) {
-        fromAddr = web3.eth.abi.decodeParameter('address', log.topics[1]);
-        toAddr = web3.eth.abi.decodeParameter('address', log.topics[2]);
-        tokenId = web3.eth.abi.decodeParameter('uint256', log.topics[3]);
-        tokens.push(tokenId);
-        tokens = _.uniq(tokens);
+        tx.fromAddr = web3.eth.abi.decodeParameter('address', log.topics[1]);
+        tx.toAddr = web3.eth.abi.decodeParameter('address', log.topics[2]);
+        tx.tokenId = web3.eth.abi.decodeParameter('uint256', log.topics[3]);
+        tx.tokens.push(tx.tokenId);
+        tx.tokens = _.uniq(tx.tokens);
     } else if (
-        transferEventTypes[tokenType][0] === log.topics[0] &&
-        logAddress === contractAddress
+        transferEventTypes[tx.tokenType][0] === log.topics[0] &&
+        logAddress === tx.contractAddress
     ) {
-        fromAddr = web3.eth.abi.decodeParameter('address', log.topics[2]);
-        toAddr = web3.eth.abi.decodeParameter('address', log.topics[3]);
+        tx.fromAddr = web3.eth.abi.decodeParameter('address', log.topics[2]);
+        tx.toAddr = web3.eth.abi.decodeParameter('address', log.topics[3]);
         const decodeData = web3.eth.abi.decodeLog(
             [
                 { type: 'uint256', name: 'id' },
@@ -36,11 +26,9 @@ const parseSaleToken = ({
             log.data,
             []
         );
-        tokenId = decodeData.id;
-        tokens.push(Number(decodeData.value));
+        tx.tokenId = decodeData.id;
+        tx.tokens.push(Number(decodeData.value));
     }
-
-    return { tokens, tokenId, fromAddr, toAddr };
 };
 
 export { parseSaleToken };
