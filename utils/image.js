@@ -1,9 +1,9 @@
+import axios from 'axios';
+import sharp from 'sharp';
 import Jimp from 'jimp-compact';
 import { Gif } from 'make-a-gif';
 import { getTokenData } from './api.js';
-import { IMAGE_SIZE } from '../config/setup.js';
-import axios from 'axios';
-import sharp from 'sharp';
+import { WEB3, ABI, IMAGE_SIZE } from '../config/setup.js';
 
 const GIF_DURATION = 1500;
 const { width, height } = IMAGE_SIZE;
@@ -16,20 +16,29 @@ const resizeImage = async (image) => {
     return buffer;
 };
 
-const createGif = async (tokens) => {
+const createGif = async (tokens, contractAddress, tokenType) => {
     console.log('Creating GIF...');
     const frames = [];
 
     for (const token of tokens) {
         let imageData;
-        const tokenData = await getTokenData(token);
+        const tokenData = await getTokenData(contractAddress, tokenType, token);
         const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
-        const isSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
-        if (isSvg) {
-            const response = await axios.get(tokenData.image, { responseType: 'arraybuffer' });
-            const buffer = Buffer.from(response.data, 'utf8');
-            const imageBuffer = await sharp(buffer).png().toBuffer();
-            imageData = imageBuffer;
+        const endsWithSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
+        const startsWithSvg = tokenData.image
+            ? tokenData.image.startsWith('data:image/svg+xml;base64,')
+            : false;
+        if (endsWithSvg) {
+            const response = await axios.get(tokenData.image, {
+                responseType: 'arraybuffer'
+            });
+            const buffer = await sharp(response.data).png().toBuffer();
+            imageData = buffer;
+        } else if (startsWithSvg) {
+            const base64Image = tokenData.image.replace('data:image/svg+xml;base64,', '');
+            const buffer = Buffer.from(base64Image, 'base64');
+
+            imageData = await sharp(buffer).png().toBuffer();
         } else {
             imageData = tokenData.image;
         }
@@ -69,22 +78,45 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
 
         frames.push({ src: buffer, duration: GIF_DURATION });
 
-        let i = 0;
         for (const asset of swap[address].receivedAssets) {
+            let symbol;
             let imageData;
-            const tokenData = await getTokenData(asset.tokenId, asset.contractAddress);
-            const isSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
+            const contract = new WEB3.eth.Contract(ABI, asset.contractAddress);
+            const tokenData = await getTokenData(
+                asset.contractAddress,
+                asset.tokenType,
+                asset.tokenId
+            );
+            const endsWithSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
+            const startsWithSvg = tokenData.image
+                ? tokenData.image.startsWith('data:image/svg+xml;base64,')
+                : false;
+
+            try {
+                symbol = await contract.methods.symbol().call();
+            } catch {
+                symbol = '';
+            }
             const tokenName =
-                tokenData.name || `${tokenData.symbol} #${String(asset.tokenId).padStart(4, '0')}`;
-            swap[address].receivedAssets[i].name = tokenName;
-            if (isSvg) {
-                const response = await axios.get(tokenData.image, { responseType: 'arraybuffer' });
-                const buffer = Buffer.from(response.data, 'utf8');
-                const imageBuffer = await sharp(buffer).png().toBuffer();
-                imageData = imageBuffer;
+                tokenData.name || `${symbol} #${String(asset.tokenId).padStart(4, '0')}`;
+
+            asset.name = tokenName;
+
+            if (endsWithSvg) {
+                const buffer = await axios.get(tokenData.image, {
+                    responseType: 'arraybuffer'
+                });
+
+                imageData = await sharp(buffer.data).png().toBuffer();
+            } else if (startsWithSvg) {
+                const base64Image = tokenData.image.replace('data:image/svg+xml;base64,', '');
+                const buffer = Buffer.from(base64Image, 'base64');
+
+                imageData = await sharp(buffer).png().toBuffer();
             } else {
                 imageData = tokenData.image;
             }
+
             const image = !imageData ? await createNaImage() : await Jimp.read(imageData);
             image.resize(width, Jimp.AUTO);
             const quantity = asset.quantity > 1 ? ` Quantity: ${asset.quantity}` : '';
@@ -92,7 +124,6 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
             const buffer = await addTextToImage(image, text, -20, 20, false, true);
 
             frames.push({ src: buffer, duration: GIF_DURATION });
-            i++;
         }
         if (parseFloat(swap[address].receivedAmount) > 0) {
             const image = new Jimp(width, height, 'white');
@@ -109,8 +140,8 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
 
     const myGif = new Gif(width, height, 100);
     await myGif.setFrames(frames);
-
     const gifImage = await myGif.encode();
+
     console.log('Swap GIF created.');
 
     return gifImage;
