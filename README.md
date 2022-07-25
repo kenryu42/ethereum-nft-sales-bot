@@ -13,7 +13,7 @@
   <h3 align="center">Ethereum-NFT-Sales-Bot</h3>
 
   <p align="center">
-    NFT sales monitoring bot for the Ethereum blockchain. (ERC721, ERC1155)
+    NFT sales monitoring bot for the Ethereum blockchain. (erc721, erc1155)
   </p>
   <br />
   <br />
@@ -29,6 +29,7 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#opensea-api-key-is-now-optional">Opensea API Key Is Now Optional</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -103,9 +104,14 @@
 
 -   Install [Node.js](https://nodejs.org) version 16
     -   If you are using [nvm](https://github.com/creationix/nvm#installation) (recommended) running `nvm use` will automatically choose the right node version for you.
--   Opensea API Key - [apply here](https://docs.opensea.io/reference/request-an-api-key)
 -   Alchemy API Key - [apply here](https://auth.alchemyapi.io/signup)
 -   Etherscan API Key - [apply here](https://etherscan.io/register)
+
+### Opensea API Key Is Now Optional
+
+-   The bot now use Alchemy as the default NFT API. [🔗 Learn more](https://docs.alchemy.com/alchemy/enhanced-apis/nft-api)
+
+-   If you set `OPENSEA_API_KEY` in the `.env` file, it will take priority over the Alchemy for NFT API.
 
 ### Installation
 
@@ -123,7 +129,6 @@ npm install
 
 ```
 CONTRACT_ADDRESS=
-OPENSEA_API_KEY=
 ALCHEMY_API_KEY=
 ETHERSCAN_API_KEY=
 ```
@@ -131,6 +136,7 @@ ETHERSCAN_API_KEY=
 ### Optional
 
 ```
+OPENSEA_API_KEY=
 TWITTER_ENABLED=
 TWITTER_API_KEY=
 TWITTER_API_SECRET=
