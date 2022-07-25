@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { ethers } from 'ethers';
 import { WEB3 } from '../../config/setup.js';
 import { parseTransaction } from '../../controllers/parseTransaction.js';
+import { getContractData } from '../../utils/api.js';
 
 describe('NFT Trader Integration Test', function () {
     after(function () {
@@ -14,7 +15,8 @@ describe('NFT Trader Integration Test', function () {
 
         it('should get the correct data', async function () {
             const txHash = '0x09fc308002fcad5f30e103cc582c60ab43fec67f6bd9357c347de63bbd7fc00a';
-            const parseResult = await parseTransaction(WEB3, txHash, bayc, 'ERC721');
+            const contractData = await getContractData(bayc);
+            const parseResult = await parseTransaction(WEB3, txHash, bayc, contractData);
             const { isSwap, swap, addressMaker, addressTaker, tokenData, market, transactionHash } =
                 parseResult;
             const makerReceivedAssets = swap[addressMaker].receivedAssets;
@@ -45,7 +47,7 @@ describe('NFT Trader Integration Test', function () {
             assert.strictEqual(takerReceivedEth, '0.0');
             assert.strictEqual(market.name, 'NFT Trader 🔄');
             assert.strictEqual(transactionHash, txHash);
-            assert.strictEqual(tokenData.status, 200);
+            expect(tokenData).to.not.be.null;
         });
     });
 
@@ -54,7 +56,8 @@ describe('NFT Trader Integration Test', function () {
 
         it('should get the correct data', async function () {
             const txHash = '0x4faa22dac2533657dc2c08422c91abc389107a1bb1e88ceda4e72844ea2cec07';
-            const parseResult = await parseTransaction(WEB3, txHash, gutterCat, 'ERC1155');
+            const contractData = await getContractData(gutterCat);
+            const parseResult = await parseTransaction(WEB3, txHash, gutterCat, contractData);
             const { isSwap, swap, addressMaker, addressTaker, tokenData, market, transactionHash } =
                 parseResult;
             const makerReceivedAssets = swap[addressMaker].receivedAssets;
@@ -89,7 +92,7 @@ describe('NFT Trader Integration Test', function () {
             assert.strictEqual(takerReceivedEth, '0.0');
             assert.strictEqual(market.name, 'NFT Trader 🔄');
             assert.strictEqual(transactionHash, txHash);
-            assert.strictEqual(tokenData.status, 200);
+            expect(tokenData).to.not.be.null;
         });
     });
 
@@ -98,7 +101,8 @@ describe('NFT Trader Integration Test', function () {
 
         it('should get the correct data', async function () {
             const txHash = '0xf31708233d600e253e1fffe4c5f82dadd5ce1acc47d823082fca00f7f1aa763d';
-            const parseResult = await parseTransaction(WEB3, txHash, gutterCat, 'ERC1155');
+            const contractData = await getContractData(gutterCat);
+            const parseResult = await parseTransaction(WEB3, txHash, gutterCat, contractData);
             const { isSwap, swap, addressMaker, addressTaker, tokenData, market, transactionHash } =
                 parseResult;
             const makerReceivedAssets = swap[addressMaker].receivedAssets;
@@ -135,7 +139,7 @@ describe('NFT Trader Integration Test', function () {
             assert.strictEqual(takerReceivedEth, '0.0');
             assert.strictEqual(market.name, 'NFT Trader 🔄');
             assert.strictEqual(transactionHash, txHash);
-            assert.strictEqual(tokenData.status, 200);
+            expect(tokenData).to.not.be.null;
         });
     });
 });

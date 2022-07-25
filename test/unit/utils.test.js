@@ -10,13 +10,14 @@ import {
     getContractData,
     formatPrice
 } from '../../utils/api.js';
-import { WEB3 } from '../../config/setup.js';
+import { WEB3, DEFAULT_NFT_API } from '../../config/setup.js';
 
 describe('Unit Test', function () {
     const myAddress = '0xBbf61c7c7eaF83a697f69A02469B4F7D2fCc2936';
     const validAddress = '0x1234567890123456789012345678901234567890';
     const invalidAddress = '0x123456789012345678901234567890123456789';
 
+    console.log(`Default NFT Api: ${DEFAULT_NFT_API}`);
     after(function () {
         WEB3.currentProvider.disconnect();
     });
@@ -80,10 +81,13 @@ describe('Unit Test', function () {
     describe('get token data', function () {
         const azuki = '0xED5AF388653567Af2F388E6224dC7C4b3241C544';
         it('should able to get token data', async function () {
-            const tokenData = await getTokenData(42, azuki);
-            const response = tokenData.status === 200;
+            const tokenData = await getTokenData(azuki, 'erc721', 40);
+            const image = tokenData.image;
+            const tokenName = tokenData.name;
 
-            expect(response).to.be.true;
+            expect(tokenData).to.not.be.null;
+            expect(image).to.not.be.null;
+            assert.strictEqual(tokenName, 'Azuki #40');
         });
     });
 
@@ -91,12 +95,13 @@ describe('Unit Test', function () {
         const azuki = '0xED5AF388653567Af2F388E6224dC7C4b3241C544';
         it('should able to get token data', async function () {
             const contractData = await getContractData(azuki);
-            const contractName = contractData.name;
+            const symbol = contractData.symbol;
+            const collectionName = contractData.name;
 
             expect(contractData).to.not.be.null;
             expect(contractData).to.not.be.undefined;
-            expect(contractName).to.not.be.null;
-            expect(contractData).to.not.be.undefined;
+            assert.strictEqual(symbol, 'AZUKI');
+            assert.strictEqual(collectionName, 'Azuki');
         });
     });
 
