@@ -7,11 +7,10 @@ import {
     DEFAULT_NFT_API,
     OPENSEA_API_KEY,
     ALCHEMY_API_KEY,
-    CONTRACT_ADDRESS,
     ETHERSCAN_API_KEY
 } from '../config/setup.js';
 
-const openseaNftApi = async (tokenId, contractAddress = CONTRACT_ADDRESS) => {
+const openseaNftApi = async (tokenId, contractAddress) => {
     const baseURL = `https://api.opensea.io/api/v1/asset/${contractAddress}/${tokenId}`;
 
     try {
@@ -34,7 +33,7 @@ const openseaNftApi = async (tokenId, contractAddress = CONTRACT_ADDRESS) => {
     }
 };
 
-const retryOnOpenseaNftApi = async (tokenId, contractAddress = CONTRACT_ADDRESS) => {
+const retryOnOpenseaNftApi = async (tokenId, contractAddress) => {
     const result = await retry(
         async () => {
             const response = await openseaNftApi(tokenId, contractAddress);

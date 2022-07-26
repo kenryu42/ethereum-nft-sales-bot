@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import { formatPrice } from '../utils/api.js';
 import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
-import { WEBHOOK_URLS, CONTRACT_ADDRESS, GIF_ENABLED } from '../config/setup.js';
+import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
 
 const sendEmbedMessage = async (tx) => {
@@ -38,7 +38,7 @@ const sendEmbedMessage = async (tx) => {
         const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
 
         embed
-            .setURL(`${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokenId}`)
+            .setURL(`${tx.market.site}${tx.contractAddress}/${tx.tokenId}`)
             .addField(
                 priceTitle,
                 `\`${formatPrice(tx.totalPrice)} ${tx.currency.name} ${tx.ethUsdValue}\``,
@@ -59,7 +59,7 @@ const sendEmbedMessage = async (tx) => {
         }
 
         if (tx.tokenType === 'ERC721' && tx.quantity > 1 && GIF_ENABLED) {
-            const gifImage = await createGif(tx.tokens, CONTRACT_ADDRESS, tx.tokenType);
+            const gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
 
             tx.gifImage = gifImage;
             file = new MessageAttachment(gifImage, 'image.gif');
@@ -103,7 +103,7 @@ const sendEmbedMessage = async (tx) => {
             ];
 
             embed.addFields(fields);
-            formatSweepField(tx.tokens, tx.prices, tx.currency, tx.marketList, embed);
+            formatSweepField(tx, embed);
         } else {
             const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
 
@@ -111,7 +111,7 @@ const sendEmbedMessage = async (tx) => {
                 embed.addField('Quantity', `\`${tx.quantity}\``, false);
 
             if (tx.tokenType === 'ERC721' && tx.quantity > 1) {
-                formatBundleField(tx.tokens, tx.market, embed);
+                formatBundleField(tx, embed);
                 embed.addField(
                     'Sweeper',
                     `[${tx.to}](${tx.market.accountPage}${tx.toAddr}${isX2Y2})`,

@@ -7,7 +7,6 @@ import {
     GIF_ENABLED,
     TWITTER_ENABLED,
     DISCORD_ENABLED,
-    CONTRACT_ADDRESS,
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
@@ -33,7 +32,7 @@ const tweet = async (tx) => {
     if (tx.isSwap && !DISCORD_ENABLED) {
         tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
     } else if (tx.isSweep && !DISCORD_ENABLED) {
-        tx.gifImage = await createGif(tx.tokens, CONTRACT_ADDRESS, tx.tokenType);
+        tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
     }
 
     if (!tx.tokenData.image) {
@@ -107,7 +106,7 @@ ${
 			
 ${field}
 			
-🔍 ${tx.market.site}${CONTRACT_ADDRESS}/${tx.tokens[0]}	
+🔍 ${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}	
 			`;
     }
 
