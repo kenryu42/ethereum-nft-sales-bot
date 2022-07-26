@@ -219,6 +219,71 @@ const markets = {
                 ]
             }
         ]
+    },
+    '0x0804b76278eac7c719ee7b7921b3f1071d1ae2f7': {
+        name: 'Opensea: Seaport ⚓️',
+        color: '#399dff',
+        site: 'https://opensea.io/assets/',
+        accountPage: 'https://opensea.io/',
+        iconURL: 'https://pbs.twimg.com/profile_images/1537131404550582272/TvRw2kcG_400x400.jpg',
+        logDecoder: [
+            {
+                type: 'bytes32',
+                name: 'orderHash'
+            },
+            {
+                type: 'address',
+                name: 'recipient'
+            },
+            {
+                type: 'tuple[]',
+                name: 'offer',
+                components: [
+                    {
+                        type: 'uint8',
+                        name: 'itemType'
+                    },
+                    {
+                        type: 'address',
+                        name: 'token'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'identifier'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'amount'
+                    }
+                ]
+            },
+            {
+                type: 'tuple[]',
+                name: 'consideration',
+                components: [
+                    {
+                        type: 'uint8',
+                        name: 'itemType'
+                    },
+                    {
+                        type: 'address',
+                        name: 'token'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'identifier'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'amount'
+                    },
+                    {
+                        type: 'address',
+                        name: 'recipient'
+                    }
+                ]
+            }
+        ]
     }
 };
 
