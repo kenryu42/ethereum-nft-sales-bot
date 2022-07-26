@@ -26,7 +26,7 @@ const client = TWITTER_ENABLED
 const rwClient = TWITTER_ENABLED ? client.readWrite : null;
 
 const tweet = async (tx) => {
-    let imageType;
+    let imageType = EUploadMimeType.Png;
     let imageBuffer;
     let tweetContent;
 
@@ -38,20 +38,17 @@ const tweet = async (tx) => {
 
     if (!tx.tokenData.image) {
         imageBuffer = await createNaImage(true);
-        imageType = EUploadMimeType.Png;
     } else if (tx.isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
         imageBuffer = tx.gifImage;
         imageType = EUploadMimeType.Gif;
     } else if (tx.tokenData.image.endsWith('.svg')) {
         const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
         imageBuffer = await sharp(buffer.data).png().toBuffer();
-        imageType = EUploadMimeType.Png;
     } else if (tx.tokenData.image.startsWith('data:image/svg+xml;base64,')) {
         const base64Image = tx.tokenData.image.replace('data:image/svg+xml;base64,', '');
         const buffer = Buffer.from(base64Image, 'base64');
 
         imageBuffer = await sharp(buffer).png().toBuffer();
-        imageType = EUploadMimeType.Png;
     } else {
         const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
         imageBuffer = buffer.data;
