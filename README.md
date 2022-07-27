@@ -274,6 +274,14 @@ kenryu.eth - [@kenryu42](https://twitter.com/kenryu42) - ken0ryu@gmail.com
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Collections using this bot
+
+Please open a Pull Request to add your collection below! ❤️
+
+| Collection       | Twitter                                   | Discord                                                |
+| ---------------- | ----------------------------------------- | ------------------------------------------------------ |
+| Murakami.Flowers | [@MFTMKKUS](https://twitter.com/MFTMKKUS) | [Murakami.Flowers](https://discord.gg/murakamiflowers) |
+
 ## LICENSE
 
 This project is [MIT](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/main/LICENSE) licensed.
