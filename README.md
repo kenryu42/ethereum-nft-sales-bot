@@ -54,6 +54,7 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#collections-using-this-bot">Collections using this bot</a></li>
     <li><a href="#license">License</a></li>
   </ol>
 </details>
@@ -281,6 +282,8 @@ Please open a Pull Request to add your collection below! ❤️
 | Collection       | Twitter                                   | Discord                                                |
 | ---------------- | ----------------------------------------- | ------------------------------------------------------ |
 | Murakami.Flowers | [@MFTMKKUS](https://twitter.com/MFTMKKUS) | [Murakami.Flowers](https://discord.gg/murakamiflowers) |
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## LICENSE
 
