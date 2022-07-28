@@ -2,7 +2,7 @@
     "name": "ethereum-nft-sales-bot",
     "version": "1.0.0",
     "description": "An ethereum NFT sales monitoring bot.",
-    "main": "app.js",
+    "main": "app.ts",
     "scripts": {
         "format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
         "lint": "eslint '**/*.{js,jsx,ts,tsx}' --ext .ts",
