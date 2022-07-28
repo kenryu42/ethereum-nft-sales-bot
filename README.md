@@ -54,6 +54,7 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#collections-using-this-bot">Collections using this bot</a></li>
     <li><a href="#license">License</a></li>
   </ol>
 </details>
@@ -271,6 +272,16 @@ kenryu.eth - [@kenryu42](https://twitter.com/kenryu42) - ken0ryu@gmail.com
 ## Acknowledgments
 
 -   [@dsgriffin](https://github.com/dsgriffin) - [NFT Sales Twitter Bot](https://github.com/dsgriffin/nft-sales-twitter-bot)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Collections using this bot
+
+Please open a Pull Request to add your collection below! ❤️
+
+| Collection       | Twitter                                   | Discord                                                |
+| ---------------- | ----------------------------------------- | ------------------------------------------------------ |
+| Murakami.Flowers | [@MFTMKKUS](https://twitter.com/MFTMKKUS) | [Murakami.Flowers](https://discord.gg/murakamiflowers) |
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
