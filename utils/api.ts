@@ -8,9 +8,11 @@ import {
     OPENSEA_API_KEY,
     ALCHEMY_API_KEY,
     ETHERSCAN_API_KEY
-} from '../config/setup.js';
+} from '../config/setup';
+import { AlchemyWeb3 } from '@alch/alchemy-web3';
+import { ContractData, TokenData } from '../types/types';
 
-const openseaNftApi = async (tokenId, contractAddress) => {
+const openseaNftApi = async (tokenId: string | number, contractAddress: string) => {
     const baseURL = `https://api.opensea.io/api/v1/asset/${contractAddress}/${tokenId}`;
 
     try {
@@ -21,7 +23,7 @@ const openseaNftApi = async (tokenId, contractAddress) => {
         });
 
         return response;
-    } catch (error) {
+    } catch (error: any) {
         if (error.response) {
             console.log(error.response.data);
             console.log(error.response.status);
@@ -33,7 +35,10 @@ const openseaNftApi = async (tokenId, contractAddress) => {
     }
 };
 
-const retryOnOpenseaNftApi = async (tokenId, contractAddress) => {
+const retryOnOpenseaNftApi = async (
+    tokenId: string | number,
+    contractAddress: string
+): Promise<TokenData> => {
     const result = await retry(
         async () => {
             const response = await openseaNftApi(tokenId, contractAddress);
@@ -45,11 +50,8 @@ const retryOnOpenseaNftApi = async (tokenId, contractAddress) => {
             const data = _.get(response, 'data');
 
             return {
-                status: _.get(response, 'status'),
                 name: _.get(data, 'name'),
-                symbol: _.get(data, ['asset_contract', 'symbol']),
-                image: _.get(data, 'image_url'),
-                collectionName: _.get(data, ['collection', 'name'])
+                image: _.get(data, 'image_url')
             };
         },
         {
@@ -60,14 +62,16 @@ const retryOnOpenseaNftApi = async (tokenId, contractAddress) => {
     return result;
 };
 
-const getOpenseaName = async (address) => {
+const getOpenseaName = async (address: string) => {
     try {
         const response = await axios.get(`https://api.opensea.io/api/v1/account/${address}`);
 
         const result = _.get(response, 'data');
 
         return _.get(result, ['data', 'user', 'username']);
-    } catch (error) {
+    } catch (error: any) {
+        console.log('getOpenseaName API error');
+        console.log(`address: ${address}`);
         if (error.response) {
             console.log('Error message:', error.response.data);
             console.log('Status:', error.response.status);
@@ -77,7 +81,11 @@ const getOpenseaName = async (address) => {
     }
 };
 
-const getNFTMetadata = async (contractAddress, tokenType, tokenId) => {
+const getNFTMetadata = async (
+    contractAddress: string,
+    tokenType: string,
+    tokenId: string | number
+) => {
     try {
         const baseURL = `https://eth-mainnet.alchemyapi.io/nft/v2/${ALCHEMY_API_KEY}/getNFTMetadata`;
         const response = await axios.get(
@@ -85,7 +93,7 @@ const getNFTMetadata = async (contractAddress, tokenType, tokenId) => {
         );
 
         return response;
-    } catch (error) {
+    } catch (error: any) {
         console.log('getNFTMetadata API error');
 
         if (error.response) {
@@ -99,7 +107,11 @@ const getNFTMetadata = async (contractAddress, tokenType, tokenId) => {
     }
 };
 
-const retryOnGetNFTMetadata = async (contractAddress, tokenType, tokenId) => {
+const retryOnGetNFTMetadata = async (
+    contractAddress: string,
+    tokenType: string,
+    tokenId: string | number
+): Promise<TokenData> => {
     const result = await retry(
         async () => {
             const response = await getNFTMetadata(contractAddress, tokenType, tokenId);
@@ -123,14 +135,14 @@ const retryOnGetNFTMetadata = async (contractAddress, tokenType, tokenId) => {
     return result;
 };
 
-const getContractMetadata = async (contractAddress) => {
+const getContractMetadata = async (contractAddress: string) => {
     try {
         const response = await axios.get(
             `https://eth-mainnet.alchemyapi.io/nft/v2/${ALCHEMY_API_KEY}/getContractMetadata?contractAddress=${contractAddress}`
         );
 
         return response;
-    } catch (error) {
+    } catch (error: any) {
         console.log('getContractMetadata API error');
 
         if (error.response) {
@@ -144,7 +156,7 @@ const getContractMetadata = async (contractAddress) => {
     }
 };
 
-const retryOnGetContractMetadata = async (contractAddress) => {
+const retryOnGetContractMetadata = async (contractAddress: string): Promise<ContractData> => {
     const result = await retry(
         async () => {
             const response = await getContractMetadata(contractAddress);
@@ -169,7 +181,7 @@ const retryOnGetContractMetadata = async (contractAddress) => {
     return result;
 };
 
-const getAssetContract = async (contractAddress) => {
+const getAssetContract = async (contractAddress: string) => {
     try {
         const response = await axios.get(
             `https://api.opensea.io/api/v1/asset_contract/${contractAddress}`,
@@ -181,7 +193,7 @@ const getAssetContract = async (contractAddress) => {
         );
 
         return response;
-    } catch (error) {
+    } catch (error: any) {
         console.log('getAssetContract API error');
 
         if (error.response) {
@@ -193,7 +205,7 @@ const getAssetContract = async (contractAddress) => {
     }
 };
 
-const retryOnGetAssetContract = async (contractAddress) => {
+const retryOnGetAssetContract = async (contractAddress: string): Promise<ContractData> => {
     const result = await retry(
         async () => {
             const response = await getAssetContract(contractAddress);
@@ -218,7 +230,7 @@ const retryOnGetAssetContract = async (contractAddress) => {
     return result;
 };
 
-const getENSName = async (address) => {
+const getENSName = async (address: string) => {
     try {
         // const provider = new ethers.providers.CloudflareProvider();
         const provider = new ethers.providers.AlchemyProvider('homestead', ALCHEMY_API_KEY);
@@ -230,14 +242,14 @@ const getENSName = async (address) => {
     }
 };
 
-const getReadableName = async (address) => {
+const getReadableName = async (address: string) => {
     const result =
         (await getOpenseaName(address)) || (await getENSName(address)) || shortenAddress(address);
 
     return result;
 };
 
-const getTransactionReceipt = async (web3, transactionHash) => {
+const getTransactionReceipt = async (web3: AlchemyWeb3, transactionHash: string) => {
     const receipt = await retry(
         async () => {
             const rec = await web3.eth.getTransactionReceipt(transactionHash);
@@ -256,48 +268,42 @@ const getTransactionReceipt = async (web3, transactionHash) => {
     return receipt;
 };
 
-const getTokenData = async (contractAddress, tokenType, tokenId) => {
-    try {
-        let tokenData;
+const getTokenData = async (
+    contractAddress: string,
+    tokenType: string,
+    tokenId: string | number
+) => {
+    let tokenData;
 
-        if (DEFAULT_NFT_API === 'Alchemy') {
-            tokenData = await retryOnGetNFTMetadata(contractAddress, tokenType, tokenId);
-        } else {
-            tokenData = await retryOnOpenseaNftApi(tokenId, contractAddress);
-        }
-
-        return tokenData;
-    } catch (error) {
-        console.log(`Default Api: ${DEFAULT_NFT_API}`);
-        console.log('API error: ', error);
+    if (DEFAULT_NFT_API === 'Alchemy') {
+        tokenData = await retryOnGetNFTMetadata(contractAddress, tokenType, tokenId);
+    } else {
+        tokenData = await retryOnOpenseaNftApi(tokenId, contractAddress);
     }
+
+    return tokenData;
 };
 
-const getContractData = async (contractAddress) => {
-    try {
-        let contractData;
+const getContractData = async (contractAddress: string) => {
+    let contractData;
 
-        if (DEFAULT_NFT_API === 'Alchemy') {
-            contractData = await retryOnGetContractMetadata(contractAddress);
-        } else {
-            contractData = await retryOnGetAssetContract(contractAddress);
-        }
-
-        return contractData;
-    } catch (error) {
-        console.log(`Default Api: ${DEFAULT_NFT_API}`);
-        console.log('API error: ', error);
+    if (DEFAULT_NFT_API === 'Alchemy') {
+        contractData = await retryOnGetContractMetadata(contractAddress);
+    } else {
+        contractData = await retryOnGetAssetContract(contractAddress);
     }
+
+    return contractData;
 };
 
-const shortenAddress = (address) => {
+const shortenAddress = (address: string) => {
     if (!ethers.utils.isAddress(address)) {
         throw new Error('Not a valid address');
     }
     return address.substring(0, 6) + '...' + address.substring(address.length - 4);
 };
 
-const getEthUsdPrice = async (ethPrice) => {
+const getEthUsdPrice = async (ethPrice: number) => {
     const url = `
         https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${ETHERSCAN_API_KEY}
     `;
@@ -322,7 +328,7 @@ const getEthUsdPrice = async (ethPrice) => {
     return result;
 };
 
-const formatPrice = (price) => {
+const formatPrice = (price: number) => {
     let formatedPrice = price.toLocaleString('en-US', {
         minimumFractionDigits: 3,
         maximumFractionDigits: 3

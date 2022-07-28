@@ -1,10 +1,12 @@
-import { transferEventTypes } from '../config/logEventTypes.js';
+import { AlchemyWeb3 } from '@alch/alchemy-web3';
+import { transferEventTypes } from '../config/logEventTypes';
+import { TransactionData } from '../types/types';
 
-const parseSwapToken = ({ tx, web3, log, logAddress }) => {
+const parseSwapToken = (tx: TransactionData, web3: AlchemyWeb3, log: any, logAddress: string) => {
     if (tx.isSwap && transferEventTypes['ERC721'] === log.topics[0]) {
         const receivedAddr = web3.eth.abi.decodeParameter('address', log.topics[2]).toLowerCase();
 
-        tx.tokenId = web3.eth.abi.decodeParameter('uint256', log.topics[3]);
+        tx.tokenId = String(web3.eth.abi.decodeParameter('uint256', log.topics[3]));
         if (logAddress === tx.contractAddress) tx.swap.monitorTokenId = tx.tokenId;
 
         receivedAddr in tx.swap

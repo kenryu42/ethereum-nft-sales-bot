@@ -1,9 +1,16 @@
-import { parseTransaction } from './parseTransaction.js';
-import { sendEmbedMessage } from '../discord/embed.js';
-import { tweet } from '../twitter/tweet.js';
-import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup.js';
+import { parseTransaction } from './parseTransaction';
+import { sendEmbedMessage } from '../discord/embed';
+import { tweet } from '../twitter/tweet';
+import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup';
+import { AlchemyWeb3 } from '@alch/alchemy-web3';
+import { ContractData } from '../types/types';
 
-const runApp = async (provider, transactionHash, contractAddress, contractData) => {
+const runApp = async (
+    provider: AlchemyWeb3,
+    transactionHash: string,
+    contractAddress: string,
+    contractData: ContractData
+) => {
     const txData = await parseTransaction(provider, transactionHash, contractAddress, contractData);
 
     if (txData) {
@@ -25,21 +32,17 @@ const runApp = async (provider, transactionHash, contractAddress, contractData) 
                 '--------------------------------------------------------------------------------'
             );
             console.log(`${contractName} Swap on NFTTrader.io #${swap.id}`);
-            console.log(`Maker: ${swap[addressMaker].name}`);
-            console.log(`Spent Assets: ${JSON.stringify(swap[addressMaker].spentAssets, 0, 2)}`);
-            console.log(`Spent Value: ${swap[addressMaker].spentAmount} ETH`);
-            console.log(
-                `Received Assets: ${JSON.stringify(swap[addressMaker].receivedAssets, 0, 2)}`
-            );
-            console.log(`Received Value: ${swap[addressMaker].receivedAmount} ETH`);
+            console.log(`Maker: ${swap[addressMaker!].name}`);
+            console.log(`Spent Assets: ${JSON.stringify(swap[addressMaker!].spentAssets)}`);
+            console.log(`Spent Value: ${swap[addressMaker!].spentAmount} ETH`);
+            console.log(`Received Assets: ${JSON.stringify(swap[addressMaker!].receivedAssets)}`);
+            console.log(`Received Value: ${swap[addressMaker!].receivedAmount} ETH`);
             console.log('🔄');
-            console.log(`Taker: ${swap[addressTaker].name}`);
-            console.log(`Spent Assets: ${JSON.stringify(swap[addressTaker].spentAssets, 0, 2)}`);
-            console.log(`Spent Value: ${swap[addressTaker].spentAmount} ETH`);
-            console.log(
-                `Received Assets: ${JSON.stringify(swap[addressTaker].receivedAssets, 0, 2)}`
-            );
-            console.log(`Received Value: ${swap[addressTaker].receivedAmount} ETH`);
+            console.log(`Taker: ${swap[addressTaker!].name}`);
+            console.log(`Spent Assets: ${JSON.stringify(swap[addressTaker!].spentAssets)}`);
+            console.log(`Spent Value: ${swap[addressTaker!].spentAmount} ETH`);
+            console.log(`Received Assets: ${JSON.stringify(swap[addressTaker!].receivedAssets)}`);
+            console.log(`Received Value: ${swap[addressTaker!].receivedAmount} ETH`);
             console.log(`\nhttps://etherscan.io/txData/${transactionHash}`);
             console.log(
                 '--------------------------------------------------------------------------------'

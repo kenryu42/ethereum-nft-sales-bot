@@ -9,8 +9,8 @@ import {
     getTokenData,
     getContractData,
     formatPrice
-} from '../../utils/api.js';
-import { WEB3, DEFAULT_NFT_API } from '../../config/setup.js';
+} from '../../utils/api';
+import { DEFAULT_NFT_API } from '../../config/setup';
 
 describe('Unit Test', function () {
     const myAddress = '0xBbf61c7c7eaF83a697f69A02469B4F7D2fCc2936';
@@ -18,15 +18,11 @@ describe('Unit Test', function () {
     const invalidAddress = '0x123456789012345678901234567890123456789';
 
     console.log(`Default NFT Api: ${DEFAULT_NFT_API}`);
-    after(function () {
-        WEB3.currentProvider.disconnect();
-    });
 
     /*
      **	https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
      */
-    function isNumeric(str) {
-        if (typeof str != 'string') return false;
+    function isNumeric(str: string) {
         return !Number.isNaN(str) && !Number.isNaN(parseFloat(str));
     }
 
@@ -71,7 +67,7 @@ describe('Unit Test', function () {
 
     describe('get Eth Usd price', function () {
         it('should return ethusd price', async function () {
-            const ethUsd = await getEthUsdPrice('0.69');
+            const ethUsd = await getEthUsdPrice(0.69);
             const result = isNumeric(ethUsd);
 
             expect(result).to.be.true;

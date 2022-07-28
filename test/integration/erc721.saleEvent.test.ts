@@ -1,12 +1,13 @@
 import assert from 'assert';
 import { expect } from 'chai';
 import { ethers } from 'ethers';
-import { WEB3 } from '../../config/setup.js';
-import { getContractData } from '../../utils/api.js';
-import { parseTransaction } from '../../controllers/parseTransaction.js';
+import { ContractData } from '../../types/types';
+import { getContractData } from '../../utils/api';
+import { WEB3 } from '../../config/setup';
+import { parseTransaction } from '../../controllers/parseTransaction';
 
 describe('ERC 721 Integration Test', function () {
-    let contractData;
+    let contractData: ContractData;
     const bayc = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
 
     before(async function () {
@@ -37,16 +38,16 @@ describe('ERC 721 Integration Test', function () {
                 toAddr,
                 sweeperAddr,
                 transactionHash
-            } = salesData;
+            } = salesData!;
 
             const isSameSize =
                 tokens.length === prices.length && tokens.length === marketList.length;
 
             expect(isSameSize).to.be.true;
             expect(tokenData).to.not.be.null;
-            expect(ethers.utils.isAddress(fromAddr)).to.be.true;
-            expect(ethers.utils.isAddress(toAddr)).to.be.true;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(fromAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(toAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'Opensea: Seaport ⚓️');
             assert.strictEqual(market, marketList[0]);
             assert.strictEqual(transactionHash, txHash);
@@ -68,16 +69,16 @@ describe('ERC 721 Integration Test', function () {
                 toAddr,
                 sweeperAddr,
                 transactionHash
-            } = salesData;
+            } = salesData!;
 
             const isSameSize =
                 tokens.length === prices.length && tokens.length === marketList.length;
 
             expect(isSameSize).to.be.true;
             expect(tokenData).to.not.be.null;
-            expect(ethers.utils.isAddress(fromAddr)).to.be.true;
-            expect(ethers.utils.isAddress(toAddr)).to.be.true;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(fromAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(toAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'LooksRare 👀💎');
             assert.strictEqual(market, marketList[0]);
             assert.strictEqual(transactionHash, txHash);
@@ -99,16 +100,16 @@ describe('ERC 721 Integration Test', function () {
                 toAddr,
                 sweeperAddr,
                 transactionHash
-            } = salesData;
+            } = salesData!;
 
             const isSameSize =
                 tokens.length === prices.length && tokens.length === marketList.length;
 
             expect(isSameSize).to.be.true;
             expect(tokenData).to.not.be.null;
-            expect(ethers.utils.isAddress(fromAddr)).to.be.true;
-            expect(ethers.utils.isAddress(toAddr)).to.be.true;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(fromAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(toAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'X2Y2 ⭕️');
             assert.strictEqual(market, marketList[0]);
             assert.strictEqual(transactionHash, txHash);
@@ -137,15 +138,15 @@ describe('ERC 721 Integration Test', function () {
                 toAddr,
                 sweeperAddr,
                 transactionHash
-            } = salesData;
+            } = salesData!;
 
             assert.strictEqual(tokens.length, 2);
             assert.strictEqual(prices.length, 1);
             assert.strictEqual(prices[0], '0.10');
             assert.strictEqual(marketList.length, 1);
-            expect(ethers.utils.isAddress(fromAddr)).to.be.true;
-            expect(ethers.utils.isAddress(toAddr)).to.be.true;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(fromAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(toAddr!)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'Opensea: Seaport ⚓️');
             assert.strictEqual(market, marketList[0]);
             assert.strictEqual(transactionHash, txHash);
@@ -161,14 +162,14 @@ describe('ERC 721 Integration Test', function () {
             const salesData = await parseTransaction(WEB3, txHash, beanz, beanZcontractData);
 
             const { tokens, prices, tokenData, marketList, market, sweeperAddr, transactionHash } =
-                salesData;
+                salesData!;
 
             const isSameSize =
                 tokens.length === prices.length && tokens.length === marketList.length;
 
             expect(isSameSize).to.be.true;
             expect(tokenData).to.not.be.null;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'Gem 💎');
             assert.strictEqual(transactionHash, txHash);
         });
@@ -182,14 +183,14 @@ describe('ERC 721 Integration Test', function () {
             const salesData = await parseTransaction(WEB3, txHash, meebits, meebitsContractData);
 
             const { tokens, prices, tokenData, marketList, market, sweeperAddr, transactionHash } =
-                salesData;
+                salesData!;
 
             const isSameSize =
                 tokens.length === prices.length && tokens.length === marketList.length;
 
             expect(isSameSize).to.be.true;
             expect(tokenData).to.not.be.null;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'Genie 🧞‍♂️');
             assert.strictEqual(transactionHash, txHash);
         });
@@ -203,14 +204,14 @@ describe('ERC 721 Integration Test', function () {
             const salesData = await parseTransaction(WEB3, txHash, neko, nekoContractData);
 
             const { tokens, prices, tokenData, marketList, market, sweeperAddr, transactionHash } =
-                salesData;
+                salesData!;
 
             const isSameSize =
                 tokens.length === prices.length && tokens.length === marketList.length;
 
             expect(isSameSize).to.be.true;
             expect(tokenData).to.not.be.null;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'Gem 💎');
             assert.strictEqual(transactionHash, txHash);
         });
@@ -224,13 +225,13 @@ describe('ERC 721 Integration Test', function () {
             const salesData = await parseTransaction(WEB3, txHash, murakamiFlowers, mfContractData);
 
             const { tokens, prices, tokenData, marketList, market, sweeperAddr, transactionHash } =
-                salesData;
+                salesData!;
 
             const isSameSize =
                 tokens.length === prices.length && tokens.length === marketList.length;
 
             expect(isSameSize).to.be.true;
-            expect(ethers.utils.isAddress(sweeperAddr)).to.be.true;
+            expect(ethers.utils.isAddress(sweeperAddr!)).to.be.true;
             assert.strictEqual(market.name, 'Genie 🧞‍♂️');
             assert.strictEqual(transactionHash, txHash);
             expect(tokenData).to.not.be.null;

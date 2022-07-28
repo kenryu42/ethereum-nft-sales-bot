@@ -1,8 +1,15 @@
 import { ethers } from 'ethers';
-import { currencies } from '../config/currencies.js';
-import { formatPrice } from '../utils/api.js';
+import { currencies } from '../config/currencies';
+import {
+    Market,
+    TransactionData,
+    SeaportOrder,
+    OfferItem,
+    ConsiderationItem
+} from '../types/types';
+import { formatPrice } from '../utils/api';
 
-const parseSeaport = ({ tx, logMarket, decodedLogData }) => {
+const parseSeaport = (tx: TransactionData, logMarket: Market, decodedLogData: SeaportOrder) => {
     const offer = decodedLogData.offer;
     const consideration = decodedLogData.consideration;
     const nftOnOfferSide = offer.some((item) => item.token.toLowerCase() === tx.contractAddress);
@@ -30,8 +37,8 @@ const parseSeaport = ({ tx, logMarket, decodedLogData }) => {
     return [price, false];
 };
 
-function reducer(previous, current) {
-    const currency = currencies[current.token.toLowerCase()];
+function reducer(previous: number, current: OfferItem | ConsiderationItem) {
+    const currency = currencies[current.token.toLowerCase() as keyof typeof currencies];
     if (currency !== undefined) {
         const result =
             previous + Number(ethers.utils.formatUnits(current.amount, currency.decimals));

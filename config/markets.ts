@@ -1,4 +1,6 @@
-const markets = {
+import { Market } from '../types/types';
+
+const markets: { [key: string]: Market } = {
     // NFT Trader BatchSwap Address
     '0x657e383edb9a7407e468acbcc9fe4c9730c7c275': {
         name: 'NFT Trader 🔄',
