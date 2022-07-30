@@ -55,7 +55,7 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
-    <li><a href="#collections-using-this-bot">Collections using this bot</a></li>
+    <li><a href="#collections">Collections</a></li>
     <li><a href="#license">License</a></li>
   </ol>
 </details>
@@ -286,9 +286,11 @@ kenryu.eth - [@kenryu42](https://twitter.com/kenryu42) - ken0ryu@gmail.com
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Collections using this bot
+## Collections
 
-Please open a Pull Request to add your collection below! ❤️
+Collections that using this bot.
+
+Open a Pull Request to add your collection below!
 
 | Collection       | Twitter                                   | Discord                                                |
 | ---------------- | ----------------------------------------- | ------------------------------------------------------ |
