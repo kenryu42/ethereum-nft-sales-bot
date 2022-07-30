@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { currencies } from '../config/currencies';
+import { currencies } from '../config/currencies.js';
 import {
     Market,
     TransactionData,
@@ -7,7 +7,7 @@ import {
     OfferItem,
     ConsiderationItem
 } from '../types/types';
-import { formatPrice } from '../utils/api';
+import { formatPrice } from '../utils/api.js';
 
 const parseSeaport = (tx: TransactionData, logMarket: Market, decodedLogData: SeaportOrder) => {
     const offer = decodedLogData.offer;

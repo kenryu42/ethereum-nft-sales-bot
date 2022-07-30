@@ -1,9 +1,10 @@
-import { transferEventTypes } from '../config/logEventTypes';
+import { transferEventTypes } from '../config/logEventTypes.js';
 import _ from 'lodash';
 import { TransactionData } from '../types/types';
+import { Log } from 'web3-core';
 import { AlchemyWeb3 } from '@alch/alchemy-web3';
 
-const parseSaleToken = (tx: TransactionData, web3: AlchemyWeb3, log: any, logAddress: string) => {
+const parseSaleToken = (tx: TransactionData, web3: AlchemyWeb3, log: Log, logAddress: string) => {
     if (
         log.data === '0x' &&
         transferEventTypes[tx.tokenType as keyof typeof transferEventTypes] === log.topics[0] &&

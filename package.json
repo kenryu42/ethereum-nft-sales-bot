@@ -2,14 +2,19 @@
     "name": "ethereum-nft-sales-bot",
     "version": "1.0.0",
     "description": "An ethereum NFT sales monitoring bot.",
-    "main": "app.ts",
+    "main": "src/app.js",
+    "type": "module",
     "scripts": {
+        "clean": "rm -rf dist",
+        "build": "npm run clean && npx tsc",
+        "start": "npm run build && node --no-warnings dist/app.js",
+        "debug": "node --no-warnings dist/app.js -t",
         "format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
         "lint": "eslint '**/*.{js,jsx,ts,tsx}' --ext .ts",
         "fix": "npm run format && npm run lint",
-        "unit": "npx mocha -r ts-node/register test/unit/* --timeout 120000",
-        "integration": "npx mocha -r ts-node/register test/integration/* --timeout 240000",
-        "test": "npx mocha -r ts-node/register test/unit/* test/integration/* --timeout 360000"
+        "unit": "npx mocha test/unit/*",
+        "integration": "npx mocha test/integration/*",
+        "test": "npm run unit && npm run integration"
     },
     "repository": {
         "type": "git",

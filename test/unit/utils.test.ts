@@ -9,8 +9,8 @@ import {
     getTokenData,
     getContractData,
     formatPrice
-} from '../../utils/api';
-import { DEFAULT_NFT_API } from '../../config/setup';
+} from '../../src/utils/api.js';
+import { DEFAULT_NFT_API } from '../../src/config/setup.js';
 
 describe('Unit Test', function () {
     const myAddress = '0xBbf61c7c7eaF83a697f69A02469B4F7D2fCc2936';

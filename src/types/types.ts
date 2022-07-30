@@ -1,5 +1,12 @@
-import { ColorResolvable } from 'discord.js';
 import { ethers } from 'ethers';
+import { ColorResolvable } from 'discord.js';
+
+interface CustomError extends Error {
+    response?: {
+        status: number;
+        data: string;
+    };
+}
 
 type ContractData = {
     name: string | null;
@@ -16,7 +23,7 @@ type SwapTokenData = {
     name?: string;
     tokenId: string;
     tokenType: string;
-    quantity?: string;
+    quantity?: number;
     contractAddress: string;
 };
 
@@ -31,7 +38,7 @@ interface Swap {
 }
 
 type SwapData = Swap & {
-    id?: number;
+    id?: string;
     monitorTokenId?: string;
 };
 
@@ -41,21 +48,17 @@ type Market = {
     site: string;
     accountPage: string;
     iconURL: string;
-    logDecoder: (
-        | {
-              type: string;
-              name: string;
-          }
-        | {
-              type: string;
-              name: string;
-              components: {
-                  type: string;
-                  name: string;
-              }[];
-          }
-    )[];
+    logDecoder?: {
+        type: string;
+        name: string;
+        components?: {
+            type: string;
+            name: string;
+        }[];
+    }[];
 };
+
+type DecodedLogData = { [key: string]: string };
 
 type OfferItem = {
     itemType: string;
@@ -77,11 +80,14 @@ type SeaportOrder = {
     consideration: ConsiderationItem[];
 };
 
-type DecodedData = {
-    [key: string]: string;
+type SwapEvent = {
+    _creator: string;
+    _time: string;
+    _status: number;
+    _swapId: string;
+    _counterpart: string;
+    _referral: string;
 };
-
-type DecodedLogData = DecodedData | SeaportOrder;
 
 type TransactionData = {
     swap: SwapData;
@@ -119,9 +125,11 @@ export {
     Market,
     SwapData,
     TokenData,
+    CustomError,
     ContractData,
     TransactionData,
     OfferItem,
+    SwapEvent,
     SeaportOrder,
     ConsiderationItem,
     DecodedLogData

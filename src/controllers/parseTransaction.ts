@@ -4,18 +4,34 @@ import {
     getReadableName,
     getTransactionReceipt,
     getEthUsdPrice
-} from '../utils/api';
+} from '../utils/api.js';
 import _ from 'lodash';
 import { ethers } from 'ethers';
-import { markets } from '../config/markets';
-import { parseSeaport } from './parseSeaport';
-import { parseNftTrader } from './parseNftTrader';
-import { parseSaleToken } from './parseSaleToken';
-import { parseSwapToken } from './parseSwapToken';
-import { currencies } from '../config/currencies';
-import { saleEventTypes } from '../config/logEventTypes';
+import { markets } from '../config/markets.js';
+import { parseSeaport } from './parseSeaport.js';
+import { parseNftTrader } from './parseNftTrader.js';
+import { parseSaleToken } from './parseSaleToken.js';
+import { parseSwapToken } from './parseSwapToken.js';
+import { currencies } from '../config/currencies.js';
+import { saleEventTypes } from '../config/logEventTypes.js';
 import { AlchemyWeb3 } from '@alch/alchemy-web3';
-import { ContractData, TransactionData } from '../types/types';
+import {
+    ContractData,
+    TransactionData,
+    DecodedLogData,
+    SeaportOrder,
+    SwapEvent
+} from '../types/types.js';
+
+const isSeaport = (
+    decodedLogData: DecodedLogData | SeaportOrder
+): decodedLogData is SeaportOrder => {
+    return (decodedLogData as SeaportOrder).offer !== undefined;
+};
+
+const isNftTrader = (decodedLogData: DecodedLogData | SwapEvent): decodedLogData is SwapEvent => {
+    return (decodedLogData as SwapEvent)._swapId !== undefined;
+};
 
 async function parseTransaction(
     web3: AlchemyWeb3,
@@ -32,9 +48,9 @@ async function parseTransaction(
 
     const tx: TransactionData = {
         swap: {},
+        tokens: [],
         prices: [],
         totalPrice: 0,
-        tokens: [],
         symbol: contractData.symbol,
         tokenType: contractData.tokenType,
         contractName: contractData.name,
@@ -67,13 +83,16 @@ async function parseTransaction(
             const marketLogDecoder = isSale
                 ? tx.market.logDecoder
                 : markets[logAddress as keyof typeof markets].logDecoder;
-            const decodedLogData: any = web3.eth.abi.decodeLog(marketLogDecoder, log.data, []);
 
-            if (logMarket.name === 'Opensea: Seaport ⚓️') {
+            if (marketLogDecoder === undefined) return null;
+
+            const decodedLogData = web3.eth.abi.decodeLog(marketLogDecoder, log.data, []);
+
+            if (isSeaport(decodedLogData)) {
                 const parseResult = parseSeaport(tx, logMarket, decodedLogData);
 
                 if (parseResult === null) continue;
-            } else if (logMarket.name === 'NFT Trader 🔄') {
+            } else if (isNftTrader(decodedLogData)) {
                 const parseResult = await parseNftTrader(tx, web3, log, logAddress, decodedLogData);
 
                 if (parseResult === null) return null;
@@ -95,11 +114,11 @@ async function parseTransaction(
         console.error('No tokens found. Please check the contract address is correct.');
         return null;
     }
-    tx.to = !tx.isSwap ? await getReadableName(tx.toAddr!) : '';
-    tx.from = !tx.isSwap ? await getReadableName(tx.fromAddr!) : '';
+    tx.to = !tx.isSwap ? await getReadableName(tx.toAddr ?? '') : '';
+    tx.from = !tx.isSwap ? await getReadableName(tx.fromAddr ?? '') : '';
     tx.tokenData = tx.swap.monitorTokenId
-        ? await getTokenData(contractAddress, tx.tokenType!, tx.swap.monitorTokenId)
-        : await getTokenData(contractAddress, tx.tokenType!, tx.tokenId!);
+        ? await getTokenData(contractAddress, tx.tokenType ?? 'UNKNOWN', tx.swap.monitorTokenId)
+        : await getTokenData(contractAddress, tx.tokenType ?? 'UNKNOWN', tx.tokenId ?? '');
     tx.tokenName = tx.tokenData.name || `${tx.symbol} #${tx.tokenId}`;
     tx.sweeperAddr = receipt.from;
     tx.sweeper = tx.isSweep ? await getReadableName(tx.sweeperAddr) : '';

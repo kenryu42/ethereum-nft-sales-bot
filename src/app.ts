@@ -1,25 +1,29 @@
-import { runApp } from './controllers/runApp';
+import { runApp } from './controllers/runApp.js';
 import {
-    WEB3,
     ABI,
     TOKEN_TYPE,
+    ALCHEMY_API_KEY,
     CONTRACT_ADDRESS,
     CONTRACT_ADDRESSES,
     DEFAULT_NFT_API
-} from './config/setup';
+} from './config/setup.js';
 import { AbiItem } from 'web3-utils';
-import { options } from './config/commander';
-import { getContractData } from './utils/api';
+import { options } from './config/commander.js';
+import { getContractData } from './utils/api.js';
 import { EventData } from 'web3-eth-contract';
 import { ContractData } from './types/types';
+import { HttpProvider } from 'web3-core';
+import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 
 let lastTransactionHash: string;
+const web3 = createAlchemyWeb3(`wss://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`);
 
 console.log(`Default NFT Api: ${DEFAULT_NFT_API}`);
 
 async function main(contractAddress: string) {
     const contractData: ContractData = await getContractData(contractAddress);
-    const tokenType = contractData!.tokenType === 'unknown' ? TOKEN_TYPE : contractData!.tokenType;
+    // if (!contractData) return;
+    const tokenType = contractData.tokenType === 'unknown' ? TOKEN_TYPE : contractData.tokenType;
 
     if (tokenType !== 'ERC721' && tokenType !== 'ERC1155') {
         console.log(contractData);
@@ -27,7 +31,7 @@ async function main(contractAddress: string) {
         console.log('Please enter the TOKEN_TYPE in (file:./.env)');
         process.exit(1);
     }
-    const contract = new WEB3.eth.Contract(ABI as AbiItem[], contractAddress);
+    const contract = new web3.eth.Contract(ABI as AbiItem[], contractAddress);
 
     const transferEvents =
         tokenType === 'ERC721'
@@ -40,9 +44,7 @@ async function main(contractAddress: string) {
             .on('connected', (subscription_id: string) => {
                 console.log(`Subscription ID: ${subscription_id}`);
                 console.log(
-                    `Listening to ${tokenType} ${eventType[i]} events on collection: ${
-                        contractData!.name
-                    }`
+                    `Listening to ${tokenType} ${eventType[i]} events on collection: ${contractData.name}`
                 );
                 console.log(`Contract address: ${contractAddress}\n`);
             })
@@ -52,7 +54,7 @@ async function main(contractAddress: string) {
                 if (transactionHash == lastTransactionHash) return;
                 lastTransactionHash = transactionHash;
 
-                await runApp(WEB3, transactionHash, contractAddress, contractData);
+                await runApp(web3, transactionHash, contractAddress, contractData);
             })
             .on('error', (error: Error) => {
                 console.error(error);
@@ -74,8 +76,11 @@ async function main(contractAddress: string) {
                 process.exit(1);
             }
             console.log(`Running test for tx: ${options.test}`);
-            await runApp(WEB3, options.test, CONTRACT_ADDRESS, contractData);
-            process.exit(0);
+            await runApp(web3, options.test, CONTRACT_ADDRESS, contractData);
+
+            const provider = web3.currentProvider as HttpProvider;
+
+            provider.disconnect();
         } catch (error) {
             console.error(error);
             process.exit(1);

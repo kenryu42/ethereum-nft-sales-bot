@@ -1,4 +1,4 @@
-import { getEthUsdPrice } from '../utils/api';
+import { getEthUsdPrice } from '../utils/api.js';
 import { SwapData, TransactionData } from '../types/types';
 import { MessageEmbed } from 'discord.js';
 
@@ -53,7 +53,9 @@ const formatBundleField = (tx: TransactionData, embed: MessageEmbed) => {
 const formatSwapField = async (swap: SwapData, address: string, embed: MessageEmbed) => {
     let values = '';
     const sep = '\n';
-    for (const asset of swap[address].spentAssets!) {
+    const spentAssets = swap[address].spentAssets ?? [];
+
+    for (const asset of spentAssets) {
         const value =
             `[${asset.name}](https://opensea.io/assets/ethereum/${asset.contractAddress}/${asset.tokenId})` +
             sep;
@@ -65,7 +67,7 @@ const formatSwapField = async (swap: SwapData, address: string, embed: MessageEm
     }
     values = values || '`-`';
     embed.addField('Spent Assets', values);
-    const usdValue = await getEthUsdPrice(Number(swap[address].spentAmount!));
+    const usdValue = await getEthUsdPrice(Number(swap[address].spentAmount));
     const usdPrice = usdValue !== '0' ? ` ($ ${usdValue})` : '';
     const spentAmount =
         swap[address].spentAmount !== '0.0'

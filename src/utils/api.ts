@@ -8,9 +8,9 @@ import {
     OPENSEA_API_KEY,
     ALCHEMY_API_KEY,
     ETHERSCAN_API_KEY
-} from '../config/setup';
+} from '../config/setup.js';
 import { AlchemyWeb3 } from '@alch/alchemy-web3';
-import { ContractData, TokenData } from '../types/types';
+import { ContractData, CustomError, TokenData } from '../types/types';
 
 const openseaNftApi = async (tokenId: string | number, contractAddress: string) => {
     const baseURL = `https://api.opensea.io/api/v1/asset/${contractAddress}/${tokenId}`;
@@ -23,12 +23,16 @@ const openseaNftApi = async (tokenId: string | number, contractAddress: string) 
         });
 
         return response;
-    } catch (error: any) {
-        if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-        } else {
-            console.error(error.message);
+    } catch (error) {
+        if (error instanceof Error) {
+            const customError: CustomError = error;
+
+            if (customError.response) {
+                console.log(customError.response.data);
+                console.log(customError.response.status);
+            } else {
+                console.error(error.message);
+            }
         }
 
         return null;
@@ -69,15 +73,22 @@ const getOpenseaName = async (address: string) => {
         const result = _.get(response, 'data');
 
         return _.get(result, ['data', 'user', 'username']);
-    } catch (error: any) {
+    } catch (error) {
         console.log('getOpenseaName API error');
         console.log(`address: ${address}`);
-        if (error.response) {
-            console.log('Error message:', error.response.data);
-            console.log('Status:', error.response.status);
-        } else {
-            console.error(error.message);
+
+        if (error instanceof Error) {
+            const customError: CustomError = error;
+
+            if (customError.response) {
+                console.log(customError.response.data);
+                console.log(customError.response.status);
+            } else {
+                console.error(error.message);
+            }
         }
+
+        return null;
     }
 };
 
@@ -93,14 +104,16 @@ const getNFTMetadata = async (
         );
 
         return response;
-    } catch (error: any) {
-        console.log('getNFTMetadata API error');
+    } catch (error) {
+        if (error instanceof Error) {
+            const customError: CustomError = error;
 
-        if (error.response) {
-            console.log('Error data:', error.response.data);
-            console.log('Status:', error.response.status);
-        } else {
-            console.error('Error message:', error.message);
+            if (customError.response) {
+                console.log(customError.response.data);
+                console.log(customError.response.status);
+            } else {
+                console.error(error.message);
+            }
         }
 
         return null;
@@ -142,14 +155,18 @@ const getContractMetadata = async (contractAddress: string) => {
         );
 
         return response;
-    } catch (error: any) {
+    } catch (error) {
         console.log('getContractMetadata API error');
 
-        if (error.response) {
-            console.log('Error data:', error.response.data);
-            console.log('Status:', error.response.status);
-        } else {
-            console.error('Error message:', error.message);
+        if (error instanceof Error) {
+            const customError: CustomError = error;
+
+            if (customError.response) {
+                console.log(customError.response.data);
+                console.log(customError.response.status);
+            } else {
+                console.error(error.message);
+            }
         }
 
         return null;
@@ -193,14 +210,17 @@ const getAssetContract = async (contractAddress: string) => {
         );
 
         return response;
-    } catch (error: any) {
+    } catch (error) {
         console.log('getAssetContract API error');
 
-        if (error.response) {
-            console.log('Error data:', error.response.data);
-            console.log('Status:', error.response.status);
-        } else {
-            console.error('Error message:', error.message);
+        if (error instanceof Error) {
+            const customError: CustomError = error;
+            if (customError.response) {
+                console.log(customError.response.data);
+                console.log(customError.response.status);
+            } else {
+                console.error(error.message);
+            }
         }
     }
 };

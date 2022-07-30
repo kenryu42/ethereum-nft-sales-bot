@@ -2,16 +2,16 @@ import { AlchemyWeb3 } from '@alch/alchemy-web3';
 import { Log } from 'web3-core';
 import { AbiItem } from 'web3-utils';
 import { ethers } from 'ethers';
-import { NFT_TRADER_ABI } from '../config/setup';
-import { TransactionData } from '../types/types';
-import { getReadableName } from '../utils/api';
+import { NFT_TRADER_ABI } from '../config/setup.js';
+import { TransactionData, SwapEvent } from '../types/types';
+import { getReadableName } from '../utils/api.js';
 
 const parseNftTrader = async (
     tx: TransactionData,
     web3: AlchemyWeb3,
     log: Log,
     logAddress: string,
-    decodedLogData: any
+    decodedLogData: SwapEvent
 ) => {
     const swapStatus = String(web3.eth.abi.decodeParameter('uint8', log.topics[3]));
     // if tx.swap status is not 1 (closed), then skip parsing.

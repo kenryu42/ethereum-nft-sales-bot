@@ -1,7 +1,6 @@
 import 'dotenv/config';
-import { createAlchemyWeb3 } from '@alch/alchemy-web3';
-import ABI from './abi.json';
-import NFT_TRADER_ABI from './NFTTraderSwap.json';
+import ABI from './abi.json' assert { type: 'json' };
+import NFT_TRADER_ABI from './NFTTraderSwap.json' assert { type: 'json' };
 
 // Required settings
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
@@ -37,9 +36,6 @@ const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET || '';
 const DISCORD_ENABLED = process.env.DISCORD_ENABLED === '1';
 const WEBHOOK_1 = process.env.WEBHOOK_URL || '';
 const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== '');
-
-// Alchemy provider settings
-const WEB3 = createAlchemyWeb3(`wss://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`);
 
 // Error handler for configuration
 const checkConfig = (config: {
@@ -85,7 +81,6 @@ checkConfig({
 
 export {
     ABI,
-    WEB3,
     NFT_TRADER_ABI,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,

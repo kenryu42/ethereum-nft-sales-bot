@@ -41,8 +41,9 @@
         <li><a href="#multi-monitoring">Multi Monitoring</a></li>
       </ul>
     </li>
-    <li><a href="#run-test">Run Test</a></li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#run-test">Run Test</a></li>
+    <li><a href="#run-fix">Run Fix</a></li>
     <li>
       <a href="#notify-method">Notify Method</a>
       <ul>
@@ -165,6 +166,22 @@ If `CONTRACT_ADDRESS` and `CONTRACT_ADDRESSES` are both set, `CONTRACT_ADDRESSES
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+## Usage
+
+Run the following command to start the bot:
+
+```bash
+npm start
+```
+
+To test a certain transaction for debugging purposes, run the following command:
+
+```
+npm run debug -- <transaction-hash>
+```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Run Test
 
 To ensure your configuration(`.env`) is correct, run the following command:
@@ -173,22 +190,16 @@ To ensure your configuration(`.env`) is correct, run the following command:
 npm test
 ```
 
-The test should take less than 2 minutes to run. If it fails, either APIs are down or your configuration is incorrect.
+The test should take less than 3 minutes to run. If it fails, either APIs are down or your configuration is incorrect.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Usage
+## Run Fix
 
-Run the following command to start the bot:
+To format code and fix linting errors, run the following command:
 
 ```bash
-node app.js
-```
-
-To test a certain transaction for debugging purposes, run the following command:
-
-```
-node app.js -t <transaction-hash>
+npm run fix
 ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
