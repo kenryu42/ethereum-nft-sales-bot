@@ -15,13 +15,8 @@ import { parseSwapToken } from './parseSwapToken.js';
 import { currencies } from '../config/currencies.js';
 import { saleEventTypes } from '../config/logEventTypes.js';
 import { AlchemyWeb3 } from '@alch/alchemy-web3';
-import {
-    ContractData,
-    TransactionData,
-    DecodedLogData,
-    SeaportOrder,
-    SwapEvent
-} from '../types/types.js';
+import { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../types/types.js';
+import { initializeTransactionData } from '../config/initialize.js';
 
 const isSeaport = (
     decodedLogData: DecodedLogData | SeaportOrder
@@ -46,21 +41,7 @@ async function parseTransaction(
         return null;
     }
 
-    const tx: TransactionData = {
-        swap: {},
-        tokens: [],
-        prices: [],
-        totalPrice: 0,
-        symbol: contractData.symbol,
-        tokenType: contractData.tokenType,
-        contractName: contractData.name,
-        marketList: [],
-        market: _.get(markets, recipient),
-        currency: { name: 'ETH', decimals: 18 },
-        contractAddress: contractAddress
-    };
-    tx.isSwap = tx.market.name === 'NFT Trader 🔄';
-    tx.isSweep = tx.market.name === 'Gem 💎' || tx.market.name === 'Genie 🧞‍♂️';
+    const tx = initializeTransactionData(contractData, recipient, contractAddress);
 
     for (const log of receipt.logs) {
         const logAddress = log.address.toLowerCase();
