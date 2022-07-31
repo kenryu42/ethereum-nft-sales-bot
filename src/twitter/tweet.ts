@@ -12,6 +12,7 @@ import {
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET
 } from '../config/setup.js';
+import { TransactionData } from '../types/types';
 
 const client = TWITTER_ENABLED
     ? new TwitterApi({
@@ -22,14 +23,18 @@ const client = TWITTER_ENABLED
       })
     : null;
 
-const rwClient = TWITTER_ENABLED ? client.readWrite : null;
+const rwClient = TWITTER_ENABLED && client ? client.readWrite : null;
 
-const tweet = async (tx) => {
+const tweet = async (tx: TransactionData) => {
     let imageType = EUploadMimeType.Png;
     let imageBuffer;
     let tweetContent;
 
-    if (tx.isSwap && !DISCORD_ENABLED) {
+    if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
+        return;
+    }
+
+    if (tx.isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
         tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
     } else if (tx.isSweep && !DISCORD_ENABLED) {
         tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
@@ -37,7 +42,7 @@ const tweet = async (tx) => {
 
     if (!tx.tokenData.image) {
         imageBuffer = await createNaImage(true);
-    } else if (tx.isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
+    } else if (tx.isSwap || (GIF_ENABLED && (tx.quantity ?? 0) > 1 && tx.tokenType === 'ERC721')) {
         imageBuffer = tx.gifImage;
         imageType = EUploadMimeType.Gif;
     } else if (tx.tokenData.image.endsWith('.svg')) {
@@ -62,7 +67,7 @@ const tweet = async (tx) => {
 
     if (tx.isSweep) {
         tweetContent = `
-${tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName} \
+${tx.quantity ?? 0 > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName} \
 swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
 
@@ -71,7 +76,7 @@ ${tx.market.accountPage}${tx.sweeperAddr}
 
 🔍 https://etherscan.io/tx/${tx.transactionHash}	
 			`;
-    } else if (tx.isSwap) {
+    } else if (tx.isSwap && tx.addressMaker && tx.addressTaker) {
         tweetContent = `
 New ${tx.contractName} Swap on NFT Trader
 
@@ -86,7 +91,7 @@ ${tx.market.accountPage}${tx.addressTaker}
     } else {
         const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
         const field =
-            tx.tokenType === 'ERC721' && tx.quantity > 1
+            tx.tokenType === 'ERC721' && (tx.quantity ?? 0) > 1
                 ? `
 Sweeper: ${tx.to}
 ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
@@ -101,7 +106,7 @@ ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
 
         tweetContent = `
 ${
-    tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
+    tx.quantity ?? 0 > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
 } sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.name}
 			
 ${field}

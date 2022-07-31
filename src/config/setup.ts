@@ -1,20 +1,20 @@
 import 'dotenv/config';
-import { createRequire } from 'module';
-import { createAlchemyWeb3 } from '@alch/alchemy-web3';
+import ABI from './abi.json' assert { type: 'json' };
+import NFT_TRADER_ABI from './NFTTraderSwap.json' assert { type: 'json' };
 
 // Required settings
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
     ? process.env.CONTRACT_ADDRESS.toLowerCase()
-    : null;
+    : '';
 const CONTRACT_ADDRESSES = process.env.CONTRACT_ADDRESSES
     ? process.env.CONTRACT_ADDRESSES.toLowerCase()
-    : null;
-const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+    : '';
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || '';
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 
 // Optional settings
-const TOKEN_TYPE = process.env.TOKEN_TYPE;
-const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY;
+const TOKEN_TYPE = process.env.TOKEN_TYPE || '';
+const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY || '';
 
 const DEFAULT_NFT_API = OPENSEA_API_KEY ? 'Opensea' : 'Alchemy';
 
@@ -27,32 +27,27 @@ const IMAGE_SIZE = {
 
 // Twitter api settings if enable (optional)
 const TWITTER_ENABLED = process.env.TWITTER_ENABLED === '1';
-const TWITTER_API_KEY = process.env.TWITTER_API_KEY;
-const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET;
-const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN;
-const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET;
+const TWITTER_API_KEY = process.env.TWITTER_API_KEY || '';
+const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET || '';
+const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN || '';
+const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET || '';
 
 // Discord webhook settings if enable (optional)
 const DISCORD_ENABLED = process.env.DISCORD_ENABLED === '1';
-const WEBHOOK_1 = process.env.WEBHOOK_URL;
-const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== undefined);
-
-// Alchemy provider settings
-const require = createRequire(import.meta.url);
-const ABI = require('./abi.json');
-const NFT_TRADER_ABI = require('./NFTTraderSwap.json');
-const options = {
-    reconnect: {
-        auto: true,
-        delay: 5000, // ms
-        maxAttempts: 5,
-        onTimeout: false
-    }
-};
-const WEB3 = createAlchemyWeb3(`wss://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`, options);
+const WEBHOOK_1 = process.env.WEBHOOK_URL || '';
+const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== '');
 
 // Error handler for configuration
-const checkConfig = (config) => {
+const checkConfig = (config: {
+    CONTRACT: [string, string];
+    ALCHEMY_API_KEY: string;
+    ETHERSCAN_API_KEY: string;
+    WEBHOOK_URL: string;
+    TWITTER_API_KEY: string;
+    TWITTER_API_SECRET: string;
+    TWITTER_ACCESS_TOKEN: string;
+    TWITTER_ACCESS_SECRET: string;
+}) => {
     let configError = false;
 
     for (const [key, value] of Object.entries(config)) {
@@ -86,7 +81,6 @@ checkConfig({
 
 export {
     ABI,
-    WEB3,
     NFT_TRADER_ABI,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,

@@ -1,10 +1,13 @@
+import { Log } from 'web3-core';
+import { AlchemyWeb3 } from '@alch/alchemy-web3';
+import { TransactionData } from '../types/types';
 import { transferEventTypes } from '../config/logEventTypes.js';
 
-const parseSwapToken = ({ tx, web3, log, logAddress }) => {
+const parseSwapToken = (tx: TransactionData, web3: AlchemyWeb3, log: Log, logAddress: string) => {
     if (tx.isSwap && transferEventTypes['ERC721'] === log.topics[0]) {
         const receivedAddr = web3.eth.abi.decodeParameter('address', log.topics[2]).toLowerCase();
 
-        tx.tokenId = web3.eth.abi.decodeParameter('uint256', log.topics[3]);
+        tx.tokenId = String(web3.eth.abi.decodeParameter('uint256', log.topics[3]));
         if (logAddress === tx.contractAddress) tx.swap.monitorTokenId = tx.tokenId;
 
         receivedAddr in tx.swap
@@ -37,7 +40,7 @@ const parseSwapToken = ({ tx, web3, log, logAddress }) => {
                 ? tx.swap[receivedAddr].receivedAssets.push({
                       tokenId: decodeData.ids[i],
                       tokenType: 'ERC1155',
-                      quantity: decodeData.values[i],
+                      quantity: Number(decodeData.values[i]),
                       contractAddress: logAddress
                   })
                 : (tx.swap[receivedAddr] = {
@@ -45,7 +48,7 @@ const parseSwapToken = ({ tx, web3, log, logAddress }) => {
                           {
                               tokenId: decodeData.ids[i],
                               tokenType: 'ERC1155',
-                              quantity: decodeData.values[i],
+                              quantity: Number(decodeData.values[i]),
                               contractAddress: logAddress
                           }
                       ]

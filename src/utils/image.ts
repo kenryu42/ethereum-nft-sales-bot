@@ -2,13 +2,16 @@ import axios from 'axios';
 import sharp from 'sharp';
 import Jimp from 'jimp-compact';
 import { Gif } from 'make-a-gif';
+import { AbiItem } from 'web3-utils';
 import { getTokenData } from './api.js';
-import { WEB3, ABI, IMAGE_SIZE } from '../config/setup.js';
+import { ABI, IMAGE_SIZE, ALCHEMY_API_KEY } from '../config/setup.js';
+import { SwapData } from '../types/types';
+import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 
 const GIF_DURATION = 1500;
 const { width, height } = IMAGE_SIZE;
 
-const resizeImage = async (image) => {
+const resizeImage = async (image: string) => {
     const resizedImage = await Jimp.read(image);
     resizedImage.resize(width, Jimp.AUTO);
     const buffer = await resizedImage.getBufferAsync(Jimp.MIME_PNG);
@@ -16,7 +19,7 @@ const resizeImage = async (image) => {
     return buffer;
 };
 
-const createGif = async (tokens, contractAddress, tokenType) => {
+const createGif = async (tokens: number[], contractAddress: string, tokenType: string) => {
     console.log('Creating GIF...');
     const frames = [];
 
@@ -30,13 +33,13 @@ const createGif = async (tokens, contractAddress, tokenType) => {
             : false;
         console.log(tokenData.image);
         if (endsWithSvg) {
-            const response = await axios.get(tokenData.image, {
+            const response = await axios.get(tokenData.image ?? '', {
                 responseType: 'arraybuffer'
             });
             const buffer = await sharp(response.data).png().toBuffer();
             imageData = buffer;
         } else if (startsWithSvg) {
-            const base64Image = tokenData.image.replace('data:image/svg+xml;base64,', '');
+            const base64Image = tokenData.image ?? ''.replace('data:image/svg+xml;base64,', '');
             const buffer = Buffer.from(base64Image, 'base64');
 
             imageData = await sharp(buffer).png().toBuffer();
@@ -64,7 +67,7 @@ const createGif = async (tokens, contractAddress, tokenType) => {
     return gifImage;
 };
 
-const createSwapGif = async (swap, addressMaker, addressTaker) => {
+const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker: string) => {
     console.log('Creating Swap GIF...');
     const frames = [];
     const image = await Jimp.read('https://i.postimg.cc/qB8cqcM8/nft-trader-logo-black.png');
@@ -74,7 +77,7 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
 
     for (const address of [addressMaker, addressTaker]) {
         let image = new Jimp(width, height, 'white');
-        image = await addTextToImage(image, swap[address].name, 0, -25, true);
+        image = await addTextToImage(image, swap[address].name ?? 'NoName', 0, -25, true);
         const buffer = await addTextToImage(image, 'Received:', 0, 25);
 
         frames.push({ src: buffer, duration: GIF_DURATION });
@@ -82,7 +85,8 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
         for (const asset of swap[address].receivedAssets) {
             let symbol;
             let imageData;
-            const contract = new WEB3.eth.Contract(ABI, asset.contractAddress);
+            const web3 = createAlchemyWeb3(`wss://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`);
+            const contract = new web3.eth.Contract(ABI as AbiItem[], asset.contractAddress);
             const tokenData = await getTokenData(
                 asset.contractAddress,
                 asset.tokenType,
@@ -104,13 +108,13 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
             asset.name = tokenName;
 
             if (endsWithSvg) {
-                const buffer = await axios.get(tokenData.image, {
+                const buffer = await axios.get(tokenData.image ?? '', {
                     responseType: 'arraybuffer'
                 });
 
                 imageData = await sharp(buffer.data).png().toBuffer();
             } else if (startsWithSvg) {
-                const base64Image = tokenData.image.replace('data:image/svg+xml;base64,', '');
+                const base64Image = tokenData.image ?? ''.replace('data:image/svg+xml;base64,', '');
                 const buffer = Buffer.from(base64Image, 'base64');
 
                 imageData = await sharp(buffer).png().toBuffer();
@@ -120,13 +124,13 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
 
             const image = !imageData ? await createNaImage() : await Jimp.read(imageData);
             image.resize(width, Jimp.AUTO);
-            const quantity = asset.quantity > 1 ? ` Quantity: ${asset.quantity}` : '';
+            const quantity = asset.quantity ?? 0 > 1 ? ` Quantity: ${asset.quantity}` : '';
             const text = `${tokenName}${quantity}`;
             const buffer = await addTextToImage(image, text, -20, 20, false, true);
 
             frames.push({ src: buffer, duration: GIF_DURATION });
         }
-        if (parseFloat(swap[address].receivedAmount) > 0) {
+        if (parseFloat(swap[address].receivedAmount ?? '0') > 0) {
             const image = new Jimp(width, height, 'white');
             const buffer = await addTextToImage(image, `${swap[address].receivedAmount} ETH`, 0, 0);
 
@@ -148,7 +152,14 @@ const createSwapGif = async (swap, addressMaker, addressTaker) => {
     return gifImage;
 };
 
-const addTextToImage = async (image, text, x, y, jimp = false, idText = false) => {
+const addTextToImage = async (
+    image: Jimp,
+    text: string,
+    x: number,
+    y: number,
+    jimp = false,
+    idText = false
+) => {
     const font = await Jimp.loadFont(idText ? Jimp.FONT_SANS_32_WHITE : Jimp.FONT_SANS_32_BLACK);
     const textObject = {
         text: text,

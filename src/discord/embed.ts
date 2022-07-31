@@ -5,23 +5,28 @@ import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
+import { TransactionData } from '../types/types';
 
-const sendEmbedMessage = async (tx) => {
-    let file;
+const sendEmbedMessage = async (tx: TransactionData) => {
+    let file: MessageAttachment;
     const embed = new MessageEmbed();
 
-    if (tx.isSwap) {
+    if (tx.isSwap && tx.addressMaker && tx.addressTaker) {
         const gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
 
         embed.addField(
             'Maker',
-            `[${tx.swap[tx.addressMaker].name}](${tx.market.accountPage}${tx.addressMaker})`
+            `[${tx.swap[tx.addressMaker as keyof typeof tx.swap].name}](${tx.market.accountPage}${
+                tx.addressMaker
+            })`
         );
         await formatSwapField(tx.swap, tx.addressMaker, embed);
 
         embed.addField(
             'Taker',
-            `[${tx.swap[tx.addressTaker].name}](${tx.market.accountPage}${tx.addressTaker})`
+            `[${tx.swap[tx.addressTaker as keyof typeof tx.swap].name}](${tx.market.accountPage}${
+                tx.addressTaker
+            })`
         );
         await formatSwapField(tx.swap, tx.addressTaker, embed);
 
@@ -32,9 +37,9 @@ const sendEmbedMessage = async (tx) => {
             .setColor(tx.market.color)
             .setTimestamp();
         tx.gifImage = gifImage;
-        file = new MessageAttachment(gifImage, 'image.gif');
+        file = new MessageAttachment(gifImage as Buffer, 'image.gif');
         embed.setImage('attachment://image.gif');
-    } else {
+    } else if (tx.tokenData && tx.tokenData.image && tx.quantity) {
         const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
 
         embed
@@ -62,7 +67,7 @@ const sendEmbedMessage = async (tx) => {
             const gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
 
             tx.gifImage = gifImage;
-            file = new MessageAttachment(gifImage, 'image.gif');
+            file = new MessageAttachment(gifImage as Buffer, 'image.gif');
             embed.setImage('attachment://image.gif');
         } else if (!tx.tokenData.image) {
             const naImage = await createNaImage(true);
@@ -104,7 +109,7 @@ const sendEmbedMessage = async (tx) => {
 
             embed.addFields(fields);
             formatSweepField(tx, embed);
-        } else {
+        } else if (tx.quantity) {
             const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
 
             if (tx.tokenType === 'ERC1155' || tx.quantity > 1)
