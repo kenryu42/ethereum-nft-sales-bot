@@ -10,7 +10,7 @@ const { width, height } = IMAGE_SIZE;
 
 const resizeImage = async (image) => {
     const resizedImage = await Jimp.read(image);
-    resizeImage.resize(width, Jimp.AUTO);
+    resizedImage.resize(width, Jimp.AUTO);
     const buffer = await resizedImage.getBufferAsync(Jimp.MIME_PNG);
 
     return buffer;
@@ -28,6 +28,7 @@ const createGif = async (tokens, contractAddress, tokenType) => {
         const startsWithSvg = tokenData.image
             ? tokenData.image.startsWith('data:image/svg+xml;base64,')
             : false;
+        console.log(tokenData.image);
         if (endsWithSvg) {
             const response = await axios.get(tokenData.image, {
                 responseType: 'arraybuffer'
