@@ -58,7 +58,6 @@ const runApp = async (
     }
 
     if (DISCORD_ENABLED && TWITTER_ENABLED && txData) {
-        console.log('Sending message to Discord and Twitter...');
         const tweetConfig = await sendEmbedMessage(txData);
         await tweet(tweetConfig);
     } else if (DISCORD_ENABLED && txData) {
