@@ -91,8 +91,8 @@ type SwapEvent = {
 
 type TransactionData = {
     swap: SwapData;
-    isSwap?: boolean;
-    isSweep?: boolean;
+    isSwap: boolean;
+    isSweep: boolean;
     prices: string[];
     totalPrice: number;
     tokens: number[];
