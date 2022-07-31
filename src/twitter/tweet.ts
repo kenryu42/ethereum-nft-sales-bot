@@ -42,7 +42,7 @@ const tweet = async (tx: TransactionData) => {
 
     if (!tx.tokenData.image) {
         imageBuffer = await createNaImage(true);
-    } else if (tx.isSwap || (GIF_ENABLED && (tx.quantity ?? 0 > 1) && tx.tokenType === 'ERC721')) {
+    } else if (tx.isSwap || (GIF_ENABLED && (tx.quantity ?? 0) > 1 && tx.tokenType === 'ERC721')) {
         imageBuffer = tx.gifImage;
         imageType = EUploadMimeType.Gif;
     } else if (tx.tokenData.image.endsWith('.svg')) {
@@ -91,7 +91,7 @@ ${tx.market.accountPage}${tx.addressTaker}
     } else {
         const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
         const field =
-            tx.tokenType === 'ERC721' && (tx.quantity ?? 0 > 1)
+            tx.tokenType === 'ERC721' && (tx.quantity ?? 0) > 1
                 ? `
 Sweeper: ${tx.to}
 ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
