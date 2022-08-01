@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import ABI from './abi.json' assert { type: 'json' };
 import NFT_TRADER_ABI from './NFTTraderSwap.json' assert { type: 'json' };
+import { Network, Alchemy } from 'alchemy-sdk';
 
 // Required settings
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
@@ -24,6 +25,13 @@ const IMAGE_SIZE = {
     width: 500,
     height: 500
 };
+
+// Alchemy sdk setup
+const settings = {
+    apiKey: ALCHEMY_API_KEY,
+    network: Network.ETH_MAINNET
+};
+const alchemy = new Alchemy(settings);
 
 // Twitter api settings if enable (optional)
 const TWITTER_ENABLED = process.env.TWITTER_ENABLED === '1';
@@ -81,6 +89,7 @@ checkConfig({
 
 export {
     ABI,
+    alchemy,
     NFT_TRADER_ABI,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,

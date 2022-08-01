@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { ColorResolvable } from 'discord.js';
+import { NftTokenType } from 'alchemy-sdk';
 
 interface CustomError extends Error {
     response?: {
@@ -9,9 +10,9 @@ interface CustomError extends Error {
 }
 
 type ContractData = {
-    name: string | null;
-    symbol: string | null;
-    tokenType: string | null;
+    name: string | undefined;
+    symbol: string | undefined;
+    tokenType: NftTokenType;
 };
 
 type TokenData = {
@@ -22,7 +23,7 @@ type TokenData = {
 type SwapTokenData = {
     name?: string;
     tokenId: string;
-    tokenType: string;
+    tokenType: NftTokenType;
     quantity?: number;
     contractAddress: string;
 };
@@ -98,9 +99,9 @@ type TransactionData = {
     tokens: number[];
     tokenId?: string;
     tokenData?: TokenData;
-    symbol: string | null;
-    tokenType: string | null;
-    contractName: string | null;
+    symbol: string | undefined;
+    tokenType: NftTokenType;
+    contractName: string | undefined;
     market: Market;
     marketList: Market[];
     gifImage?: Buffer | Uint8Array;

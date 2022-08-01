@@ -1,10 +1,4 @@
-import {
-    formatPrice,
-    getTokenData,
-    getReadableName,
-    getTransactionReceipt,
-    getEthUsdPrice
-} from '../utils/api.js';
+import { formatPrice, getTokenData, getReadableName, getEthUsdPrice } from '../utils/api.js';
 import _ from 'lodash';
 import { ethers } from 'ethers';
 import { markets } from '../config/markets.js';
@@ -14,9 +8,10 @@ import { parseSaleToken } from './parseSaleToken.js';
 import { parseSwapToken } from './parseSwapToken.js';
 import { currencies } from '../config/currencies.js';
 import { saleEventTypes } from '../config/logEventTypes.js';
-import { AlchemyWeb3 } from '@alch/alchemy-web3';
 import { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../types/types.js';
 import { initializeTransactionData } from '../config/initialize.js';
+import Web3EthAbi from 'web3-eth-abi';
+import { alchemy } from '../config/setup.js';
 
 const isSeaport = (
     decodedLogData: DecodedLogData | SeaportOrder
@@ -29,15 +24,14 @@ const isNftTrader = (decodedLogData: DecodedLogData | SwapEvent): decodedLogData
 };
 
 async function parseTransaction(
-    web3: AlchemyWeb3,
     transactionHash: string,
     contractAddress: string,
     contractData: ContractData
 ) {
-    const receipt = await getTransactionReceipt(web3, transactionHash);
-    const recipient = receipt.to.toLowerCase();
+    const receipt = await alchemy.core.getTransactionReceipt(transactionHash);
+    const recipient = receipt ? receipt.to.toLowerCase() : '';
 
-    if (!(recipient in markets)) {
+    if (!receipt || !(recipient in markets)) {
         return null;
     }
 
@@ -52,9 +46,9 @@ async function parseTransaction(
         }
 
         if (tx.isSwap) {
-            parseSwapToken(tx, web3, log, logAddress);
+            parseSwapToken(tx, log, logAddress);
         } else {
-            parseSaleToken(tx, web3, log, logAddress);
+            parseSaleToken(tx, log, logAddress);
         }
 
         const isSale = logAddress === recipient && saleEventTypes.includes(log.topics[0]);
@@ -67,14 +61,14 @@ async function parseTransaction(
 
             if (marketLogDecoder === undefined) return null;
 
-            const decodedLogData = web3.eth.abi.decodeLog(marketLogDecoder, log.data, []);
+            const decodedLogData = Web3EthAbi.decodeLog(marketLogDecoder, log.data, []);
 
             if (isSeaport(decodedLogData)) {
                 const parseResult = parseSeaport(tx, logMarket, decodedLogData);
 
                 if (parseResult === null) continue;
             } else if (isNftTrader(decodedLogData)) {
-                const parseResult = await parseNftTrader(tx, web3, log, logAddress, decodedLogData);
+                const parseResult = await parseNftTrader(tx, log, logAddress, decodedLogData);
 
                 if (parseResult === null) return null;
             } else if (tx.marketList.length + 1 === tx.tokens.length) {
@@ -98,8 +92,8 @@ async function parseTransaction(
     tx.to = !tx.isSwap ? await getReadableName(tx.toAddr ?? '') : '';
     tx.from = !tx.isSwap ? await getReadableName(tx.fromAddr ?? '') : '';
     tx.tokenData = tx.swap.monitorTokenId
-        ? await getTokenData(contractAddress, tx.tokenType ?? 'UNKNOWN', tx.swap.monitorTokenId)
-        : await getTokenData(contractAddress, tx.tokenType ?? 'UNKNOWN', tx.tokenId ?? '');
+        ? await getTokenData(contractAddress, tx.swap.monitorTokenId, tx.tokenType)
+        : await getTokenData(contractAddress, tx.tokenId ?? '', tx.tokenType);
     tx.tokenName = tx.tokenData.name || `${tx.symbol} #${tx.tokenId}`;
     tx.sweeperAddr = receipt.from;
     tx.sweeper = tx.isSweep ? await getReadableName(tx.sweeperAddr) : '';
