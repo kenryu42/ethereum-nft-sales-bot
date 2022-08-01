@@ -31,7 +31,6 @@ const createGif = async (tokens: number[], contractAddress: string, tokenType: s
         const startsWithSvg = tokenData.image
             ? tokenData.image.startsWith('data:image/svg+xml;base64,')
             : false;
-        console.log(tokenData.image);
         if (endsWithSvg) {
             const response = await axios.get(tokenData.image ?? '', {
                 responseType: 'arraybuffer'
