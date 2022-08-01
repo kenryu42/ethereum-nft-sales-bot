@@ -67,7 +67,7 @@ async function main(contractAddress: string) {
         try {
             const contractData = await getContractData(CONTRACT_ADDRESS);
             const tokenType =
-                contractData.tokenType === 'unknown' ? TOKEN_TYPE : contractData.tokenType;
+                contractData.tokenType === 'UNKNOWN' ? TOKEN_TYPE : contractData.tokenType;
 
             if (tokenType !== 'ERC721' && tokenType !== 'ERC1155') {
                 console.log(contractData);
