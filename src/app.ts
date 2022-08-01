@@ -23,7 +23,7 @@ console.log(`Default NFT Api: ${DEFAULT_NFT_API}`);
 async function main(contractAddress: string) {
     const contractData: ContractData = await getContractData(contractAddress);
     // if (!contractData) return;
-    const tokenType = contractData.tokenType === 'unknown' ? TOKEN_TYPE : contractData.tokenType;
+    const tokenType = contractData.tokenType === 'UNKNOWN' ? TOKEN_TYPE : contractData.tokenType;
 
     if (tokenType !== 'ERC721' && tokenType !== 'ERC1155') {
         console.log(contractData);
