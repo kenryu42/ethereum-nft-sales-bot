@@ -7,7 +7,8 @@
     "scripts": {
         "clean": "rm -rf dist",
         "build": "npm run clean && npx tsc",
-        "start": "npm run build && node --no-warnings dist/app.js",
+        "postinstall": "npm run build",
+        "start": "node --no-warnings dist/app.js",
         "debug": "node --no-warnings dist/app.js -t",
         "format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
         "lint": "eslint '**/*.{js,jsx,ts,tsx}' --ext .ts",

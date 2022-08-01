@@ -176,7 +176,7 @@ npm start
 
 To test a certain transaction for debugging purposes, run the following command:
 
-```
+```bash
 npm run debug -- <transaction-hash>
 ```
 
