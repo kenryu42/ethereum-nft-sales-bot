@@ -3,7 +3,6 @@ import { expect } from 'chai';
 import { ethers } from 'ethers';
 import { ContractData } from '../../src/types/types';
 import { getContractData } from '../../src/utils/api.js';
-import { ALCHEMY_API_KEY } from '../../src/config/setup.js';
 import { parseTransaction } from '../../src/controllers/parseTransaction.js';
 
 describe('ERC 1155 Integration Test', function () {
