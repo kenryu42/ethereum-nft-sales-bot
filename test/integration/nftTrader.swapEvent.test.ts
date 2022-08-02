@@ -1,28 +1,17 @@
 import assert from 'assert';
 import { expect } from 'chai';
 import { ethers } from 'ethers';
-import { createAlchemyWeb3 } from '@alch/alchemy-web3';
 import { getContractData } from '../../src/utils/api.js';
-import { ALCHEMY_API_KEY } from '../../src/config/setup.js';
 import { parseTransaction } from '../../src/controllers/parseTransaction.js';
-import { HttpProvider } from 'web3-core';
 
 describe('NFT Trader Integration Test', function () {
-    const web3 = createAlchemyWeb3(`wss://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`);
-
-    after(function () {
-        const provider = web3.currentProvider as HttpProvider;
-
-        provider.disconnect();
-    });
-
     describe('ERC721 swap event', function () {
         const bayc = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
 
         it('should get the correct data', async function () {
             const txHash = '0x09fc308002fcad5f30e103cc582c60ab43fec67f6bd9357c347de63bbd7fc00a';
             const contractData = await getContractData(bayc);
-            const tx = await parseTransaction(web3, txHash, bayc, contractData);
+            const tx = await parseTransaction(txHash, bayc, contractData);
 
             if (!tx || !tx.addressMaker || !tx.addressTaker) return;
 
@@ -64,7 +53,7 @@ describe('NFT Trader Integration Test', function () {
         it('should get the correct data', async function () {
             const txHash = '0x4faa22dac2533657dc2c08422c91abc389107a1bb1e88ceda4e72844ea2cec07';
             const contractData = await getContractData(gutterCat);
-            const tx = await parseTransaction(web3, txHash, gutterCat, contractData);
+            const tx = await parseTransaction(txHash, gutterCat, contractData);
 
             if (!tx || !tx.addressMaker || !tx.addressTaker) return;
 
@@ -110,7 +99,7 @@ describe('NFT Trader Integration Test', function () {
         it('should get the correct data', async function () {
             const txHash = '0xf31708233d600e253e1fffe4c5f82dadd5ce1acc47d823082fca00f7f1aa763d';
             const contractData = await getContractData(gutterCat);
-            const tx = await parseTransaction(web3, txHash, gutterCat, contractData);
+            const tx = await parseTransaction(txHash, gutterCat, contractData);
 
             if (!tx || !tx.addressMaker || !tx.addressTaker) return;
 

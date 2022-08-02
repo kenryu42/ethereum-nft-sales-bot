@@ -2,16 +2,14 @@ import { parseTransaction } from './parseTransaction.js';
 import { sendEmbedMessage } from '../discord/embed.js';
 import { tweet } from '../twitter/tweet.js';
 import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup.js';
-import { AlchemyWeb3 } from '@alch/alchemy-web3';
 import { ContractData } from '../types/types';
 
 const runApp = async (
-    provider: AlchemyWeb3,
     transactionHash: string,
     contractAddress: string,
     contractData: ContractData
 ) => {
-    const txData = await parseTransaction(provider, transactionHash, contractAddress, contractData);
+    const txData = await parseTransaction(transactionHash, contractAddress, contractData);
 
     if (txData) {
         const {

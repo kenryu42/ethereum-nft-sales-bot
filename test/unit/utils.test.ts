@@ -11,6 +11,7 @@ import {
     formatPrice
 } from '../../src/utils/api.js';
 import { DEFAULT_NFT_API } from '../../src/config/setup.js';
+import { NftTokenType } from 'alchemy-sdk';
 
 describe('Unit Test', function () {
     const myAddress = '0xBbf61c7c7eaF83a697f69A02469B4F7D2fCc2936';
@@ -77,7 +78,7 @@ describe('Unit Test', function () {
     describe('get token data', function () {
         const azuki = '0xED5AF388653567Af2F388E6224dC7C4b3241C544';
         it('should able to get token data', async function () {
-            const tokenData = await getTokenData(azuki, 'erc721', 40);
+            const tokenData = await getTokenData(azuki, 40, 'ERC721' as NftTokenType);
             const image = tokenData.image;
             const tokenName = tokenData.name;
 

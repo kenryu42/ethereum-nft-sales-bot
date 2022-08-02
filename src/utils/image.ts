@@ -1,12 +1,12 @@
 import axios from 'axios';
 import sharp from 'sharp';
 import Jimp from 'jimp-compact';
+import { ethers } from 'ethers';
 import { Gif } from 'make-a-gif';
-import { AbiItem } from 'web3-utils';
 import { getTokenData } from './api.js';
-import { ABI, IMAGE_SIZE, ALCHEMY_API_KEY } from '../config/setup.js';
 import { SwapData } from '../types/types';
-import { createAlchemyWeb3 } from '@alch/alchemy-web3';
+import { NftTokenType } from 'alchemy-sdk';
+import { ABI, alchemy, IMAGE_SIZE } from '../config/setup.js';
 
 const GIF_DURATION = 1500;
 const { width, height } = IMAGE_SIZE;
@@ -19,13 +19,13 @@ const resizeImage = async (image: string) => {
     return buffer;
 };
 
-const createGif = async (tokens: number[], contractAddress: string, tokenType: string) => {
+const createGif = async (tokens: number[], contractAddress: string, tokenType: NftTokenType) => {
     console.log('Creating GIF...');
     const frames = [];
 
     for (const token of tokens) {
         let imageData;
-        const tokenData = await getTokenData(contractAddress, tokenType, token);
+        const tokenData = await getTokenData(contractAddress, token, tokenType);
         const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
         const endsWithSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
         const startsWithSvg = tokenData.image
@@ -71,6 +71,7 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
     const frames = [];
     const image = await Jimp.read('https://i.postimg.cc/qB8cqcM8/nft-trader-logo-black.png');
     const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+    const provider = await alchemy.config.getProvider();
 
     frames.push({ src: buffer, duration: GIF_DURATION });
 
@@ -84,12 +85,11 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
         for (const asset of swap[address].receivedAssets) {
             let symbol;
             let imageData;
-            const web3 = createAlchemyWeb3(`wss://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}`);
-            const contract = new web3.eth.Contract(ABI as AbiItem[], asset.contractAddress);
+            const contract = new ethers.Contract(asset.contractAddress, ABI, provider);
             const tokenData = await getTokenData(
                 asset.contractAddress,
-                asset.tokenType,
-                asset.tokenId
+                asset.tokenId,
+                asset.tokenType
             );
             const endsWithSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
             const startsWithSvg = tokenData.image
@@ -97,7 +97,7 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
                 : false;
 
             try {
-                symbol = await contract.methods.symbol().call();
+                symbol = await contract.symbol();
             } catch {
                 symbol = '';
             }
