@@ -7,7 +7,7 @@ import { Log } from '@ethersproject/abstract-provider';
 const parseSaleToken = (tx: TransactionData, log: Log, logAddress: string) => {
     if (
         log.data === '0x' &&
-        transferEventTypes[tx.tokenType as keyof typeof transferEventTypes] === log.topics[0] &&
+        log.topics[0] === transferEventTypes.ERC721 &&
         logAddress === tx.contractAddress
     ) {
         tx.fromAddr = String(Web3EthAbi.decodeParameter('address', log.topics[1]));
@@ -16,7 +16,7 @@ const parseSaleToken = (tx: TransactionData, log: Log, logAddress: string) => {
         tx.tokens.push(Number(tx.tokenId));
         tx.tokens = _.uniq(tx.tokens);
     } else if (
-        transferEventTypes[tx.tokenType as keyof typeof transferEventTypes][0] === log.topics[0] &&
+        transferEventTypes.ERC1155.includes(log.topics[0]) &&
         logAddress === tx.contractAddress
     ) {
         tx.fromAddr = String(Web3EthAbi.decodeParameter('address', log.topics[2]));
