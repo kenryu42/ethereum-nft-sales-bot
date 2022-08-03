@@ -43,7 +43,7 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#run-test">Run Test</a></li>
-    <li><a href="#run-fix">Run Fix</a></li>
+    <li><a href="#lint-check">Lint Check</a></li>
     <li>
       <a href="#notify-method">Notify Method</a>
       <ul>
@@ -198,7 +198,7 @@ The test should take less than 3 minutes to run. If it fails, either APIs are do
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Run Fix
+## Lint Check
 
 To format code and fix linting errors, run the following command:
 
