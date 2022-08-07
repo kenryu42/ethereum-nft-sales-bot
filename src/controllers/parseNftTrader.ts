@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
 import Web3EthAbi from 'web3-eth-abi';
 import { getReadableName } from '../utils/api.js';
-import { Log } from '@ethersproject/abstract-provider';
-import { TransactionData, SwapEvent } from '../types/types';
+import type { Log } from '@ethersproject/abstract-provider';
+import type { TransactionData, SwapEvent } from '../types';
 import { alchemy, NFT_TRADER_ABI } from '../config/setup.js';
 
 const parseNftTrader = async (

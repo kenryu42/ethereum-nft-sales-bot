@@ -5,7 +5,7 @@ import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
-import { TransactionData } from '../types/types';
+import type { TransactionData } from '../types';
 
 const sendEmbedMessage = async (tx: TransactionData) => {
     let file: MessageAttachment;

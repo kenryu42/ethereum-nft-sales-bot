@@ -1,8 +1,8 @@
 import Web3EthAbi from 'web3-eth-abi';
-import { NftTokenType } from 'alchemy-sdk';
-import { TransactionData } from '../types/types';
+import type { NftTokenType } from 'alchemy-sdk';
+import type { TransactionData } from '../types';
 import { transferEventTypes } from '../config/logEventTypes.js';
-import { Log } from '@ethersproject/abstract-provider';
+import type { Log } from '@ethersproject/abstract-provider';
 
 const parseSwapToken = (tx: TransactionData, log: Log, logAddress: string) => {
     if (tx.isSwap && log.topics[0] === transferEventTypes.ERC721) {

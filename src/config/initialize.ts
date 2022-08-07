@@ -1,5 +1,5 @@
 import { markets } from './markets.js';
-import { ContractData, TransactionData } from '../types/types';
+import type { ContractData, TransactionData } from '../types';
 
 export const initializeTransactionData = (
     contractData: ContractData,

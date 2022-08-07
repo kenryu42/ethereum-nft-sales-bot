@@ -1,5 +1,5 @@
 import { getEthUsdPrice } from '../utils/api.js';
-import { SwapData, TransactionData } from '../types/types';
+import type { SwapData, TransactionData } from '../types';
 import { MessageEmbed } from 'discord.js';
 
 const formatSweepField = (tx: TransactionData, embed: MessageEmbed) => {

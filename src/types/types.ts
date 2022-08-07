@@ -2,20 +2,20 @@ import { ethers } from 'ethers';
 import { ColorResolvable } from 'discord.js';
 import { NftTokenType } from 'alchemy-sdk';
 
-interface CustomError extends Error {
+export interface CustomError extends Error {
     response?: {
         status: number;
         data: string;
     };
 }
 
-type ContractData = {
+export type ContractData = {
     name: string | undefined;
     symbol: string | undefined;
     tokenType: NftTokenType;
 };
 
-type TokenData = {
+export type TokenData = {
     name: string | null;
     image: string | null;
 };
@@ -38,12 +38,12 @@ interface Swap {
     };
 }
 
-type SwapData = Swap & {
+export type SwapData = Swap & {
     id?: string;
     monitorTokenId?: string;
 };
 
-type Market = {
+export type Market = {
     name: string;
     color: ColorResolvable;
     site: string;
@@ -59,16 +59,16 @@ type Market = {
     }[];
 };
 
-type DecodedLogData = { [key: string]: string };
+export type DecodedLogData = { [key: string]: string };
 
-type OfferItem = {
+export type OfferItem = {
     itemType: string;
     token: string;
     identifier: string;
     amount: ethers.BigNumberish;
 };
 
-type ConsiderationItem = {
+export type ConsiderationItem = {
     itemType: string;
     token: string;
     identifier: string;
@@ -76,12 +76,12 @@ type ConsiderationItem = {
     recipient: string;
 };
 
-type SeaportOrder = {
+export type SeaportOrder = {
     offer: OfferItem[];
     consideration: ConsiderationItem[];
 };
 
-type SwapEvent = {
+export type SwapEvent = {
     _creator: string;
     _time: string;
     _status: number;
@@ -90,7 +90,7 @@ type SwapEvent = {
     _referral: string;
 };
 
-type TransactionData = {
+export type TransactionData = {
     swap: SwapData;
     isSwap: boolean;
     isSweep: boolean;
@@ -120,18 +120,4 @@ type TransactionData = {
     addressMaker?: string;
     addressTaker?: string;
     transactionHash?: string;
-};
-
-export {
-    Market,
-    SwapData,
-    TokenData,
-    CustomError,
-    ContractData,
-    TransactionData,
-    OfferItem,
-    SwapEvent,
-    SeaportOrder,
-    ConsiderationItem,
-    DecodedLogData
 };

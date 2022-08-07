@@ -12,7 +12,7 @@ import {
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET
 } from '../config/setup.js';
-import { TransactionData } from '../types/types';
+import type { TransactionData } from '../types';
 
 const client = TWITTER_ENABLED
     ? new TwitterApi({

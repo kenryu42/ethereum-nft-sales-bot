@@ -8,7 +8,7 @@ import {
 } from './config/setup.js';
 import { options } from './config/commander.js';
 import { getContractData } from './utils/api.js';
-import { ContractData } from './types/types';
+import type { ContractData } from './types';
 import { transferEventTypes } from './config/logEventTypes.js';
 
 let lastTransactionHash: string;

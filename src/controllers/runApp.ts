@@ -2,7 +2,7 @@ import { parseTransaction } from './parseTransaction.js';
 import { sendEmbedMessage } from '../discord/embed.js';
 import { tweet } from '../twitter/tweet.js';
 import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup.js';
-import { ContractData } from '../types/types';
+import type { ContractData } from '../types';
 
 const runApp = async (
     transactionHash: string,

@@ -8,7 +8,7 @@ import { parseSaleToken } from './parseSaleToken.js';
 import { parseSwapToken } from './parseSwapToken.js';
 import { currencies } from '../config/currencies.js';
 import { saleEventTypes } from '../config/logEventTypes.js';
-import { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../types/types.js';
+import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../types';
 import { initializeTransactionData } from '../config/initialize.js';
 import Web3EthAbi from 'web3-eth-abi';
 import { alchemy } from '../config/setup.js';

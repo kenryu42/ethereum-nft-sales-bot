@@ -4,8 +4,8 @@ import Jimp from 'jimp-compact';
 import { ethers } from 'ethers';
 import { Gif } from 'make-a-gif';
 import { getTokenData } from './api.js';
-import { SwapData } from '../types/types';
-import { NftTokenType } from 'alchemy-sdk';
+import type { SwapData } from '../types';
+import type { NftTokenType } from 'alchemy-sdk';
 import { ABI, alchemy, IMAGE_SIZE } from '../config/setup.js';
 
 const GIF_DURATION = 1500;

@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { expect } from 'chai';
 import { ethers } from 'ethers';
-import { ContractData } from '../../src/types/types';
+import type { ContractData } from '../../src/types';
 import { getContractData } from '../../src/utils/api.js';
 import { parseTransaction } from '../../src/controllers/parseTransaction.js';
 

@@ -10,8 +10,8 @@ import {
     ALCHEMY_API_KEY,
     ETHERSCAN_API_KEY
 } from '../config/setup.js';
-import { NftTokenType } from 'alchemy-sdk';
-import { ContractData, CustomError, TokenData } from '../types/types';
+import type { NftTokenType } from 'alchemy-sdk';
+import type { ContractData, CustomError, TokenData } from '../types';
 
 const openseaNftApi = async (tokenId: string | number, contractAddress: string) => {
     const baseURL = `https://api.opensea.io/api/v1/asset/${contractAddress}/${tokenId}`;
