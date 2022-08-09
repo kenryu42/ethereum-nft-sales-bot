@@ -1,9 +1,10 @@
 <div id="top"></div>
 
-[![GitHub license](https://img.shields.io/github/license/kenryu42/ethereum-nft-sales-bot)](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/main/LICENSE)
+![GitHub contributors](https://img.shields.io/github/contributors-anon/kenryu42/ethereum-nft-sales-bot)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kenryu42/ethereum-nft-sales-bot/run-tests)
 ![GitHub issues](https://img.shields.io/github/issues-raw/kenryu42/ethereum-nft-sales-bot)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/kenryu42/ethereum-nft-sales-bot)
+[![GitHub license](https://img.shields.io/github/license/kenryu42/ethereum-nft-sales-bot)](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/main/LICENSE)
 
 <div align="center">
 
@@ -19,8 +20,10 @@
   <br />
 </div>
 
-<details open>
-  <summary>Contents</summary>
+## Table of Contents
+
+<details>
+  <summary>Click to expand</summary>
   <ol>
     <li><a href="#market-coverage">Market Coverage</a></li>
     <li><a href="#gif-generator">GIF Generator</a></li>
