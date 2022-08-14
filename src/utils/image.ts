@@ -38,7 +38,7 @@ const createGif = async (tokens: number[], contractAddress: string, tokenType: N
             const buffer = await sharp(response.data).png().toBuffer();
             imageData = buffer;
         } else if (startsWithSvg) {
-            const base64Image = tokenData.image ?? ''.replace('data:image/svg+xml;base64,', '');
+            const base64Image = (tokenData.image ?? '').replace('data:image/svg+xml;base64,', '');
             const buffer = Buffer.from(base64Image, 'base64');
 
             imageData = await sharp(buffer).png().toBuffer();
