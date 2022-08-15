@@ -15,7 +15,8 @@
         "fix": "npm run format && npm run lint",
         "unit": "npx mocha test/unit/*",
         "integration": "npx mocha test/integration/*",
-        "test": "npm run unit && npm run integration"
+        "test": "npm run unit && npm run integration",
+        "update": "git pull && npm run build"
     },
     "repository": {
         "type": "git",

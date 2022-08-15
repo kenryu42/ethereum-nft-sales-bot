@@ -44,6 +44,7 @@
         <li><a href="#multi-monitoring">Multi Monitoring</a></li>
       </ul>
     </li>
+    <li><a href="#update">Update</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#run-test">Run Test</a></li>
     <li><a href="#lint-check">Lint Check</a></li>
@@ -172,6 +173,14 @@ If `CONTRACT_ADDRESS` and `CONTRACT_ADDRESSES` are both set, `CONTRACT_ADDRESSES
 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+## Update
+
+Run the following command to update the source code:
+
+```bash
+npm run update
+```
 
 ## Usage
 
