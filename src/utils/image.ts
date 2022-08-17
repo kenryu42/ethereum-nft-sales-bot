@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import { Gif } from 'make-a-gif';
 import { getTokenData } from './api.js';
 import type { SwapData } from '../types';
+import type { BigNumberish } from 'ethers';
 import type { NftTokenType } from 'alchemy-sdk';
 import { ABI, alchemy, IMAGE_SIZE } from '../config/setup.js';
 
@@ -19,7 +20,11 @@ const resizeImage = async (image: string) => {
     return buffer;
 };
 
-const createGif = async (tokens: number[], contractAddress: string, tokenType: NftTokenType) => {
+const createGif = async (
+    tokens: BigNumberish[],
+    contractAddress: string,
+    tokenType: NftTokenType
+) => {
     console.log('Creating GIF...');
     const frames = [];
 
