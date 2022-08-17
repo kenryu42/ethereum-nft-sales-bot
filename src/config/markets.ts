@@ -1,6 +1,15 @@
 import type { Market } from '../types';
 
 const markets: { [key: string]: Market } = {
+    // Sudoswap Pair Router Address
+    '0x2b2e8cda09bba9660dca5cb6233787738ad68329': {
+        name: 'Sudoswap',
+        color: '#b6b9fe',
+        site: 'https://opensea.io/assets/',
+        accountPage: 'https://opensea.io/',
+        iconURL: 'https://pbs.twimg.com/profile_images/1542272594686054401/vOi42ixp_400x400.jpg',
+        logDecoder: []
+    },
     // NFT Trader BatchSwap Address
     '0x657e383edb9a7407e468acbcc9fe4c9730c7c275': {
         name: 'NFT Trader 🔄',
