@@ -77,8 +77,10 @@
 
 -   [Genie](https://www.genie.xyz/)
 
--   [NFT Trader
-    <img src="https://cdn-icons-png.flaticon.com/512/891/891449.png" width="20" height="20"/>](https://www.nfttrader.io/)
+-   [NFT Trader](https://www.nfttrader.io/)
+
+-   [Sudoswap
+    <img src="https://cdn-icons-png.flaticon.com/512/891/891449.png" width="20" height="20"/>](https://sudoswap.xyz/#/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -267,10 +269,9 @@ DISCORD_ENABLED=1
 
 ## Mindmap
 
--   **OTC Events**
-
 -   [x] Add NFT Trader
--   [ ] Add Sudo Swap
+-   [x] Add Sudo Swap
+-   [ ] Add Sudo Swap OTC
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
