@@ -1,6 +1,6 @@
-import { ethers } from 'ethers';
-import { ColorResolvable } from 'discord.js';
-import { NftTokenType } from 'alchemy-sdk';
+import type { BigNumberish } from 'ethers';
+import type { ColorResolvable } from 'discord.js';
+import type { NftTokenType } from 'alchemy-sdk';
 
 export interface CustomError extends Error {
     response?: {
@@ -65,14 +65,14 @@ export type OfferItem = {
     itemType: string;
     token: string;
     identifier: string;
-    amount: ethers.BigNumberish;
+    amount: BigNumberish;
 };
 
 export type ConsiderationItem = {
     itemType: string;
     token: string;
     identifier: string;
-    amount: ethers.BigNumberish;
+    amount: BigNumberish;
     recipient: string;
 };
 
@@ -94,9 +94,10 @@ export type TransactionData = {
     swap: SwapData;
     isSwap: boolean;
     isSweep: boolean;
+    isSudo: boolean;
     prices: string[];
     totalPrice: number;
-    tokens: number[];
+    tokens: BigNumberish[];
     tokenId?: string;
     tokenData?: TokenData;
     symbol: string | undefined;
