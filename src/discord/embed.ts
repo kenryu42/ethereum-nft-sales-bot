@@ -54,11 +54,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             .setTimestamp();
 
         if (tx.quantity > 1) {
-            embed.setTitle(
-                `${tx.quantity} ${tx.contractName || tx.tokenName} ${
-                    tx.isSweep ? 'SWEPT!' : 'SOLD!'
-                }`
-            );
+            embed.setTitle(`${tx.quantity} ${tx.contractName || tx.tokenName} SWEPT!`);
         } else {
             embed.setTitle(`${tx.tokenName} SOLD!`);
         }
