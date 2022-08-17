@@ -10,6 +10,7 @@ export const initializeTransactionData = (
         swap: {},
         isSwap: markets[recipient].name === 'NFT Trader 🔄',
         isSweep: markets[recipient].name === 'Gem 💎' || markets[recipient].name === 'Genie 🧞‍♂️',
+        isSudo: markets[recipient].name === 'Sudoswap',
         tokens: [],
         prices: [],
         totalPrice: 0,
