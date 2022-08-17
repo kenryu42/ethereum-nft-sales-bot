@@ -12,6 +12,7 @@ import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../t
 import { initializeTransactionData } from '../config/initialize.js';
 import Web3EthAbi from 'web3-eth-abi';
 import { alchemy } from '../config/setup.js';
+import { parseSudoswap } from './parseSudoswap.js';
 
 const isSeaport = (
     decodedLogData: DecodedLogData | SeaportOrder
@@ -30,12 +31,18 @@ async function parseTransaction(
 ) {
     const receipt = await alchemy.core.getTransactionReceipt(transactionHash);
     const recipient = receipt ? receipt.to.toLowerCase() : '';
+    const tx = initializeTransactionData(contractData, recipient, contractAddress);
+    tx.transactionHash = transactionHash;
 
     if (!receipt || !(recipient in markets)) {
         return null;
     }
 
-    const tx = initializeTransactionData(contractData, recipient, contractAddress);
+    if (tx.isSudo) {
+        const parseResult = await parseSudoswap(tx);
+
+        if (parseResult === null) return null;
+    }
 
     for (const log of receipt.logs) {
         const logAddress = log.address.toLowerCase();
@@ -65,9 +72,11 @@ async function parseTransaction(
 
             if (isSeaport(decodedLogData)) {
                 const parseResult = parseSeaport(tx, logMarket, decodedLogData);
+                console.log('hello go to seaport');
 
                 if (parseResult === null) continue;
             } else if (isNftTrader(decodedLogData)) {
+                console.log('hello go to nft trader');
                 const parseResult = await parseNftTrader(tx, log, logAddress, decodedLogData);
 
                 if (parseResult === null) return null;
@@ -102,7 +111,6 @@ async function parseTransaction(
             ? await getEthUsdPrice(tx.totalPrice)
             : null;
     tx.ethUsdValue = tx.usdPrice ? `($ ${tx.usdPrice})` : '';
-    tx.transactionHash = transactionHash;
 
     return tx;
 }
