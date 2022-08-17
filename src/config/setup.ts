@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import ABI from './abi.json' assert { type: 'json' };
 import NFT_TRADER_ABI from './NFTTraderSwap.json' assert { type: 'json' };
+import SUDOSWAP_ABI from './Sudoswap.json' assert { type: 'json' };
 import { Network, Alchemy } from 'alchemy-sdk';
 
 // Required settings
@@ -91,6 +92,7 @@ export {
     ABI,
     alchemy,
     NFT_TRADER_ABI,
+    SUDOSWAP_ABI,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,
     IMAGE_SIZE,
