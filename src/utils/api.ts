@@ -2,6 +2,7 @@ import 'dotenv/config';
 import _ from 'lodash';
 import axios from 'axios';
 import { ethers } from 'ethers';
+import type { BigNumberish } from 'ethers';
 import retry from 'async-retry';
 import {
     alchemy,
@@ -13,7 +14,7 @@ import {
 import type { NftTokenType } from 'alchemy-sdk';
 import type { ContractData, CustomError, TokenData } from '../types';
 
-const openseaNftApi = async (tokenId: string | number, contractAddress: string) => {
+const openseaNftApi = async (tokenId: BigNumberish, contractAddress: string) => {
     const baseURL = `https://api.opensea.io/api/v1/asset/${contractAddress}/${tokenId}`;
 
     try {
@@ -41,7 +42,7 @@ const openseaNftApi = async (tokenId: string | number, contractAddress: string) 
 };
 
 const retryOnOpenseaNftApi = async (
-    tokenId: string | number,
+    tokenId: BigNumberish,
     contractAddress: string
 ): Promise<TokenData> => {
     const result = await retry(
@@ -95,7 +96,7 @@ const getOpenseaName = async (address: string) => {
 
 const retryOnGetNFTMetadata = async (
     contractAddress: string,
-    tokenId: string | number,
+    tokenId: BigNumberish,
     tokenType: NftTokenType
 ): Promise<TokenData> => {
     const result = await retry(
@@ -215,7 +216,7 @@ const getReadableName = async (address: string) => {
 
 const getTokenData = async (
     contractAddress: string,
-    tokenId: string | number,
+    tokenId: BigNumberish,
     tokenType: NftTokenType
 ) => {
     let tokenData;
