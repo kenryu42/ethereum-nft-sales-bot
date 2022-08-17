@@ -72,11 +72,9 @@ async function parseTransaction(
 
             if (isSeaport(decodedLogData)) {
                 const parseResult = parseSeaport(tx, logMarket, decodedLogData);
-                console.log('hello go to seaport');
 
                 if (parseResult === null) continue;
             } else if (isNftTrader(decodedLogData)) {
-                console.log('hello go to nft trader');
                 const parseResult = await parseNftTrader(tx, log, logAddress, decodedLogData);
 
                 if (parseResult === null) return null;
