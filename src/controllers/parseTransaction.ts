@@ -31,12 +31,12 @@ async function parseTransaction(
 ) {
     const receipt = await alchemy.core.getTransactionReceipt(transactionHash);
     const recipient = receipt ? receipt.to.toLowerCase() : '';
-    const tx = initializeTransactionData(contractData, recipient, contractAddress);
-    tx.transactionHash = transactionHash;
 
     if (!receipt || !(recipient in markets)) {
         return null;
     }
+    const tx = initializeTransactionData(contractData, recipient, contractAddress);
+    tx.transactionHash = transactionHash;
 
     if (tx.isSudo) {
         const parseResult = await parseSudoswap(tx);
