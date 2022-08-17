@@ -109,7 +109,7 @@ ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
 
         tweetContent = `
 ${
-    tx.quantity ?? 0 > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
+    (tx.quantity ?? 0) > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
 } sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.name}
 			
 ${field}
