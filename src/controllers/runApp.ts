@@ -41,7 +41,7 @@ const runApp = async (
             console.log(`Spent Value: ${swap[addressTaker].spentAmount} ETH`);
             console.log(`Received Assets: ${JSON.stringify(swap[addressTaker].receivedAssets)}`);
             console.log(`Received Value: ${swap[addressTaker].receivedAmount} ETH`);
-            console.log(`\nhttps://etherscan.io/txData/${transactionHash}`);
+            console.log(`\nhttps://etherscan.io/tx/${transactionHash}`);
             console.log(
                 '--------------------------------------------------------------------------------'
             );
@@ -51,7 +51,7 @@ const runApp = async (
                     market.name
                 } for ${totalPrice} ${currency.name}`
             );
-            console.log(`https://etherscan.io/txData/${transactionHash}\n`);
+            console.log(`https://etherscan.io/tx/${transactionHash}\n`);
         }
     }
 
