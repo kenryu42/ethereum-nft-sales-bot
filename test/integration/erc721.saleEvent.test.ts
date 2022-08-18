@@ -32,6 +32,7 @@ describe('ERC 721 Integration Test', function () {
             const isSameSize =
                 tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
 
+            assert.strictEqual(tx.isSweep,false);
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
@@ -53,6 +54,7 @@ describe('ERC 721 Integration Test', function () {
             const isSameSize =
                 tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
 
+            assert.strictEqual(tx.isSweep,false);
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
@@ -74,6 +76,7 @@ describe('ERC 721 Integration Test', function () {
             const isSameSize =
                 tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
 
+            assert.strictEqual(tx.isSweep,false);
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
@@ -94,6 +97,7 @@ describe('ERC 721 Integration Test', function () {
 
             if (!tx) return;
 
+            assert.strictEqual(tx.isSweep,true);
             assert.strictEqual(tx.tokens.length, 2);
             assert.strictEqual(tx.prices.length, 1);
             assert.strictEqual(tx.prices[0], '0.10');
@@ -120,6 +124,7 @@ describe('ERC 721 Integration Test', function () {
             const isSameSize =
                 tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
 
+            assert.strictEqual(tx.isSweep,true);
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
@@ -140,6 +145,7 @@ describe('ERC 721 Integration Test', function () {
             const isSameSize =
                 tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
 
+            assert.strictEqual(tx.isSweep,true);
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
@@ -160,6 +166,7 @@ describe('ERC 721 Integration Test', function () {
             const isSameSize =
                 tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
 
+            assert.strictEqual(tx.isSweep,true);
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
