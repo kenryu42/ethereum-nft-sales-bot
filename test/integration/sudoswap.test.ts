@@ -17,6 +17,7 @@ describe('Sudoswap Integration Test', function () {
 
             const isSameSize = tx.tokens.length === tx.quantity;
 
+            assert.strictEqual(tx.isSweep,true);
             expect(isSameSize).to.be.true;
             expect(tx.isSudo).to.be.true;
             expect(tx.tokenData).to.not.be.null;
@@ -39,6 +40,7 @@ describe('Sudoswap Integration Test', function () {
 
             const isSameSize = tx.tokens.length === tx.quantity;
 
+            assert.strictEqual(tx.isSweep,false);
             expect(isSameSize).to.be.true;
             expect(tx.isSudo).to.be.true;
             expect(tx.tokenData).to.not.be.null;
@@ -61,6 +63,7 @@ describe('Sudoswap Integration Test', function () {
 
             const isSameSize = tx.tokens.length === tx.quantity;
 
+            assert.strictEqual(tx.isSweep,false);
             expect(isSameSize).to.be.true;
             expect(tx.isSudo).to.be.true;
             expect(tx.tokenData).to.not.be.null;
