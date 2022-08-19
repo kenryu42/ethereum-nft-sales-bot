@@ -16,7 +16,8 @@
         "unit": "npx mocha test/unit/*",
         "integration": "npx mocha test/integration/*",
         "test": "npm run unit && npm run integration",
-        "update": "git pull && npm i"
+        "update": "git pull && npm i",
+        "commit": "npx cz"
     },
     "repository": {
         "type": "git",
