@@ -1,6 +1,6 @@
 {
     "name": "ethereum-nft-sales-bot",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "An ethereum NFT sales monitoring bot.",
     "main": "src/app.js",
     "type": "module",
@@ -16,7 +16,8 @@
         "unit": "npx mocha test/unit/*",
         "integration": "npx mocha test/integration/*",
         "test": "npm run unit && npm run integration",
-        "update": "git pull && npm i"
+        "update": "git pull && npm i",
+        "commit": "npx cz"
     },
     "repository": {
         "type": "git",
@@ -50,6 +51,8 @@
         "@typescript-eslint/eslint-plugin": "^5.31.0",
         "@typescript-eslint/parser": "^5.31.0",
         "chai": "^4.3.6",
+        "commitizen": "^4.2.5",
+        "cz-conventional-changelog": "^3.3.0",
         "eslint": "^8.18.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.0.0",
@@ -58,5 +61,10 @@
         "ts-mocha": "^10.0.0",
         "ts-node": "^10.9.1",
         "typescript": "^4.7.4"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
     }
 }
