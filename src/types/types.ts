@@ -93,7 +93,7 @@ export type SwapEvent = {
 export type TransactionData = {
     swap: SwapData;
     isSwap: boolean;
-    isSweep: boolean;
+    isAggregator: boolean;
     isSudo: boolean;
     prices: string[];
     totalPrice: number;

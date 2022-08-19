@@ -47,7 +47,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             .addField(
                 priceTitle,
                 `\`${formatPrice(tx.totalPrice)} ${tx.currency.name} ${tx.ethUsdValue}\``,
-                tx.isSweep
+                tx.isAggregator
             )
             .setFooter({ text: tx.market.name, iconURL: tx.market.iconURL })
             .setColor(tx.market.color)
@@ -89,7 +89,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             embed.setImage(tx.tokenData.image);
         }
 
-        if (tx.isSweep) {
+        if (tx.isAggregator) {
             const fields = [
                 {
                     name: 'Quantity',

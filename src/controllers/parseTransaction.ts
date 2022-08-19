@@ -48,7 +48,7 @@ async function parseTransaction(
         const logAddress = log.address.toLowerCase();
         const logMarket = _.get(markets, logAddress);
 
-        if (logAddress in currencies && !tx.isSweep) {
+        if (logAddress in currencies && !tx.isAggregator) {
             tx.currency = currencies[logAddress as keyof typeof currencies];
         }
 
@@ -103,7 +103,7 @@ async function parseTransaction(
         : await getTokenData(contractAddress, tx.tokenId ?? '', tx.tokenType);
     tx.tokenName = tx.tokenData.name || `${tx.symbol} #${tx.tokenId}`;
     tx.sweeperAddr = receipt.from;
-    tx.sweeper = tx.isSweep ? await getReadableName(tx.sweeperAddr) : '';
+    tx.sweeper = tx.isAggregator ? await getReadableName(tx.sweeperAddr) : '';
     tx.usdPrice =
         !tx.isSwap && (tx.currency.name === 'ETH' || tx.currency.name === 'WETH')
             ? await getEthUsdPrice(tx.totalPrice)

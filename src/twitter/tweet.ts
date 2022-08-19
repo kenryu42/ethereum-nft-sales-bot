@@ -37,7 +37,7 @@ const tweet = async (tx: TransactionData) => {
     if (tx.isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
         tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
     } else if (
-        (tx.isSweep || (GIF_ENABLED && (tx.quantity ?? 0) > 1 && tx.tokenType === 'ERC721')) &&
+        ((GIF_ENABLED && (tx.quantity ?? 0) > 1 && tx.tokenType === 'ERC721')) &&
         !DISCORD_ENABLED
     ) {
         tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
@@ -68,7 +68,7 @@ const tweet = async (tx: TransactionData) => {
         mimeType: imageType
     });
 
-    if (tx.isSweep) {
+    if (tx.isAggregator) {
         tweetContent = `
 ${tx.quantity ?? 0 > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName} \
 swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
