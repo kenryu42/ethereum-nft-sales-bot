@@ -68,7 +68,7 @@ const tweet = async (tx: TransactionData) => {
         mimeType: imageType
     });
 
-    if (tx.isSweep) {
+    if (tx.isAggregator) {
         tweetContent = `
 ${tx.quantity ?? 0 > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName} \
 swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
