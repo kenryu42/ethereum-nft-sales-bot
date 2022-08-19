@@ -1,6 +1,6 @@
 {
     "name": "ethereum-nft-sales-bot",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "An ethereum NFT sales monitoring bot.",
     "main": "src/app.js",
     "type": "module",
