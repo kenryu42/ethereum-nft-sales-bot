@@ -1,8 +1,7 @@
 # Contribution guide
 
-## Developing commitizen
+## Developing Ethereum NFT Sales Bot
 
-You consider contributing changes to commitizen – thank you!
 Please consider these guidelines when filing a pull request:
 
 -   Commits follow the [Angular commit convention](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
@@ -11,7 +10,7 @@ Please consider these guidelines when filing a pull request:
 
 ## Creating releases
 
-commitizen uses [semantic-release](https://github.com/semantic-release/semantic-release)
+we uses [semantic-release](https://github.com/semantic-release/semantic-release)
 to release new versions automatically.
 
 -   Commits of type `fix` will trigger bugfix releases, think `0.0.1`
