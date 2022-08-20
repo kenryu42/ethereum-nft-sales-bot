@@ -39,7 +39,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
         tx.gifImage = gifImage;
         file = new MessageAttachment(gifImage as Buffer, 'image.gif');
         embed.setImage('attachment://image.gif');
-    } else if (tx.tokenData && tx.tokenData.image && tx.quantity) {
+    } else if (tx.tokenData && tx.tokenData.image) {
         const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
 
         embed

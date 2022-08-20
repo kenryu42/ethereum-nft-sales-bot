@@ -15,6 +15,7 @@ export const initializeTransactionData = (
         tokens: [],
         prices: [],
         totalPrice: 0,
+        quantity: 0,
         symbol: contractData.symbol,
         tokenType: contractData.tokenType,
         contractName: contractData.name,

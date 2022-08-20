@@ -108,7 +108,7 @@ export type TransactionData = {
     gifImage?: Buffer | Uint8Array;
     currency: { name: string; decimals: number };
     contractAddress: string;
-    quantity?: number;
+    quantity: number;
     to?: string;
     from?: string;
     toAddr?: string;
