@@ -110,10 +110,10 @@ describe('ERC 721 Integration Test', function () {
 
     describe('gem swap event', function () {
         it('should get the correct sales data', async function () {
-            const beanz = '0x306b1ea3ecdf94ab739f1910bbda052ed4a9f949';
-            const txHash = '0x9cdb1f154b4c2b6feb31e000435ce534c2e8197b47f3ed0cec2c24dfc4d04f82';
-            const beanZcontractData = await getContractData(beanz);
-            const tx = await parseTransaction(txHash, beanz, beanZcontractData);
+            const otherDeed = '0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258';
+            const txHash = '0x97f8a3fa7f3e69959ec716e9d0395497ef01cf25c526eadb243a9a0747210245';
+            const otherContractData = await getContractData(otherDeed);
+            const tx = await parseTransaction(txHash, otherDeed, otherContractData);
 
             if (!tx) return;
 
@@ -130,10 +130,10 @@ describe('ERC 721 Integration Test', function () {
 
     describe('genie swap event', function () {
         it('should get the correct sales data', async function () {
-            const meebits = '0x7bd29408f11d2bfc23c34f18275bbf23bb716bc7';
-            const txHash = '0xc952d3c1b21e14c34389224643fad9f7094702788ba3a65e0ba0c874d2c22bb7';
-            const meebitsContractData = await getContractData(meebits);
-            const tx = await parseTransaction(txHash, meebits, meebitsContractData);
+            const pudgyPeguin = '0xbd3531da5cf5857e7cfaa92426877b022e612cf8';
+            const txHash = '0x2f142466062b0c6565144c9eb2a57e0aebcda40ce194950be76532d99a3d465a';
+            const pudgyContractData = await getContractData(pudgyPeguin);
+            const tx = await parseTransaction(txHash, pudgyPeguin, pudgyContractData);
 
             if (!tx) return;
 
@@ -144,26 +144,6 @@ describe('ERC 721 Integration Test', function () {
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
             assert.strictEqual(tx.market.name, 'genie');
-            assert.strictEqual(tx.transactionHash, txHash);
-        });
-    });
-
-    describe('gem swap event with mixed nft', function () {
-        it('should get the correct sales data of specify nft', async function () {
-            const neko = '0x0a8eb54b0123778291a3cddd2074c9ce8b2cfae5';
-            const txHash = '0xcf337694d4c19d2930da7a8825c02e08376e47eb4775d801405ea4c9b4bdcb4c';
-            const nekoContractData = await getContractData(neko);
-            const tx = await parseTransaction(txHash, neko, nekoContractData);
-
-            if (!tx) return;
-
-            const isSameSize =
-                tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
-
-            expect(isSameSize).to.be.true;
-            expect(tx.tokenData).to.not.be.null;
-            expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'gem');
             assert.strictEqual(tx.transactionHash, txHash);
         });
     });
