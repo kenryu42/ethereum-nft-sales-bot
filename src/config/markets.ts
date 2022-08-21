@@ -115,29 +115,6 @@ const markets: { [key: string]: Market } = {
             }
         ]
     },
-    // OpenSea Contract Address
-    '0x7f268357a8c2552623316e2562d90e642bb538e5': {
-        name: 'opensea',
-        displayName: 'OpenSea: Wyvern 🌊',
-        color: '#2484e4',
-        site: 'https://opensea.io/assets/',
-        accountPage: 'https://opensea.io/',
-        iconURL: 'https://pbs.twimg.com/profile_images/1533843334946508806/kleAruEh_400x400.png',
-        logDecoder: [
-            {
-                type: 'bytes32',
-                name: 'buyHash'
-            },
-            {
-                type: 'bytes32',
-                name: 'sellHash'
-            },
-            {
-                type: 'uint256',
-                name: 'price'
-            }
-        ]
-    },
     // LooksRareExchange Contract Address
     '0x59728544b08ab483533076417fbbb2fd0b17ce3a': {
         name: 'looksrare',
@@ -177,6 +154,7 @@ const markets: { [key: string]: Market } = {
             }
         ]
     },
+    // Opensea Seaport Protocol Contract Address
     '0x00000000006c3852cbef3e08e8df289169ede581': {
         name: 'opensea',
         displayName: 'Opensea: Seaport ⚓️',
