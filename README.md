@@ -68,7 +68,7 @@
 
 ## Market Coverage
 
--   [Opensea](https://opensea.io/) (Wyvren & Seaport)
+-   [Opensea](https://opensea.io/)
 
 -   [Looksrare](https://looksrare.org/)
 
