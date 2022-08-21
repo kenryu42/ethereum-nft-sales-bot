@@ -5,7 +5,9 @@ import { transferEventTypes } from '../config/logEventTypes.js';
 import type { Log } from '@ethersproject/abstract-provider';
 
 const parseSwapToken = (tx: TransactionData, log: Log, logAddress: string) => {
-    if (tx.isSwap && log.topics[0] === transferEventTypes.ERC721) {
+    const isSwap = tx.recipient === 'nft-trader';
+
+    if (isSwap && log.topics[0] === transferEventTypes.ERC721) {
         const receivedAddr = Web3EthAbi.decodeParameter('address', log.topics[2]).toLowerCase();
 
         tx.tokenId = String(Web3EthAbi.decodeParameter('uint256', log.topics[3]));
@@ -26,7 +28,7 @@ const parseSwapToken = (tx: TransactionData, log: Log, logAddress: string) => {
                       }
                   ]
               });
-    } else if (tx.isSwap && transferEventTypes.ERC1155.includes(log.topics[0])) {
+    } else if (isSwap && transferEventTypes.ERC1155.includes(log.topics[0])) {
         const receivedAddr = Web3EthAbi.decodeParameter('address', log.topics[3]).toLowerCase();
         const decodeData = Web3EthAbi.decodeLog(
             [

@@ -1,6 +1,6 @@
 import type { BigNumberish } from 'ethers';
-import type { ColorResolvable } from 'discord.js';
 import type { NftTokenType } from 'alchemy-sdk';
+import type { ColorResolvable } from 'discord.js';
 
 export interface CustomError extends Error {
     response?: {
@@ -44,7 +44,8 @@ export type SwapData = Swap & {
 };
 
 export type Market = {
-    name: string;
+    name: Recipient;
+    displayName: string;
     color: ColorResolvable;
     site: string;
     accountPage: string;
@@ -90,11 +91,19 @@ export type SwapEvent = {
     _referral: string;
 };
 
+export type Recipient =
+    | 'opensea'
+    | 'looksrare'
+    | 'x2y2'
+    | 'gem'
+    | 'genie'
+    | 'nft-trader'
+    | 'sudoswap'
+    | 'unknown';
+
 export type TransactionData = {
+    recipient: Recipient;
     swap: SwapData;
-    isSwap: boolean;
-    isAggregator: boolean;
-    isSudo: boolean;
     prices: string[];
     totalPrice: number;
     tokens: BigNumberish[];
@@ -120,5 +129,5 @@ export type TransactionData = {
     ethUsdValue?: string;
     addressMaker?: string;
     addressTaker?: string;
-    transactionHash?: string;
+    transactionHash: string;
 };

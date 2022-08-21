@@ -35,10 +35,12 @@ async function parseTransaction(
     if (!receipt || !(recipient in markets)) {
         return null;
     }
-    const tx = initializeTransactionData(contractData, recipient, contractAddress);
-    tx.transactionHash = transactionHash;
+    const tx = initializeTransactionData(transactionHash, contractData, recipient, contractAddress);
+    const isSudo = tx.recipient === 'sudoswap';
+    const isSwap = tx.recipient === 'nft-trader';
+    const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
 
-    if (tx.isSudo) {
+    if (isSudo) {
         const parseResult = await parseSudoswap(tx);
 
         if (parseResult === null) return null;
@@ -48,11 +50,11 @@ async function parseTransaction(
         const logAddress = log.address.toLowerCase();
         const logMarket = _.get(markets, logAddress);
 
-        if (logAddress in currencies && !tx.isAggregator) {
+        if (logAddress in currencies && !isAggregator) {
             tx.currency = currencies[logAddress as keyof typeof currencies];
         }
 
-        if (tx.isSwap) {
+        if (tx.recipient === 'nft-trader') {
             parseSwapToken(tx, log, logAddress);
         } else {
             parseSaleToken(tx, log, logAddress);
@@ -80,7 +82,7 @@ async function parseTransaction(
                 if (parseResult === null) return null;
             } else if (tx.marketList.length + 1 === tx.tokens.length) {
                 const decodedPrice =
-                    logMarket.name === 'X2Y2 ⭕️' ? decodedLogData.amount : decodedLogData.price;
+                    logMarket.name === 'x2y2' ? decodedLogData.amount : decodedLogData.price;
                 const price = Number(ethers.utils.formatUnits(decodedPrice, tx.currency.decimals));
 
                 tx.totalPrice += price;
@@ -92,20 +94,20 @@ async function parseTransaction(
 
     tx.quantity = tx.tokenType === 'ERC721' ? tx.tokens.length : _.sum(tx.tokens);
 
-    if ((!tx.isSwap && tx.quantity === 0) || (tx.isSwap && !tx.swap.monitorTokenId)) {
+    if ((!isSwap && tx.quantity === 0) || (isSwap && !tx.swap.monitorTokenId)) {
         console.error('No tokens found. Please check the contract address is correct.');
         return null;
     }
-    tx.to = !tx.isSwap ? await getReadableName(tx.toAddr ?? '') : '';
-    tx.from = !tx.isSwap ? await getReadableName(tx.fromAddr ?? '') : '';
+    tx.to = !isSwap ? await getReadableName(tx.toAddr ?? '') : '';
+    tx.from = !isSwap ? await getReadableName(tx.fromAddr ?? '') : '';
     tx.tokenData = tx.swap.monitorTokenId
         ? await getTokenData(contractAddress, tx.swap.monitorTokenId, tx.tokenType)
         : await getTokenData(contractAddress, tx.tokenId ?? '', tx.tokenType);
     tx.tokenName = tx.tokenData.name || `${tx.symbol} #${tx.tokenId}`;
     tx.sweeperAddr = receipt.from;
-    tx.sweeper = tx.isAggregator ? await getReadableName(tx.sweeperAddr) : '';
+    tx.sweeper = isAggregator ? await getReadableName(tx.sweeperAddr) : '';
     tx.usdPrice =
-        !tx.isSwap && (tx.currency.name === 'ETH' || tx.currency.name === 'WETH')
+        !isSwap && (tx.currency.name === 'ETH' || tx.currency.name === 'WETH')
             ? await getEthUsdPrice(tx.totalPrice)
             : null;
     tx.ethUsdValue = tx.usdPrice ? `($ ${tx.usdPrice})` : '';

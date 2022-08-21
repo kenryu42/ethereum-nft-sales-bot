@@ -15,7 +15,7 @@ const runApp = async (
         const {
             tokenName,
             contractName,
-            isSwap,
+            recipient,
             swap,
             addressMaker,
             addressTaker,
@@ -25,7 +25,7 @@ const runApp = async (
             quantity
         } = txData;
 
-        if (isSwap && addressMaker && addressTaker) {
+        if (recipient === 'nft-trader' && addressMaker && addressTaker) {
             console.log(
                 '--------------------------------------------------------------------------------'
             );
@@ -48,7 +48,7 @@ const runApp = async (
         } else {
             console.log(
                 `${quantity} ${contractName || tokenName} sold on ${
-                    market.name
+                    market.displayName
                 } for ${totalPrice} ${currency.name}`
             );
             console.log(`https://etherscan.io/tx/${transactionHash}\n`);

@@ -34,14 +34,14 @@ describe('NFT Trader Integration Test', function () {
                 expect(takerReceivedAssets[i].contractAddress).to.exist;
             }
 
-            expect(tx.isSwap).to.be.true;
             expect(tx.swap[tx.addressMaker].name).to.exist;
             expect(tx.swap[tx.addressTaker].name).to.exist;
             expect(ethers.utils.isAddress(tx.addressMaker)).to.be.true;
             expect(ethers.utils.isAddress(tx.addressTaker)).to.be.true;
             assert.strictEqual(makerReceivedEth, '15.52');
             assert.strictEqual(takerReceivedEth, '0.0');
-            assert.strictEqual(tx.market.name, 'NFT Trader 🔄');
+            assert.strictEqual(tx.recipient, 'nft-trader');
+            assert.strictEqual(tx.recipient, tx.market.name);
             assert.strictEqual(tx.transactionHash, txHash);
             expect(tx.tokenData).to.not.be.null;
         });
@@ -80,14 +80,14 @@ describe('NFT Trader Integration Test', function () {
                 expect(takerReceivedAssets[i].contractAddress).to.exist;
             }
 
-            expect(tx.isSwap).to.be.true;
             expect(tx.swap[tx.addressMaker].name).to.exist;
             expect(tx.swap[tx.addressTaker].name).to.exist;
             expect(ethers.utils.isAddress(tx.addressMaker)).to.be.true;
             expect(ethers.utils.isAddress(tx.addressTaker)).to.be.true;
             assert.strictEqual(makerReceivedEth, '0.4725');
             assert.strictEqual(takerReceivedEth, '0.0');
-            assert.strictEqual(tx.market.name, 'NFT Trader 🔄');
+            assert.strictEqual(tx.recipient, 'nft-trader');
+            assert.strictEqual(tx.recipient, tx.market.name);
             assert.strictEqual(tx.transactionHash, txHash);
             expect(tx.tokenData).to.not.be.null;
         });
@@ -128,14 +128,14 @@ describe('NFT Trader Integration Test', function () {
                 expect(takerReceivedAssets[i].contractAddress).to.exist;
             }
 
-            expect(tx.isSwap).to.be.true;
             expect(tx.swap[tx.addressMaker].name).to.exist;
             expect(tx.swap[tx.addressTaker].name).to.exist;
             expect(ethers.utils.isAddress(tx.addressMaker)).to.be.true;
             expect(ethers.utils.isAddress(tx.addressTaker)).to.be.true;
             assert.strictEqual(makerReceivedEth, '0.0');
             assert.strictEqual(takerReceivedEth, '0.0');
-            assert.strictEqual(tx.market.name, 'NFT Trader 🔄');
+            assert.strictEqual(tx.recipient, 'nft-trader');
+            assert.strictEqual(tx.recipient, tx.market.name);
             assert.strictEqual(tx.transactionHash, txHash);
             expect(tx.tokenData).to.not.be.null;
         });

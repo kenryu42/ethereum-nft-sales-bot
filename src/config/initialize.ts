@@ -2,16 +2,14 @@ import { markets } from './markets.js';
 import type { ContractData, TransactionData } from '../types';
 
 export const initializeTransactionData = (
+    transactionHash: string,
     contractData: ContractData,
     recipient: string,
     contractAddress: string
 ) => {
     const tx: TransactionData = {
         swap: {},
-        isSwap: markets[recipient].name === 'NFT Trader 🔄',
-        isAggregator:
-            markets[recipient].name === 'Gem 💎' || markets[recipient].name === 'Genie 🧞‍♂️',
-        isSudo: markets[recipient].name === 'Sudoswap',
+        recipient: markets[recipient].name,
         tokens: [],
         prices: [],
         totalPrice: 0,
@@ -22,7 +20,8 @@ export const initializeTransactionData = (
         marketList: [],
         market: markets[recipient],
         currency: { name: 'ETH', decimals: 18 },
-        contractAddress: contractAddress
+        contractAddress: contractAddress,
+        transactionHash: transactionHash
     };
 
     return tx;

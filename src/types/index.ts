@@ -1,6 +1,7 @@
 export {
     Market,
     SwapData,
+    Recipient,
     TokenData,
     CustomError,
     ContractData,

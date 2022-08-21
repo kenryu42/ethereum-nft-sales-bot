@@ -18,10 +18,10 @@ describe('Sudoswap Integration Test', function () {
             const isSameSize = tx.tokens.length === tx.quantity;
 
             expect(isSameSize).to.be.true;
-            expect(tx.isSudo).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Sudoswap');
+            assert.strictEqual(tx.recipient, tx.market.name);
+            assert.strictEqual(tx.recipient, 'sudoswap');
             assert.strictEqual(tx.transactionHash, txHash);
             assert.strictEqual(tx.totalPrice, 18.76539336261635);
         });
@@ -40,10 +40,10 @@ describe('Sudoswap Integration Test', function () {
             const isSameSize = tx.tokens.length === tx.quantity;
 
             expect(isSameSize).to.be.true;
-            expect(tx.isSudo).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Sudoswap');
+            assert.strictEqual(tx.recipient, tx.market.name);
+            assert.strictEqual(tx.recipient, 'sudoswap');
             assert.strictEqual(tx.transactionHash, txHash);
             assert.strictEqual(tx.totalPrice, 5.8272946859903385);
         });
@@ -62,10 +62,10 @@ describe('Sudoswap Integration Test', function () {
             const isSameSize = tx.tokens.length === tx.quantity;
 
             expect(isSameSize).to.be.true;
-            expect(tx.isSudo).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Sudoswap');
+            assert.strictEqual(tx.recipient, tx.market.name);
+            assert.strictEqual(tx.recipient, 'sudoswap');
             assert.strictEqual(tx.transactionHash, txHash);
             assert.strictEqual(tx.totalPrice, 7.000000000000001);
         });

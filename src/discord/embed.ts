@@ -10,8 +10,10 @@ import type { TransactionData } from '../types';
 const sendEmbedMessage = async (tx: TransactionData) => {
     let file: MessageAttachment;
     const embed = new MessageEmbed();
+    const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
+    const isSwap = tx.recipient === 'nft-trader';
 
-    if (tx.isSwap && tx.addressMaker && tx.addressTaker) {
+    if (isSwap && tx.addressMaker && tx.addressTaker) {
         const gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
 
         embed.addField(
@@ -33,7 +35,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
         embed
             .setTitle(`New ${tx.contractName || tx.tokenName} Swap on NFT Trader`)
             .setURL(`${tx.market.site}${tx.transactionHash}`)
-            .setFooter({ text: tx.market.name, iconURL: tx.market.iconURL })
+            .setFooter({ text: tx.market.displayName, iconURL: tx.market.iconURL })
             .setColor(tx.market.color)
             .setTimestamp();
         tx.gifImage = gifImage;
@@ -47,9 +49,9 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             .addField(
                 priceTitle,
                 `\`${formatPrice(tx.totalPrice)} ${tx.currency.name} ${tx.ethUsdValue}\``,
-                tx.isAggregator
+                isAggregator
             )
-            .setFooter({ text: tx.market.name, iconURL: tx.market.iconURL })
+            .setFooter({ text: tx.market.displayName, iconURL: tx.market.iconURL })
             .setColor(tx.market.color)
             .setTimestamp();
 
@@ -89,7 +91,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             embed.setImage(tx.tokenData.image);
         }
 
-        if (tx.isAggregator) {
+        if (isAggregator) {
             const fields = [
                 {
                     name: 'Quantity',
@@ -106,7 +108,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             embed.addFields(fields);
             formatSweepField(tx, embed);
         } else if (tx.quantity) {
-            const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
+            const isX2Y2 = tx.market.name === 'x2y2' ? '/items' : '';
 
             if (tx.tokenType === 'ERC1155' || tx.quantity > 1)
                 embed.addField('Quantity', `\`${tx.quantity}\``, false);

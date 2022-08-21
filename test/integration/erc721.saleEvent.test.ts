@@ -37,7 +37,7 @@ describe('ERC 721 Integration Test', function () {
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Opensea: Seaport ⚓️');
+            assert.strictEqual(tx.market.name, 'opensea');
             assert.strictEqual(tx.market, tx.marketList[0]);
             assert.strictEqual(tx.transactionHash, txHash);
         });
@@ -58,7 +58,7 @@ describe('ERC 721 Integration Test', function () {
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'LooksRare 👀💎');
+            assert.strictEqual(tx.market.name, 'looksrare');
             assert.strictEqual(tx.market, tx.marketList[0]);
             assert.strictEqual(tx.transactionHash, txHash);
         });
@@ -79,7 +79,7 @@ describe('ERC 721 Integration Test', function () {
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'X2Y2 ⭕️');
+            assert.strictEqual(tx.market.name, 'x2y2');
             assert.strictEqual(tx.market, tx.marketList[0]);
             assert.strictEqual(tx.transactionHash, txHash);
         });
@@ -101,7 +101,7 @@ describe('ERC 721 Integration Test', function () {
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Opensea: Seaport ⚓️');
+            assert.strictEqual(tx.market.name, 'opensea');
             assert.strictEqual(tx.market, tx.marketList[0]);
             assert.strictEqual(tx.transactionHash, txHash);
             expect(tx.tokenData).to.not.be.null;
@@ -123,7 +123,7 @@ describe('ERC 721 Integration Test', function () {
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Gem 💎');
+            assert.strictEqual(tx.market.name, 'gem');
             assert.strictEqual(tx.transactionHash, txHash);
         });
     });
@@ -143,7 +143,7 @@ describe('ERC 721 Integration Test', function () {
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Genie 🧞‍♂️');
+            assert.strictEqual(tx.market.name, 'genie');
             assert.strictEqual(tx.transactionHash, txHash);
         });
     });
@@ -163,7 +163,7 @@ describe('ERC 721 Integration Test', function () {
             expect(isSameSize).to.be.true;
             expect(tx.tokenData).to.not.be.null;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Gem 💎');
+            assert.strictEqual(tx.market.name, 'gem');
             assert.strictEqual(tx.transactionHash, txHash);
         });
     });
@@ -182,7 +182,7 @@ describe('ERC 721 Integration Test', function () {
 
             expect(isSameSize).to.be.true;
             expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
-            assert.strictEqual(tx.market.name, 'Genie 🧞‍♂️');
+            assert.strictEqual(tx.market.name, 'genie');
             assert.strictEqual(tx.transactionHash, txHash);
             expect(tx.tokenData).to.not.be.null;
         });

@@ -29,12 +29,14 @@ const tweet = async (tx: TransactionData) => {
     let imageType = EUploadMimeType.Png;
     let imageBuffer;
     let tweetContent;
+    const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
+    const isSwap = tx.recipient === 'nft-trader';
 
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
         return;
     }
 
-    if (tx.isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
+    if (isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
         tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
     } else if (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721' && !DISCORD_ENABLED) {
         tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
@@ -42,7 +44,7 @@ const tweet = async (tx: TransactionData) => {
 
     if (!tx.tokenData.image) {
         imageBuffer = await createNaImage(true);
-    } else if (tx.isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
+    } else if (isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
         imageBuffer = tx.gifImage;
         imageType = EUploadMimeType.Gif;
     } else if (tx.tokenData.image.endsWith('.svg')) {
@@ -65,10 +67,10 @@ const tweet = async (tx: TransactionData) => {
         mimeType: imageType
     });
 
-    if (tx.isAggregator) {
+    if (isAggregator) {
         tweetContent = `
 ${tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName} \
-swept on ${tx.market.name} for ${formatPrice(tx.totalPrice)} \
+swept on ${tx.market.displayName} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
 
 Sweeper: ${tx.sweeper}
@@ -76,7 +78,7 @@ ${tx.market.accountPage}${tx.sweeperAddr}
 
 🔍 https://etherscan.io/tx/${tx.transactionHash}	
 			`;
-    } else if (tx.isSwap && tx.addressMaker && tx.addressTaker) {
+    } else if (isSwap && tx.addressMaker && tx.addressTaker) {
         tweetContent = `
 New ${tx.contractName} Swap on NFT Trader
 
@@ -89,7 +91,7 @@ ${tx.market.accountPage}${tx.addressTaker}
 🔍 ${tx.market.site}${tx.transactionHash}
             `;
     } else {
-        const isX2Y2 = tx.market.name === 'X2Y2 ⭕️' ? '/items' : '';
+        const isX2Y2 = tx.market.name === 'x2y2' ? '/items' : '';
         const field =
             tx.tokenType === 'ERC721' && tx.quantity > 1
                 ? `
@@ -107,7 +109,7 @@ ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
         tweetContent = `
 ${
     tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
-} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.name}
+} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.displayName}
 			
 ${field}
 			
