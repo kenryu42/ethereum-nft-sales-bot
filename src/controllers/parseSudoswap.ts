@@ -12,6 +12,8 @@ export async function parseSudoswap(tx: TransactionData) {
 
     if (functionName === 'swapETHForSpecificNFTs') {
         tx.totalPrice = Number(ethers.utils.formatEther(transaction.value.toString()));
+    } else if (functionName === 'robustSwapETHForSpecificNFTs'){
+        tx.totalPrice = Number(ethers.utils.formatEther(transaction.value.toString()));
     } else if (functionName === 'robustSwapNFTsForToken') {
         tx.totalPrice = Number(
             ethers.utils.formatEther(parsedTxn.args.swapList[0].minOutput.toString())
