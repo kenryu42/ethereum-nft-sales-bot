@@ -70,4 +70,26 @@ describe('Sudoswap Integration Test', function () {
             assert.strictEqual(tx.totalPrice, 7.000000000000001);
         });
     });
+
+    describe('robustSwapETHForSpecificNFTs', function () {
+        const wiiides = '0x72a94e6c51cb06453b84c049ce1e1312f7c05e2c';
+
+        it('should get the correct data', async function () {
+            const txHash = '0x98694c9db3066a0831a5d5438e965eb58f34ea197d6ded3dc070d592d2fd0967';
+            const contractData = await getContractData(wiiides);
+            const tx = await parseTransaction(txHash, wiiides, contractData);
+
+            if (!tx) return;
+
+            const isSameSize = tx.tokens.length === tx.quantity;
+
+            expect(isSameSize).to.be.true;
+            expect(tx.tokenData).to.not.be.null;
+            expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
+            assert.strictEqual(tx.recipient, tx.market.name);
+            assert.strictEqual(tx.recipient, 'sudoswap');
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.totalPrice, 0.26705108022665225);
+        });
+    });
 });
