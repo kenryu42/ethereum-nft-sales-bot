@@ -33,7 +33,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
         await formatSwapField(tx.swap, tx.addressTaker, embed);
 
         embed
-            .setTitle(`New ${tx.contractName || tx.tokenName} Swap on NFT Trader`)
+            .setTitle(`New ${tx.contractName || tx.tokenName} Swap!`)
             .setURL(`${tx.market.site}${tx.transactionHash}`)
             .setFooter({ text: tx.market.displayName, iconURL: tx.market.iconURL })
             .setColor(tx.market.color)
