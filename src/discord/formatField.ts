@@ -7,7 +7,7 @@ const formatSweepField = (tx: TransactionData, embed: MessageEmbed) => {
     const sep = '\n\n';
 
     for (let i = 0; i < tx.tokens.length; i++) {
-        const currentMarket = tx.marketList[i].name;
+        const currentMarket = tx.marketList[i].displayName;
 
         if (!(currentMarket in customField)) {
             customField[currentMarket] = [];
