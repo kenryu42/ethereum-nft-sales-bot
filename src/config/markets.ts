@@ -157,11 +157,11 @@ const markets: { [key: string]: Market } = {
     // Opensea Seaport Protocol Contract Address
     '0x00000000006c3852cbef3e08e8df289169ede581': {
         name: 'opensea',
-        displayName: 'Opensea: Seaport ⚓️',
-        color: '#399dff',
+        displayName: 'Opensea 🌊',
+        color: '#2081e2',
         site: 'https://opensea.io/assets/',
         accountPage: 'https://opensea.io/',
-        iconURL: 'https://pbs.twimg.com/profile_images/1537131404550582272/TvRw2kcG_400x400.jpg',
+        iconURL: 'https://pbs.twimg.com/profile_images/1544105652330631168/ZuvjfGkT_400x400.png',
         logDecoder: [
             {
                 type: 'bytes32',
@@ -223,11 +223,11 @@ const markets: { [key: string]: Market } = {
     },
     '0x0804b76278eac7c719ee7b7921b3f1071d1ae2f7': {
         name: 'opensea',
-        displayName: 'Opensea: Seaport ⚓️',
-        color: '#399dff',
+        displayName: 'Opensea 🌊',
+        color: '#2081e2',
         site: 'https://opensea.io/assets/',
         accountPage: 'https://opensea.io/',
-        iconURL: 'https://pbs.twimg.com/profile_images/1537131404550582272/TvRw2kcG_400x400.jpg',
+        iconURL: 'https://pbs.twimg.com/profile_images/1544105652330631168/ZuvjfGkT_400x400.png',
         logDecoder: [
             {
                 type: 'bytes32',
