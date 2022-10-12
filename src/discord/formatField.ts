@@ -33,12 +33,13 @@ const formatSweepField = (tx: TransactionData, embed: MessageEmbed) => {
 };
 
 const formatBundleField = (tx: TransactionData, embed: MessageEmbed) => {
+    let i = 0;
     let values = '';
-    const sep = '\xa0\xa0\xa0\xa0\xa0\xa0';
 
     for (const token of tx.tokens) {
+        const sep = ++i % 4 === 0 ? '\n' : '\xa0\xa0\xa0\xa0\xa0\xa0';
         const value =
-            `**[# ${String(token).padStart(4, '0')}](${tx.market.site}${
+            `**[\`#${String(token).padStart(4, '0')}\`](${tx.market.site}${
                 tx.contractAddress
             }/${token})**` + sep;
         if ((values + value).length > 1024) {
