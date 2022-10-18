@@ -2,7 +2,7 @@ import 'dotenv/config';
 import ABI from '../abi/transferEvent.json' assert { type: 'json' };
 import NFT_TRADER_ABI from '../abi/nftTrader.json' assert { type: 'json' };
 import SUDOSWAP_ABI from '../abi/sudoSwap.json' assert { type: 'json' };
-import { Network, Alchemy } from 'alchemy-sdk';
+import { Network, Alchemy, AlchemySettings } from 'alchemy-sdk';
 
 // Required settings
 const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
@@ -12,6 +12,9 @@ const CONTRACT_ADDRESSES = process.env.CONTRACT_ADDRESSES
     ? process.env.CONTRACT_ADDRESSES.toLowerCase()
     : '';
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || '';
+const ALCHEMY_API_RETRIES = process.env.ALCHEMY_API_RETRIES
+    ? parseInt(process.env.ALCHEMY_API_RETRIES)
+    : 10;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 
 // Optional settings
@@ -28,9 +31,10 @@ const IMAGE_SIZE = {
 };
 
 // Alchemy sdk setup
-const settings = {
+const settings: AlchemySettings = {
     apiKey: ALCHEMY_API_KEY,
-    network: Network.ETH_MAINNET
+    network: Network.ETH_MAINNET,
+    maxRetries: ALCHEMY_API_RETRIES
 };
 const alchemy = new Alchemy(settings);
 
