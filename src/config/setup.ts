@@ -52,6 +52,8 @@ const DISCORD_POST_PRICE_THRESHOLD = process.env.DISCORD_POST_PRICE_THRESHOLD
 const WEBHOOK_1 = process.env.WEBHOOK_URL || '';
 const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== '');
 
+const DONT_SHUT_DOWN = JSON.parse(process.env.DONT_SHUT_DOWN || 'true') as boolean;
+
 // Error handler for configuration
 const checkConfig = (config: {
     CONTRACT: [string, string];
@@ -116,5 +118,6 @@ export {
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET,
-    TWITTER_TWEET_PRICE_THRESHOLD
+    TWITTER_TWEET_PRICE_THRESHOLD,
+    DONT_SHUT_DOWN
 };

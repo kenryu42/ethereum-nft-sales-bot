@@ -4,7 +4,8 @@ import {
     TOKEN_TYPE,
     CONTRACT_ADDRESS,
     CONTRACT_ADDRESSES,
-    DEFAULT_NFT_API
+    DEFAULT_NFT_API,
+    DONT_SHUT_DOWN
 } from './config/setup.js';
 import { options } from './config/commander.js';
 import { getContractData } from './utils/api.js';
@@ -72,7 +73,7 @@ async function main(contractAddress: string) {
             await main(CONTRACT_ADDRESS);
         } catch (error) {
             console.error(error);
-            process.exit(1);
+            DONT_SHUT_DOWN ? null : process.exit(1);
         }
     }
 })();
