@@ -84,7 +84,6 @@ async function parseTransaction(
 
             const decodedLogData = Web3EthAbi.decodeLog(marketLogDecoder, log.data, []);
 
-
             if (isKodexSeaport(decodedLogData)) {
                 const parseResult = parseKodexSeaport(tx, logMarket, decodedLogData);
 

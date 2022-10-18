@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { currencies } from '../config/currencies.js';
-import { kodexMarket } from '../config/markets.js';
+import { kodexMarket, markets } from '../config/markets.js';
 import type { Market, TransactionData, SeaportOrder, OfferItem, ConsiderationItem } from '../types';
 import { formatPrice } from '../utils/api.js';
 
@@ -26,8 +26,14 @@ const parseKodexSeaport = (tx: TransactionData, _: Market, decodedLogData: Seapo
         price = totalOfferAmount;
     }
     tx.totalPrice += price;
-    tx.recipient = kodexMarket.name;
-    tx.market = kodexMarket;
+    tx.recipient =
+        tx.recipient === markets['0x00000000006c3852cbef3e08e8df289169ede581'].name
+            ? kodexMarket.name
+            : tx.recipient;
+    tx.market =
+        tx.market.name === markets['0x00000000006c3852cbef3e08e8df289169ede581'].name
+            ? kodexMarket
+            : tx.market;
     tx.marketList.push(kodexMarket);
     tx.prices.push(formatPrice(price));
 
