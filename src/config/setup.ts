@@ -40,9 +40,15 @@ const TWITTER_API_KEY = process.env.TWITTER_API_KEY || '';
 const TWITTER_API_SECRET = process.env.TWITTER_API_SECRET || '';
 const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN || '';
 const TWITTER_ACCESS_SECRET = process.env.TWITTER_ACCESS_SECRET || '';
+const TWITTER_TWEET_PRICE_THRESHOLD = process.env.TWITTER_TWEET_PRICE_THRESHOLD
+    ? parseFloat(process.env.TWITTER_TWEET_PRICE_THRESHOLD)
+    : 0;
 
 // Discord webhook settings if enable (optional)
 const DISCORD_ENABLED = process.env.DISCORD_ENABLED === '1';
+const DISCORD_POST_PRICE_THRESHOLD = process.env.DISCORD_POST_PRICE_THRESHOLD
+    ? parseFloat(process.env.DISCORD_POST_PRICE_THRESHOLD)
+    : 0;
 const WEBHOOK_1 = process.env.WEBHOOK_URL || '';
 const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== '');
 
@@ -100,6 +106,7 @@ export {
     GIF_ENABLED,
     TWITTER_ENABLED,
     DISCORD_ENABLED,
+    DISCORD_POST_PRICE_THRESHOLD,
     OPENSEA_API_KEY,
     ALCHEMY_API_KEY,
     ETHERSCAN_API_KEY,
@@ -108,5 +115,6 @@ export {
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
-    TWITTER_ACCESS_SECRET
+    TWITTER_ACCESS_SECRET,
+    TWITTER_TWEET_PRICE_THRESHOLD
 };

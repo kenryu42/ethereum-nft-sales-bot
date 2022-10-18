@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import { formatPrice } from '../utils/api.js';
 import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
-import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
+import { WEBHOOK_URLS, GIF_ENABLED, DISCORD_POST_PRICE_THRESHOLD } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
 import type { TransactionData } from '../types';
 
@@ -12,6 +12,10 @@ const sendEmbedMessage = async (tx: TransactionData) => {
     const embed = new MessageEmbed();
     const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
     const isSwap = tx.recipient === 'nft-trader';
+
+    if (tx.totalPrice < DISCORD_POST_PRICE_THRESHOLD) {
+        return tx;
+    }
 
     if (isSwap && tx.addressMaker && tx.addressTaker) {
         const gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);

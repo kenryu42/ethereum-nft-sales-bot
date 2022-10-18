@@ -10,7 +10,8 @@ import {
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
-    TWITTER_ACCESS_SECRET
+    TWITTER_ACCESS_SECRET,
+    TWITTER_TWEET_PRICE_THRESHOLD
 } from '../config/setup.js';
 import type { TransactionData } from '../types';
 
@@ -33,6 +34,10 @@ const tweet = async (tx: TransactionData) => {
     const isSwap = tx.recipient === 'nft-trader';
 
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
+        return;
+    }
+
+    if (tx.totalPrice < TWITTER_TWEET_PRICE_THRESHOLD) {
         return;
     }
 
@@ -76,7 +81,7 @@ ${tx.currency.name} ${tx.ethUsdValue}
 Sweeper: ${tx.sweeper}
 ${tx.market.accountPage}${tx.sweeperAddr}
 
-🔍 https://etherscan.io/tx/${tx.transactionHash}	
+🔍 https://etherscan.io/tx/${tx.transactionHash}
 			`;
     } else if (isSwap && tx.addressMaker && tx.addressTaker) {
         tweetContent = `
@@ -84,10 +89,10 @@ New ${tx.contractName} Swap on NFT Trader
 
 Maker: ${tx.swap[tx.addressMaker].name}
 ${tx.market.accountPage}${tx.addressMaker}
-			
+
 Taker: ${tx.swap[tx.addressTaker].name}
 ${tx.market.accountPage}${tx.addressTaker}
-			
+
 🔍 ${tx.market.site}${tx.transactionHash}
             `;
     } else {
@@ -101,7 +106,7 @@ ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
                 : `
 From: ${tx.from}
 ${tx.market.accountPage}${tx.fromAddr}${isX2Y2}
-                    
+
 To: ${tx.to}
 ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
         `;
@@ -110,10 +115,10 @@ ${tx.market.accountPage}${tx.toAddr}${isX2Y2}
 ${
     tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
 } sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.displayName}
-			
+
 ${field}
-			
-🔍 ${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}	
+
+🔍 ${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}
 			`;
     }
 
