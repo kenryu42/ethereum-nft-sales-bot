@@ -11,13 +11,25 @@ import { saleEventTypes } from '../config/logEventTypes.js';
 import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../types';
 import { initializeTransactionData } from '../config/initialize.js';
 import Web3EthAbi from 'web3-eth-abi';
-import { alchemy } from '../config/setup.js';
+import { alchemy, KODEX_FEE_ADDRESS } from '../config/setup.js';
 import { parseSudoswap } from './parseSudoswap.js';
+import { parseKodexSeaport } from './parseKodexSeaport.js';
 
 const isSeaport = (
     decodedLogData: DecodedLogData | SeaportOrder
 ): decodedLogData is SeaportOrder => {
     return (decodedLogData as SeaportOrder).offer !== undefined;
+};
+
+const isKodexSeaport = (
+    decodedLogData: DecodedLogData | SeaportOrder
+): decodedLogData is SeaportOrder => {
+    return (
+        isSeaport(decodedLogData) &&
+        decodedLogData.consideration.some(
+            (considerationItem) => considerationItem.recipient.toLowerCase() === KODEX_FEE_ADDRESS
+        )
+    );
 };
 
 const isNftTrader = (decodedLogData: DecodedLogData | SwapEvent): decodedLogData is SwapEvent => {
@@ -72,7 +84,12 @@ async function parseTransaction(
 
             const decodedLogData = Web3EthAbi.decodeLog(marketLogDecoder, log.data, []);
 
-            if (isSeaport(decodedLogData)) {
+
+            if (isKodexSeaport(decodedLogData)) {
+                const parseResult = parseKodexSeaport(tx, logMarket, decodedLogData);
+
+                if (parseResult === null) continue;
+            } else if (isSeaport(decodedLogData)) {
                 const parseResult = parseSeaport(tx, logMarket, decodedLogData);
 
                 if (parseResult === null) continue;

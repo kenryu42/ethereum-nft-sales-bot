@@ -16,6 +16,9 @@ const ALCHEMY_API_RETRIES = process.env.ALCHEMY_API_RETRIES
     ? parseInt(process.env.ALCHEMY_API_RETRIES)
     : 10;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
+const KODEX_FEE_ADDRESS = process.env.KODEX_FEE_ADDRESS
+    ? process.env.KODEX_FEE_ADDRESS.toLowerCase()
+    : '';
 
 // Optional settings
 const TOKEN_TYPE = process.env.TOKEN_TYPE || '';
@@ -128,5 +131,6 @@ export {
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET,
     TWITTER_TWEET_PRICE_THRESHOLD,
-    DONT_SHUT_DOWN
+    DONT_SHUT_DOWN,
+    KODEX_FEE_ADDRESS
 };

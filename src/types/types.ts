@@ -99,6 +99,7 @@ export type Recipient =
     | 'genie'
     | 'nft-trader'
     | 'sudoswap'
+    | 'kodex'
     | 'unknown';
 
 export type TransactionData = {
