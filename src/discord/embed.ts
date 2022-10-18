@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import { formatPrice } from '../utils/api.js';
 import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
-import { WEBHOOK_URLS, GIF_ENABLED, DISCORD_POST_PRICE_THRESHOLD } from '../config/setup.js';
+import { WEBHOOK_URLS, GIF_ENABLED, DISCORD_POST_PRICE_THRESHOLD, WHITELISTED_CURRENCIES } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
 import type { TransactionData } from '../types';
 
@@ -13,7 +13,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
     const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
     const isSwap = tx.recipient === 'nft-trader';
 
-    if (tx.totalPrice < DISCORD_POST_PRICE_THRESHOLD) {
+    if (tx.totalPrice < DISCORD_POST_PRICE_THRESHOLD || !WHITELISTED_CURRENCIES.includes(tx.currency.name.toLowerCase())) {
         return tx;
     }
 

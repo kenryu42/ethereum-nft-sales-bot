@@ -23,6 +23,10 @@ const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY || '';
 
 const DEFAULT_NFT_API = OPENSEA_API_KEY ? 'Opensea' : 'Alchemy';
 
+const WHITELISTED_CURRENCIES = (
+    JSON.parse(process.env.WHITELISTED_CURRENCIES || '[]') as string[]
+).map((currency) => currency.toLowerCase());
+
 // Image size for the GIF
 const GIF_ENABLED = true;
 const IMAGE_SIZE = {
@@ -106,6 +110,7 @@ export {
     SUDOSWAP_ABI,
     alchemy,
     DEFAULT_NFT_API,
+    WHITELISTED_CURRENCIES,
     WEBHOOK_URLS,
     IMAGE_SIZE,
     TOKEN_TYPE,

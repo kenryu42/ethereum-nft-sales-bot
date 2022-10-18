@@ -11,7 +11,8 @@ import {
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET,
-    TWITTER_TWEET_PRICE_THRESHOLD
+    TWITTER_TWEET_PRICE_THRESHOLD,
+    WHITELISTED_CURRENCIES
 } from '../config/setup.js';
 import type { TransactionData } from '../types';
 
@@ -37,7 +38,7 @@ const tweet = async (tx: TransactionData) => {
         return;
     }
 
-    if (tx.totalPrice < TWITTER_TWEET_PRICE_THRESHOLD) {
+    if (tx.totalPrice < TWITTER_TWEET_PRICE_THRESHOLD || !WHITELISTED_CURRENCIES.includes(tx.currency.name.toLowerCase())) {
         return;
     }
 
