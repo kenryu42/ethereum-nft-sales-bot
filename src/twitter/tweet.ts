@@ -35,11 +35,11 @@ const tweet = async (tx: TransactionData) => {
     const isSwap = tx.recipient === 'nft-trader';
 
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
-        return;
+        return tx;
     }
 
     if (tx.totalPrice < TWITTER_TWEET_PRICE_THRESHOLD || !WHITELISTED_CURRENCIES.includes(tx.currency.name.toLowerCase())) {
-        return;
+        return tx;
     }
 
     if (isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
@@ -128,6 +128,8 @@ ${field}
     } catch (error) {
         console.log(error);
     }
+
+    return tx;
 };
 
 export { tweet };
