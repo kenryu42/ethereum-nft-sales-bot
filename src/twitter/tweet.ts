@@ -38,7 +38,10 @@ const tweet = async (tx: TransactionData) => {
         return tx;
     }
 
-    if (tx.totalPrice < TWITTER_TWEET_PRICE_THRESHOLD || !WHITELISTED_CURRENCIES.includes(tx.currency.name.toLowerCase())) {
+    if (
+        tx.totalPrice < TWITTER_TWEET_PRICE_THRESHOLD ||
+        !WHITELISTED_CURRENCIES.includes(tx.currency.name.toLowerCase())
+    ) {
         return tx;
     }
 
@@ -97,27 +100,11 @@ ${tx.market.accountPage}${tx.addressTaker}
 🔍 ${tx.market.site}${tx.transactionHash}
             `;
     } else {
-        const isX2Y2 = tx.market.name === 'x2y2' ? '/items' : '';
-        const field =
-            tx.tokenType === 'ERC721' && tx.quantity > 1
-                ? `
-Sweeper: ${tx.to}
-${tx.market.accountPage}${tx.toAddr}${isX2Y2}
-        `
-                : `
-From: ${tx.from}
-${tx.market.accountPage}${tx.fromAddr}${isX2Y2}
-
-To: ${tx.to}
-${tx.market.accountPage}${tx.toAddr}${isX2Y2}
-        `;
-
         tweetContent = `
 ${
     tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
 } sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.displayName}
 
-${field}
 
 🔍 ${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}
 			`;
