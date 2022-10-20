@@ -99,9 +99,10 @@ const getKodexName = async (address: string) => {
     if (!KODEX_DIRECT_DATA_API) return null;
 
     try {
-        const response = await axios.post(KODEX_DIRECT_DATA_API, {
+        const response = await axios({
+            url: KODEX_DIRECT_DATA_API,
             method: 'POST',
-            Headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json' },
             data: {
                 operationName: 'GetAddressUsername',
                 query: 'query GetAddressUsername($address: String!) {users(where: {user: {_eq: $address}}) {username}}',
