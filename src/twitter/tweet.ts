@@ -28,11 +28,10 @@ const client = TWITTER_ENABLED
 const rwClient = TWITTER_ENABLED && client ? client.readWrite : null;
 
 const tweet = async (tx: TransactionData) => {
-    let imageType = EUploadMimeType.Png;
+    const imageType = EUploadMimeType.Png;
     let imageBuffer;
     let tweetContent;
     const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
-    const isSwap = tx.recipient === 'nft-trader';
 
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
         return tx;
@@ -45,17 +44,12 @@ const tweet = async (tx: TransactionData) => {
         return tx;
     }
 
-    if (isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
-        tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
-    } else if (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721' && !DISCORD_ENABLED) {
+    if (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721' && !DISCORD_ENABLED) {
         tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
     }
 
     if (!tx.tokenData.image) {
         imageBuffer = await createNaImage(true);
-    } else if (isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
-        imageBuffer = tx.gifImage;
-        imageType = EUploadMimeType.Gif;
     } else if (tx.tokenData.image.endsWith('.svg')) {
         const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
         imageBuffer = await sharp(buffer.data).png().toBuffer();
@@ -87,18 +81,6 @@ ${tx.market.accountPage}${tx.sweeperAddr}
 
 🔍 https://etherscan.io/tx/${tx.transactionHash}
 			`;
-    } else if (isSwap && tx.addressMaker && tx.addressTaker) {
-        tweetContent = `
-New ${tx.contractName} Swap on NFT Trader
-
-Maker: ${tx.swap[tx.addressMaker].name}
-${tx.market.accountPage}${tx.addressMaker}
-
-Taker: ${tx.swap[tx.addressTaker].name}
-${tx.market.accountPage}${tx.addressTaker}
-
-🔍 ${tx.market.site}${tx.transactionHash}
-            `;
     } else {
         tweetContent = `
 ${
