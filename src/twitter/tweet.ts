@@ -84,7 +84,7 @@ ${
     tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
 } bought for ${formatPrice(tx.totalPrice)} ETH on ${tx.market.displayName} #domains $ENS
 
-${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}
+${tx.market.site}${tx.contractAddress}/${tx.tokenId}
 			`;
     }
 
