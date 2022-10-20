@@ -117,7 +117,7 @@ const getKodexName = async (address: string) => {
 
         if (!username) return null;
 
-        return `${username} @ 💾`;
+        return `${username} 🧙‍♂️`;
     } catch (error) {
         console.log('getKodexName API error');
         console.log(`address: ${address}`);
