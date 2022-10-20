@@ -9,7 +9,8 @@ import {
     DEFAULT_NFT_API,
     OPENSEA_API_KEY,
     ALCHEMY_API_KEY,
-    ETHERSCAN_API_KEY
+    ETHERSCAN_API_KEY,
+    KODEX_DIRECT_DATA_API
 } from '../config/setup.js';
 import type { NftTokenType } from 'alchemy-sdk';
 import type { ContractData, CustomError, TokenData } from '../types';
@@ -95,8 +96,10 @@ const getOpenseaName = async (address: string) => {
 };
 
 const getKodexName = async (address: string) => {
+    if (!KODEX_DIRECT_DATA_API) return null;
+
     try {
-        const response = await axios.post('https://hasura.kodex.io/v1/graphql', {
+        const response = await axios.post(KODEX_DIRECT_DATA_API, {
             method: 'POST',
             data: {
                 query: `
@@ -113,9 +116,8 @@ const getKodexName = async (address: string) => {
             }
         });
 
-        console.log(response);
-
         const result = _.get(response, 'data');
+        console.log(result);
 
         return _.get(result, ['data', 'user', 'username']);
     } catch (error) {

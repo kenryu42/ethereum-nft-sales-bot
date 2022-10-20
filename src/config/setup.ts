@@ -19,6 +19,9 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 const KODEX_FEE_ADDRESS = process.env.KODEX_FEE_ADDRESS
     ? process.env.KODEX_FEE_ADDRESS.toLowerCase()
     : '';
+const KODEX_DIRECT_DATA_API = process.env.KODEX_DIRECT_DATA_API
+    ? process.env.KODEX_DIRECT_DATA_API
+    : null;
 
 // Optional settings
 const TOKEN_TYPE = process.env.TOKEN_TYPE || '';
@@ -132,5 +135,6 @@ export {
     TWITTER_ACCESS_SECRET,
     TWITTER_TWEET_PRICE_THRESHOLD,
     DONT_SHUT_DOWN,
-    KODEX_FEE_ADDRESS
+    KODEX_FEE_ADDRESS,
+    KODEX_DIRECT_DATA_API
 };
