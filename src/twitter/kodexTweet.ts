@@ -70,8 +70,7 @@ ${tx.market.accountPage}${tx.toAddr}
     const tweetContent = `
 ${tx.tokenName} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${
         tx.market.displayName
-    }
-#domains $ENS
+    } #domains $ENS
 
 ${field}
 
