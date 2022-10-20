@@ -34,13 +34,7 @@ const kodexTweet = async (tx: TransactionData) => {
         return tx;
     }
 
-    const field =
-        tx.tokenType === 'ERC721' && tx.quantity > 1
-            ? `
-Sweeper: ${tx.to}
-${tx.market.accountPage}${tx.toAddr}
-        `
-            : `
+    const field = `
 From: ${tx.from}
 ${tx.market.accountPage}${tx.fromAddr}
 
@@ -49,13 +43,13 @@ ${tx.market.accountPage}${tx.toAddr}
         `;
 
     const tweetContent = `
-${
-    tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
-} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.displayName}
+${tx.tokenName} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${
+        tx.market.displayName
+    }
 
 ${field}
 
-🔍 ${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}
+💾 ${tx.market.site}/domain/${tx.tokenName}
 			`;
 
     try {
