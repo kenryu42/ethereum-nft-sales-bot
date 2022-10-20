@@ -137,6 +137,47 @@ const getKodexName = async (address: string) => {
     }
 };
 
+const getKodexLastSale = async (domain: string) => {
+    if (!KODEX_DIRECT_DATA_API) return null;
+
+    try {
+        const response = await axios({
+            url: KODEX_DIRECT_DATA_API,
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            data: {
+                operationName: 'GetDomainLastSale',
+                query: 'query GetDomainLastSale($domain: String!) {ens_last_sales(where: {domain: {_eq: $domain}}) {saleassetamount}}',
+                variables: {
+                    domain: domain.toLowerCase()
+                }
+            }
+        });
+
+        const result = _.get(response, 'data');
+        const lastSale = _.get(result, ['data', 'ens_last_sales', '0', 'saleassetamount']);
+
+        return lastSale;
+    } catch (error) {
+        console.log('getKodexLastSale API error');
+        console.log(`domain: ${domain}`);
+
+        if (error instanceof Error) {
+            const customError: CustomError = error;
+
+            if (customError.response) {
+                console.log(customError.response.data);
+                console.log(customError.response.status);
+            } else {
+                console.error(error.message);
+            }
+        }
+
+        return null;
+    }
+};
+
+
 const retryOnGetNFTMetadata = async (
     contractAddress: string,
     tokenId: BigNumberish,
@@ -339,5 +380,6 @@ export {
     getEthUsdPrice,
     getOpenseaName,
     getContractData,
-    getReadableName
+    getReadableName,
+    getKodexLastSale
 };
