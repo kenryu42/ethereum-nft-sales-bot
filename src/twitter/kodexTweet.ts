@@ -74,7 +74,7 @@ ${tx.tokenName} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on 
 
 ${field}
 
-💾 ${tx.market.site}/domain/${tx.tokenName}
+🔍 ${tx.market.site}domain/${tx.tokenName}
 			`;
 
     try {
