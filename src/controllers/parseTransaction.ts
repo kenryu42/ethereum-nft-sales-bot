@@ -11,7 +11,7 @@ import { saleEventTypes } from '../config/logEventTypes.js';
 import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../types';
 import { initializeTransactionData } from '../config/initialize.js';
 import Web3EthAbi from 'web3-eth-abi';
-import { alchemy, KODEX_FEE_ADDRESS } from '../config/setup.js';
+import { alchemy, KODEX_FEE_ADDRESSES } from '../config/setup.js';
 import { parseSudoswap } from './parseSudoswap.js';
 import { parseKodexSeaport } from './parseKodexSeaport.js';
 
@@ -26,8 +26,8 @@ const isKodexSeaport = (
 ): decodedLogData is SeaportOrder => {
     return (
         isSeaport(decodedLogData) &&
-        decodedLogData.consideration.some(
-            (considerationItem) => considerationItem.recipient.toLowerCase() === KODEX_FEE_ADDRESS
+        decodedLogData.consideration.some((considerationItem) =>
+            KODEX_FEE_ADDRESSES.includes(considerationItem.recipient.toLowerCase())
         )
     );
 };
