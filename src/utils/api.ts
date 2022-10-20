@@ -102,21 +102,23 @@ const getKodexName = async (address: string) => {
         const response = await axios.post(KODEX_DIRECT_DATA_API, {
             method: 'POST',
             Headers: { 'content-type': 'application/json' },
-            data: JSON.stringify({
+            data: {
                 operationName: 'GetAddressUsername',
                 query: `
-                    query GetAddressUsername {
+                    query GetAddressUsername($address: String!) {
                         users(where: {
                             user: {
-                                _eq: "${address.toLowerCase()}"
+                                _eq: $address
                             }
                         }) {
                             username
                         }
                     }
                 `,
-                variables: {}
-            })
+                variables: {
+                    address: address.toLowerCase()
+                }
+            }
         });
 
         const result = _.get(response, 'data');
