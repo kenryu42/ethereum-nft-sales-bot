@@ -113,10 +113,11 @@ const getKodexName = async (address: string) => {
         });
 
         const result = _.get(response, 'data');
-        const errors = _.get(response, 'errors');
-        console.log(result, errors);
+        const username = _.get(result, ['data', 'users', '0', 'username']);
 
-        return _.get(result, ['data', 'user', 'username']);
+        if (!username) return null;
+
+        return `${username} @ 💾`;
     } catch (error) {
         console.log('getKodexName API error');
         console.log(`address: ${address}`);
