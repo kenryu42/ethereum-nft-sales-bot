@@ -28,10 +28,6 @@ const client = TWITTER_ENABLED
 const rwClient = TWITTER_ENABLED && client ? client.readWrite : null;
 
 const kodexTweet = async (tx: TransactionData) => {
-    let imageType = EUploadMimeType.Png;
-    let imageBuffer;
-    const isSwap = tx.recipient === 'nft-trader';
-
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
         return tx;
     }
@@ -43,50 +39,18 @@ const kodexTweet = async (tx: TransactionData) => {
         return tx;
     }
 
-    if (isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
-        tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
-    } else if (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721' && !DISCORD_ENABLED) {
-        tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
-    }
-
-    if (!tx.tokenData.image) {
-        imageBuffer = await createNaImage(true);
-    } else if (isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
-        imageBuffer = tx.gifImage;
-        imageType = EUploadMimeType.Gif;
-    } else if (tx.tokenData.image.endsWith('.svg')) {
-        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
-        imageBuffer = await sharp(buffer.data).png().toBuffer();
-    } else if (tx.tokenData.image.startsWith('data:image/svg+xml;base64,')) {
-        const base64Image = tx.tokenData.image.replace('data:image/svg+xml;base64,', '');
-        const buffer = Buffer.from(base64Image, 'base64');
-
-        imageBuffer = await sharp(buffer).png().toBuffer();
-    } else {
-        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
-        imageBuffer = buffer.data;
-    }
-    // if image size exceeds 5MB, resize it
-    if (imageBuffer.length > 5242880) {
-        imageBuffer = await resizeImage(tx.tokenData.image);
-    }
-    const mediaId = await client.v1.uploadMedia(imageBuffer, {
-        mimeType: imageType
-    });
-
-    const isX2Y2 = tx.market.name === 'x2y2' ? '/items' : '';
     const field =
         tx.tokenType === 'ERC721' && tx.quantity > 1
             ? `
 Sweeper: ${tx.to}
-${tx.market.accountPage}${tx.toAddr}${isX2Y2}
+${tx.market.accountPage}${tx.toAddr}
         `
             : `
 From: ${tx.from}
-${tx.market.accountPage}${tx.fromAddr}${isX2Y2}
+${tx.market.accountPage}${tx.fromAddr}
 
 To: ${tx.to}
-${tx.market.accountPage}${tx.toAddr}${isX2Y2}
+${tx.market.accountPage}${tx.toAddr}
         `;
 
     const tweetContent = `
@@ -100,7 +64,7 @@ ${field}
 			`;
 
     try {
-        await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
+        await rwClient.v1.tweet(tweetContent);
     } catch (error) {
         console.log(error);
     }
