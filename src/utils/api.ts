@@ -96,7 +96,7 @@ const getOpenseaName = async (address: string) => {
 
 const getKodexName = async (address: string) => {
     try {
-        const response = await axios.get('https://hasura.kodex.io/v1/graphql', {
+        const response = await axios.post('https://hasura.kodex.io/v1/graphql', {
             method: 'POST',
             data: {
                 query: `
