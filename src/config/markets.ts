@@ -293,8 +293,8 @@ const kodexMarket: Market = {
     name: 'kodex',
     displayName: 'Kodex 💾',
     color: '#0698A8',
-    site: 'https://kodex.io/',
-    accountPage: 'https://kodex.io/',
+    site: 'https://beta.kodex.io/',
+    accountPage: 'https://beta.kodex.io/',
     iconURL: 'https://pbs.twimg.com/profile_images/1577940082258059266/hKmodYPu_400x400.png'
 };
 
