@@ -1,4 +1,5 @@
-import { TwitterApi } from 'twitter-api-v2';
+import axios from 'axios';
+import { EUploadMimeType, TwitterApi } from 'twitter-api-v2';
 import {
     TWITTER_ACCESS_SECRET,
     TWITTER_ACCESS_TOKEN,
@@ -9,7 +10,8 @@ import {
     WHITELISTED_CURRENCIES
 } from '../config/setup.js';
 import type { TransactionData } from '../types';
-import { formatPrice } from '../utils/api.js';
+import { formatPrice, getKodexLastSale } from '../utils/api.js';
+import { resizeImage } from '../utils/image.js';
 
 const client = TWITTER_ENABLED
     ? new TwitterApi({
@@ -23,6 +25,9 @@ const client = TWITTER_ENABLED
 const rwClient = TWITTER_ENABLED && client ? client.readWrite : null;
 
 const kodexTweet = async (tx: TransactionData) => {
+    const imageType = EUploadMimeType.Png;
+    let imageBuffer;
+
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
         return tx;
     }
@@ -33,6 +38,26 @@ const kodexTweet = async (tx: TransactionData) => {
     ) {
         return tx;
     }
+
+    const previouslySoldFor = await getKodexLastSale(tx.tokenName || '');
+
+    const buffer = await axios.get(
+        `https://domains.kodex.io/api/og/eventSale?likes=0&soldFor=${formatPrice(
+            tx.totalPrice
+        )}&domainLabel=${tx.tokenName}${
+            previouslySoldFor ? `&previouslySoldFor=${previouslySoldFor}` : ''
+        }`,
+        { responseType: 'arraybuffer' }
+    );
+    imageBuffer = buffer.data;
+
+    // if image size exceeds 5MB, resize it
+    if (imageBuffer.length > 5242880) {
+        imageBuffer = await resizeImage(tx.tokenData.image);
+    }
+    const mediaId = await client.v1.uploadMedia(imageBuffer, {
+        mimeType: imageType
+    });
 
     const field = `
 From: ${tx.from}
@@ -53,7 +78,7 @@ ${field}
 			`;
 
     try {
-        await rwClient.v1.tweet(tweetContent);
+        await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
     } catch (error) {
         console.log(error);
     }

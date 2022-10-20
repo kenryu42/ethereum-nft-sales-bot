@@ -157,7 +157,7 @@ const getKodexLastSale = async (domain: string) => {
         const result = _.get(response, 'data');
         const lastSale = _.get(result, ['data', 'ens_last_sales', '0', 'saleassetamount']);
 
-        return lastSale;
+        return lastSale as string | undefined;
     } catch (error) {
         console.log('getKodexLastSale API error');
         console.log(`domain: ${domain}`);
