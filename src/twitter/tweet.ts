@@ -1,20 +1,20 @@
 import axios from 'axios';
 import sharp from 'sharp';
-import { TwitterApi, EUploadMimeType } from 'twitter-api-v2';
-import { createGif, createSwapGif, createNaImage, resizeImage } from '../utils/image.js';
-import { formatPrice } from '../utils/api.js';
+import { EUploadMimeType, TwitterApi } from 'twitter-api-v2';
 import {
-    GIF_ENABLED,
-    TWITTER_ENABLED,
     DISCORD_ENABLED,
+    GIF_ENABLED,
+    TWITTER_ACCESS_SECRET,
+    TWITTER_ACCESS_TOKEN,
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
-    TWITTER_ACCESS_TOKEN,
-    TWITTER_ACCESS_SECRET,
+    TWITTER_ENABLED,
     TWITTER_TWEET_PRICE_THRESHOLD,
     WHITELISTED_CURRENCIES
 } from '../config/setup.js';
 import type { TransactionData } from '../types';
+import { formatPrice } from '../utils/api.js';
+import { createGif, createNaImage, resizeImage } from '../utils/image.js';
 
 const client = TWITTER_ENABLED
     ? new TwitterApi({
