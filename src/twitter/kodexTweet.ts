@@ -71,6 +71,7 @@ ${tx.market.accountPage}${tx.toAddr}
 ${tx.tokenName} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${
         tx.market.displayName
     }
+#domains $ENS
 
 ${field}
 
