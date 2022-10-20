@@ -104,17 +104,7 @@ const getKodexName = async (address: string) => {
             Headers: { 'content-type': 'application/json' },
             data: {
                 operationName: 'GetAddressUsername',
-                query: `
-                    query GetAddressUsername($address: String!) {
-                        users(where: {
-                            user: {
-                                _eq: $address
-                            }
-                        }) {
-                            username
-                        }
-                    }
-                `,
+                query: 'query GetAddressUsername($address: String!) {users(where: {user: {_eq: $address}}) {username}}',
                 variables: {
                     address: address.toLowerCase()
                 }
