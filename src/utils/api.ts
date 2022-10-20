@@ -94,6 +94,49 @@ const getOpenseaName = async (address: string) => {
     }
 };
 
+const getKodexName = async (address: string) => {
+    try {
+        const response = await axios.get('https://hasura.kodex.io/v1/graphql', {
+            method: 'POST',
+            data: {
+                query: `
+                    query GetAddressUsername {
+                        users(where: {
+                            user: {
+                                _eq: "${address.toLowerCase()}"
+                            }
+                        }) {
+                            username
+                        }
+                    }
+                `
+            }
+        });
+
+        console.log(response);
+
+        const result = _.get(response, 'data');
+
+        return _.get(result, ['data', 'user', 'username']);
+    } catch (error) {
+        console.log('getKodexName API error');
+        console.log(`address: ${address}`);
+
+        if (error instanceof Error) {
+            const customError: CustomError = error;
+
+            if (customError.response) {
+                console.log(customError.response.data);
+                console.log(customError.response.status);
+            } else {
+                console.error(error.message);
+            }
+        }
+
+        return null;
+    }
+};
+
 const retryOnGetNFTMetadata = async (
     contractAddress: string,
     tokenId: BigNumberish,
@@ -209,7 +252,10 @@ const getENSName = async (address: string) => {
 
 const getReadableName = async (address: string) => {
     const result =
-        (await getOpenseaName(address)) || (await getENSName(address)) || shortenAddress(address);
+        (await getKodexName(address)) ||
+        (await getENSName(address)) ||
+        (await getOpenseaName(address)) ||
+        shortenAddress(address);
 
     return result;
 };
