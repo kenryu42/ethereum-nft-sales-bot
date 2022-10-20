@@ -3,6 +3,8 @@ import { sendEmbedMessage } from '../discord/embed.js';
 import { tweet } from '../twitter/tweet.js';
 import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup.js';
 import type { ContractData } from '../types';
+import { kodexMarket } from '../config/markets.js';
+import { kodexTweet } from '../twitter/kodexTweet.js';
 
 const runApp = async (
     transactionHash: string,
@@ -57,11 +59,11 @@ const runApp = async (
 
     if (DISCORD_ENABLED && TWITTER_ENABLED && txData) {
         const tweetConfig = await sendEmbedMessage(txData);
-        await tweet(tweetConfig);
+        tweetConfig.market.name === kodexMarket.name ? await kodexTweet(tweetConfig) : await tweet(tweetConfig);
     } else if (DISCORD_ENABLED && txData) {
         await sendEmbedMessage(txData);
     } else if (TWITTER_ENABLED && txData) {
-        await tweet(txData);
+        txData.market.name === kodexMarket.name ? await kodexTweet(txData) : await tweet(txData);
     }
 };
 
