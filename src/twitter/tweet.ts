@@ -75,6 +75,7 @@ const tweet = async (tx: TransactionData) => {
 ${tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName} \
 swept on ${tx.market.displayName} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
+#domains $ENS
 
 🔍 https://etherscan.io/tx/${tx.transactionHash}
 			`;
@@ -82,8 +83,8 @@ ${tx.currency.name} ${tx.ethUsdValue}
         tweetContent = `
 ${
     tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
-} sold for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.displayName}
-
+} bought for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.displayName}
+#domains $ENS
 
 🔍 ${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}
 			`;
