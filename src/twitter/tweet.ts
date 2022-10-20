@@ -77,16 +77,16 @@ swept on ${tx.market.displayName} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
 #domains $ENS
 
-🔍 https://etherscan.io/tx/${tx.transactionHash}
+https://etherscan.io/tx/${tx.transactionHash}
 			`;
     } else {
         tweetContent = `
 ${
     tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tokenName
-} bought for ${formatPrice(tx.totalPrice)} ETH ${tx.ethUsdValue} on ${tx.market.displayName}
+} bought for ${formatPrice(tx.totalPrice)} ETH on ${tx.market.displayName}
 #domains $ENS
 
-🔍 ${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}
+${tx.market.site}${tx.contractAddress}/${tx.tokens[0]}
 			`;
     }
 
