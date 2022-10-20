@@ -76,9 +76,6 @@ ${tx.quantity > 1 ? `${tx.quantity} ${tx.contractName || tx.tokenName}` : tx.tok
 swept on ${tx.market.displayName} for ${formatPrice(tx.totalPrice)} \
 ${tx.currency.name} ${tx.ethUsdValue}
 
-Sweeper: ${tx.sweeper}
-${tx.market.accountPage}${tx.sweeperAddr}
-
 🔍 https://etherscan.io/tx/${tx.transactionHash}
 			`;
     } else {
