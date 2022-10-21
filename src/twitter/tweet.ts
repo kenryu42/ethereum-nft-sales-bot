@@ -1,9 +1,5 @@
-import axios from 'axios';
-import sharp from 'sharp';
-import { EUploadMimeType, TwitterApi } from 'twitter-api-v2';
+import { TwitterApi } from 'twitter-api-v2';
 import {
-    DISCORD_ENABLED,
-    GIF_ENABLED,
     TWITTER_ACCESS_SECRET,
     TWITTER_ACCESS_TOKEN,
     TWITTER_API_KEY,
@@ -14,7 +10,6 @@ import {
 } from '../config/setup.js';
 import type { TransactionData } from '../types';
 import { formatPrice } from '../utils/api.js';
-import { createGif, createNaImage, resizeImage } from '../utils/image.js';
 
 const client = TWITTER_ENABLED
     ? new TwitterApi({
@@ -28,8 +23,6 @@ const client = TWITTER_ENABLED
 const rwClient = TWITTER_ENABLED && client ? client.readWrite : null;
 
 const tweet = async (tx: TransactionData) => {
-    const imageType = EUploadMimeType.Png;
-    let imageBuffer;
     let tweetContent;
     const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
 
@@ -43,32 +36,6 @@ const tweet = async (tx: TransactionData) => {
     ) {
         return tx;
     }
-
-    if (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721' && !DISCORD_ENABLED) {
-        tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
-    }
-
-    if (!tx.tokenData.image) {
-        imageBuffer = await createNaImage(true);
-    } else if (tx.tokenData.image.endsWith('.svg')) {
-        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
-        imageBuffer = await sharp(buffer.data).png().toBuffer();
-    } else if (tx.tokenData.image.startsWith('data:image/svg+xml;base64,')) {
-        const base64Image = tx.tokenData.image.replace('data:image/svg+xml;base64,', '');
-        const buffer = Buffer.from(base64Image, 'base64');
-
-        imageBuffer = await sharp(buffer).png().toBuffer();
-    } else {
-        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
-        imageBuffer = buffer.data;
-    }
-    // if image size exceeds 5MB, resize it
-    if (imageBuffer.length > 5242880) {
-        imageBuffer = await resizeImage(tx.tokenData.image);
-    }
-    const mediaId = await client.v1.uploadMedia(imageBuffer, {
-        mimeType: imageType
-    });
 
     if (isAggregator) {
         tweetContent = `
@@ -89,7 +56,7 @@ ${tx.market.site}${tx.contractAddress}/${tx.tokenId}
     }
 
     try {
-        await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
+        await rwClient.v1.tweet(tweetContent);
     } catch (error) {
         console.log(error);
     }
