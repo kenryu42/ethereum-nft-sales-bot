@@ -1,19 +1,23 @@
-import axios from 'axios';
-import sharp from 'sharp';
-import { formatPrice } from '../utils/api.js';
-import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
-import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
-import { WEBHOOK_URLS, GIF_ENABLED, DISCORD_POST_PRICE_THRESHOLD, WHITELISTED_CURRENCIES } from '../config/setup.js';
-import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
+import { MessageEmbed, WebhookClient } from 'discord.js';
+import {
+    DISCORD_POST_PRICE_THRESHOLD,
+    WEBHOOK_URLS,
+    WHITELISTED_CURRENCIES
+} from '../config/setup.js';
 import type { TransactionData } from '../types';
+import { formatPrice } from '../utils/api.js';
+import { createSwapGif } from '../utils/image.js';
+import { formatBundleField, formatSwapField, formatSweepField } from './formatField.js';
 
 const sendEmbedMessage = async (tx: TransactionData) => {
-    let file: MessageAttachment;
     const embed = new MessageEmbed();
     const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
     const isSwap = tx.recipient === 'nft-trader';
 
-    if (tx.totalPrice < DISCORD_POST_PRICE_THRESHOLD || !WHITELISTED_CURRENCIES.includes(tx.currency.name.toLowerCase())) {
+    if (
+        tx.totalPrice < DISCORD_POST_PRICE_THRESHOLD ||
+        !WHITELISTED_CURRENCIES.includes(tx.currency.name.toLowerCase())
+    ) {
         return tx;
     }
 
@@ -43,8 +47,6 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             .setColor(tx.market.color)
             .setTimestamp();
         tx.gifImage = gifImage;
-        file = new MessageAttachment(gifImage as Buffer, 'image.gif');
-        embed.setImage('attachment://image.gif');
     } else if (tx.tokenData && tx.tokenData.image) {
         const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
 
@@ -63,36 +65,6 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             embed.setTitle(`${tx.quantity} ${tx.contractName || tx.tokenName} SWEPT!`);
         } else {
             embed.setTitle(`${tx.tokenName} SOLD!`);
-        }
-
-        if (tx.tokenType === 'ERC721' && tx.quantity > 1 && GIF_ENABLED) {
-            const gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
-
-            tx.gifImage = gifImage;
-            file = new MessageAttachment(gifImage as Buffer, 'image.gif');
-            embed.setImage('attachment://image.gif');
-        } else if (!tx.tokenData.image) {
-            const naImage = await createNaImage(true);
-
-            file = new MessageAttachment(naImage, 'image.png');
-            embed.setImage('attachment://image.png');
-        } else if (tx.tokenData.image.endsWith('.svg')) {
-            const buffer = await axios.get(tx.tokenData.image, {
-                responseType: 'arraybuffer'
-            });
-            const image = await sharp(buffer.data).png().toBuffer();
-
-            file = new MessageAttachment(image, 'image.png');
-            embed.setImage('attachment://image.png');
-        } else if (tx.tokenData.image.startsWith('data:image/svg+xml;base64,')) {
-            const base64Image = tx.tokenData.image.replace('data:image/svg+xml;base64,', '');
-            const buffer = Buffer.from(base64Image, 'base64');
-            const image = await sharp(buffer).png().toBuffer();
-
-            file = new MessageAttachment(image, 'image.png');
-            embed.setImage('attachment://image.png');
-        } else {
-            embed.setImage(tx.tokenData.image);
         }
 
         if (isAggregator) {
@@ -143,16 +115,9 @@ const sendEmbedMessage = async (tx: TransactionData) => {
     WEBHOOK_URLS.forEach((webhookURL) => {
         const webhookClient = new WebhookClient({ url: webhookURL });
 
-        if (file) {
-            webhookClient.send({
-                embeds: [embed],
-                files: [file]
-            });
-        } else {
-            webhookClient.send({
-                embeds: [embed]
-            });
-        }
+        webhookClient.send({
+            embeds: [embed]
+        });
     });
 
     return tx;
