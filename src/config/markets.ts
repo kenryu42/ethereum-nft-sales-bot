@@ -34,6 +34,15 @@ const markets: { [key: string]: Market } = {
             }
         ]
     },
+    // BlurSwap Contract Address
+    '0x39da41747a83aee658334415666f3ef92dd0d541': {
+        name: 'blurSwap',
+        displayName: 'Blur Swap 🟠',
+        color: '#ff7a00',
+        site: 'https://opensea.io/assets/',
+        accountPage: 'https://opensea.io/',
+        iconURL: 'https://pbs.twimg.com/profile_images/1518705644450291713/X2FLVDdn_400x400.jpg'
+    },
     // GemSwap Contract Address
     '0x83c8f28c26bf6aaca652df1dbbe0e1b56f8baba2': {
         name: 'gem',
@@ -284,6 +293,160 @@ const markets: { [key: string]: Market } = {
                         name: 'recipient'
                     }
                 ]
+            }
+        ]
+    },
+    '0x000000000000ad05ccc4f10045630fb830b95127': {
+        name: 'blur',
+        displayName: 'Blur 🟠',
+        color: '#ff7a00',
+        site: 'https://opensea.io/assets/',
+        accountPage: 'https://opensea.io/',
+        iconURL: 'https://pbs.twimg.com/profile_images/1518705644450291713/X2FLVDdn_400x400.jpg',
+        logDecoder: [
+            {
+                type: 'tuple',
+                name: 'sell',
+                components: [
+                    {
+                        type: 'address',
+                        name: 'trader'
+                    },
+                    {
+                        type: 'uint8',
+                        name: 'side'
+                    },
+                    {
+                        type: 'address',
+                        name: 'matchingPolicy'
+                    },
+                    {
+                        type: 'address',
+                        name: 'collection'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'tokenId'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'amount'
+                    },
+                    {
+                        type: 'address',
+                        name: 'paymentToken'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'price'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'listingTime'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'expirationTime'
+                    },
+                    {
+                        type: 'tuple[]',
+                        name: 'fees',
+                        components: [
+                            {
+                                type: 'uint16',
+                                name: 'rate'
+                            },
+                            {
+                                type: 'address',
+                                name: 'recipient'
+                            }
+                        ]
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'salt'
+                    },
+                    {
+                        type: 'bytes',
+                        name: 'extraParams'
+                    }
+                ]
+            },
+            {
+                type: 'bytes32',
+                name: 'sellHash'
+            },
+            {
+                type: 'tuple',
+                name: 'buy',
+                components: [
+                    {
+                        type: 'address',
+                        name: 'trader'
+                    },
+                    {
+                        type: 'uint8',
+                        name: 'side'
+                    },
+                    {
+                        type: 'address',
+                        name: 'matchingPolicy'
+                    },
+                    {
+                        type: 'address',
+                        name: 'collection'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'tokenId'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'amount'
+                    },
+                    {
+                        type: 'address',
+                        name: 'paymentToken'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'price'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'listingTime'
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'expirationTime'
+                    },
+                    {
+                        type: 'tuple[]',
+                        name: 'fees',
+                        components: [
+                            {
+                                type: 'uint16',
+                                name: 'rate'
+                            },
+                            {
+                                type: 'address',
+                                name: 'recipient'
+                            }
+                        ]
+                    },
+                    {
+                        type: 'uint256',
+                        name: 'salt'
+                    },
+                    {
+                        type: 'bytes',
+                        name: 'extraParams'
+                    }
+                ]
+            },
+            {
+                type: 'bytes32',
+                name: 'buyHash'
             }
         ]
     }
