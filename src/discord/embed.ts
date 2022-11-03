@@ -10,7 +10,8 @@ import type { TransactionData } from '../types';
 const sendEmbedMessage = async (tx: TransactionData) => {
     let file: MessageAttachment;
     const embed = new MessageEmbed();
-    const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
+    const isAggregator =
+        tx.recipient === 'gem' || tx.recipient === 'genie' || tx.recipient === 'blurSwap';
     const isSwap = tx.recipient === 'nft-trader';
 
     if (isSwap && tx.addressMaker && tx.addressTaker) {

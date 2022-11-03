@@ -3,12 +3,13 @@ import _ from 'lodash';
 import { ethers } from 'ethers';
 import { markets } from '../config/markets.js';
 import { parseSeaport } from './parseSeaport.js';
+import { parseBlur } from './parseBlur.js';
 import { parseNftTrader } from './parseNftTrader.js';
 import { parseSaleToken } from './parseSaleToken.js';
 import { parseSwapToken } from './parseSwapToken.js';
 import { currencies } from '../config/currencies.js';
 import { saleEventTypes } from '../config/logEventTypes.js';
-import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent } from '../types';
+import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent, BlurOrder } from '../types';
 import { initializeTransactionData } from '../config/initialize.js';
 import Web3EthAbi from 'web3-eth-abi';
 import { alchemy } from '../config/setup.js';
@@ -22,6 +23,10 @@ const isSeaport = (
 
 const isNftTrader = (decodedLogData: DecodedLogData | SwapEvent): decodedLogData is SwapEvent => {
     return (decodedLogData as SwapEvent)._swapId !== undefined;
+};
+
+const isBlur = (decodedLogData: DecodedLogData | BlurOrder): decodedLogData is BlurOrder => {
+    return (decodedLogData as BlurOrder).sell !== undefined;
 };
 
 async function parseTransaction(
@@ -38,7 +43,8 @@ async function parseTransaction(
     const tx = initializeTransactionData(transactionHash, contractData, recipient, contractAddress);
     const isSudo = tx.recipient === 'sudoswap';
     const isSwap = tx.recipient === 'nft-trader';
-    const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
+    const isAggregator =
+        tx.recipient === 'gem' || tx.recipient === 'genie' || tx.recipient === 'blurSwap';
 
     if (isSudo) {
         const parseResult = await parseSudoswap(tx);
@@ -78,6 +84,10 @@ async function parseTransaction(
                 if (parseResult === null) continue;
             } else if (isNftTrader(decodedLogData)) {
                 const parseResult = await parseNftTrader(tx, log, logAddress, decodedLogData);
+
+                if (parseResult === null) return null;
+            } else if (isBlur(decodedLogData)) {
+                const parseResult = parseBlur(tx, logMarket, decodedLogData);
 
                 if (parseResult === null) return null;
             } else if (tx.marketList.length + 1 === tx.tokens.length) {
