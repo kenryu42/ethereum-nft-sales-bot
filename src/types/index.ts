@@ -10,5 +10,6 @@ export {
     SwapEvent,
     SeaportOrder,
     ConsiderationItem,
-    DecodedLogData
+    DecodedLogData,
+    BlurOrder
 } from './types';

@@ -56,6 +56,10 @@ export type Market = {
         components?: {
             type: string;
             name: string;
+            components?: {
+                type: string;
+                name: string;
+            }[];
         }[];
     }[];
 };
@@ -82,6 +86,36 @@ export type SeaportOrder = {
     consideration: ConsiderationItem[];
 };
 
+export type Fee = {
+    rate: number;
+    recipient: string;
+};
+
+export type Order = {
+    trader: string;
+    side: number;
+    matchingPolicy: string;
+    collection: string;
+    tokenId: BigNumberish;
+    amount: BigNumberish;
+    paymentToken: string;
+    price: BigNumberish;
+    listingTime: BigNumberish;
+    expirationTime: BigNumberish;
+    fees: Fee[];
+    salt: BigNumberish;
+    extraParams: string;
+};
+
+export type BlurOrder = {
+    maker: string;
+    taker: string;
+    sell: Order;
+    sellhash: string;
+    buy: Order;
+    buyhash: string;
+};
+
 export type SwapEvent = {
     _creator: string;
     _time: string;
@@ -99,6 +133,8 @@ export type Recipient =
     | 'genie'
     | 'nft-trader'
     | 'sudoswap'
+    | 'blur'
+    | 'blurSwap'
     | 'unknown';
 
 export type TransactionData = {
