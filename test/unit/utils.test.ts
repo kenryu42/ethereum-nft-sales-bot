@@ -102,23 +102,23 @@ describe('Unit Test', function () {
         });
     });
 
-    describe('format price to 2 or 3 decimal', function () {
-        it('should return price with 2 decimal', function () {
+    describe('format price to 3 or 4 decimal', function () {
+        it('should return price with 3 decimal', function () {
             const priceOne = formatPrice(1);
             const priceTwo = formatPrice(0.69000001);
             const priceThree = formatPrice(0.699999999999999);
 
-            assert.strictEqual(priceOne, '1.00');
-            assert.strictEqual(priceTwo, '0.69');
-            assert.strictEqual(priceThree, '0.70');
+            assert.strictEqual(priceOne, '1.000');
+            assert.strictEqual(priceTwo, '0.690');
+            assert.strictEqual(priceThree, '0.700');
         });
 
-        it('should return price with 3 decimal', function () {
+        it('should return price with 4 decimal', function () {
             const priceOne = formatPrice(0.42444445);
             const priceTwo = formatPrice(0.611999999999999);
             const priceThree = formatPrice(15000000.12499);
 
-            assert.strictEqual(priceOne, '0.424');
+            assert.strictEqual(priceOne, '0.4244');
             assert.strictEqual(priceTwo, '0.612');
             assert.strictEqual(priceThree, '15,000,000.125');
         });

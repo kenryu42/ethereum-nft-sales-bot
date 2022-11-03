@@ -96,7 +96,7 @@ describe('ERC 721 Integration Test', function () {
 
             assert.strictEqual(tx.tokens.length, 2);
             assert.strictEqual(tx.prices.length, 1);
-            assert.strictEqual(tx.prices[0], '0.10');
+            assert.strictEqual(tx.prices[0], '0.100');
             assert.strictEqual(tx.marketList.length, 1);
             expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
             expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
