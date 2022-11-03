@@ -80,8 +80,10 @@
 
 -   [NFT Trader](https://www.nfttrader.io/)
 
--   [Sudoswap
-    <img src="https://cdn-icons-png.flaticon.com/512/891/891449.png" width="20" height="20"/>](https://sudoswap.xyz/#/)
+-   [Sudoswap](https://sudoswap.xyz/#/)
+
+-   [Blur
+    <img src="https://cdn-icons-png.flaticon.com/512/891/891449.png" width="20" height="20"/>](https://blur.io/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -273,6 +275,8 @@ DISCORD_ENABLED=1
 -   [x] Add NFT Trader
 -   [x] Add Sudo Swap
 -   [ ] Add Sudo Swap OTC
+-   [x] Add Blur Marketplace
+-   [x] Add Blur Swap
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
