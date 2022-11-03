@@ -29,7 +29,8 @@ const tweet = async (tx: TransactionData) => {
     let imageType = EUploadMimeType.Png;
     let imageBuffer;
     let tweetContent;
-    const isAggregator = tx.recipient === 'gem' || tx.recipient === 'genie';
+    const isAggregator =
+        tx.recipient === 'gem' || tx.recipient === 'genie' || tx.recipient === 'blurSwap';
     const isSwap = tx.recipient === 'nft-trader';
 
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
