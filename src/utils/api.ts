@@ -276,8 +276,8 @@ const getEthUsdPrice = async (ethPrice: number) => {
 
 const formatPrice = (price: number) => {
     let formatedPrice = price.toLocaleString('en-US', {
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4
     });
     const lastChar = formatedPrice.length - 1;
 
