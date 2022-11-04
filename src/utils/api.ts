@@ -279,9 +279,18 @@ const formatPrice = (price: number) => {
         minimumFractionDigits: 4,
         maximumFractionDigits: 4
     });
-    const lastChar = formatedPrice.length - 1;
+    let lastIdx = formatedPrice.length - 1;
+    let i = 0;
 
-    formatedPrice = formatedPrice[lastChar] === '0' ? formatedPrice.slice(0, -1) : formatedPrice;
+    while (formatedPrice[lastIdx] === '0' || formatedPrice[lastIdx] === '.') {
+        i++;
+        lastIdx--;
+    }
+
+    if (i > 0) {
+        formatedPrice = formatedPrice.slice(0, -i);
+    }
+
     return formatedPrice;
 };
 
