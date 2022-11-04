@@ -10,7 +10,7 @@
 <div align="center">
 
   <br />
-  <img src="https://i.postimg.cc/bwfk6tFy/nft-sales-bot-banner-002.jpg" alt="Logo" width="800">
+  <img src="https://i.postimg.cc/2Sw0Bq1C/eth-bot-logo-2.png" alt="Logo" width="800">
 
   <h3 align="center">Ethereum-NFT-Sales-Bot</h3>
 
@@ -97,6 +97,8 @@
 
 ## Live Demo
 
+<img src="https://i.postimg.cc/bwfk6tFy/nft-sales-bot-banner-002.jpg" alt="Logo" width="800">
+
 ### Twitter
 
 -   [Azuki Sales](https://twitter.com/azuki_sale_bot)
@@ -106,6 +108,7 @@
 ### Discord
 
 -   [Live Demo Discord Server](https://discord.gg/GjkH7qdP8X)
+-   [Murakami.Flowers Discord Server](https://discord.gg/murakamiflowers)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
