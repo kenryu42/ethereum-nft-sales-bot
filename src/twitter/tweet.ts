@@ -1,7 +1,7 @@
 import axios from 'axios';
 import sharp from 'sharp';
 import { TwitterApi, EUploadMimeType } from 'twitter-api-v2';
-import { createGif, createSwapGif, createNaImage, resizeImage } from '../utils/image.js';
+import { createGif, createSwapGif, createTextImage, resizeImage } from '../utils/image.js';
 import { formatPrice } from '../utils/api.js';
 import {
     GIF_ENABLED,
@@ -44,7 +44,7 @@ const tweet = async (tx: TransactionData) => {
     }
 
     if (!tx.tokenData.image) {
-        imageBuffer = await createNaImage(true);
+        imageBuffer = await createTextImage('Content not available yet', true);
     } else if (isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
         imageBuffer = tx.gifImage;
         imageType = EUploadMimeType.Gif;
