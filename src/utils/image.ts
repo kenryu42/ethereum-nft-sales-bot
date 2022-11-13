@@ -28,14 +28,15 @@ const createGif = async (
     console.log('Creating GIF...');
     const frames = [];
 
-    for (const token of tokens) {
-        let imageData;
-        const tokenData = await getTokenData(contractAddress, token, tokenType);
+    for (let i = 0; i < tokens.length; i++) {
+        const tokenData = await getTokenData(contractAddress, tokens[i], tokenType);
         const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
         const endsWithSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
         const startsWithSvg = tokenData.image
             ? tokenData.image.startsWith('data:image/svg+xml;base64,')
             : false;
+        let imageData;
+
         if (endsWithSvg) {
             const response = await axios.get(tokenData.image ?? '', {
                 responseType: 'arraybuffer'
@@ -50,16 +51,29 @@ const createGif = async (
         } else {
             imageData = tokenData.image;
         }
-        const image = !imageData ? await createNaImage() : await Jimp.read(imageData);
-        image.resize(width, Jimp.AUTO);
+
         const tokenIdText = {
-            text: `# ${String(token).padStart(4, '0')}`,
+            text: `# ${String(tokens[i]).padStart(4, '0')}`,
             alignmentX: Jimp.HORIZONTAL_ALIGN_RIGHT,
             alignmentY: Jimp.VERTICAL_ALIGN_TOP
         };
+        const image = !imageData
+            ? await createTextImage('Content not available yet')
+            : await Jimp.read(imageData);
+
+        image.resize(width, Jimp.AUTO);
         image.print(font, -20, 20, tokenIdText, width, height);
         const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
         frames.push({ src: buffer, duration: GIF_DURATION });
+
+        if (i === 9 && tokens.length > 10) {
+            const textImage = await createTextImage('And more ...');
+
+            textImage.resize(width, Jimp.AUTO);
+            const buffer = await textImage.getBufferAsync(Jimp.MIME_PNG);
+            frames.push({ src: buffer, duration: GIF_DURATION });
+            break;
+        }
     }
 
     const myGif = new Gif(width, height, 100);
@@ -126,7 +140,9 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
                 imageData = tokenData.image;
             }
 
-            const image = !imageData ? await createNaImage() : await Jimp.read(imageData);
+            const image = !imageData
+                ? await createTextImage('Content not available yet')
+                : await Jimp.read(imageData);
             image.resize(width, Jimp.AUTO);
             const quantity = asset.quantity ?? 0 > 1 ? ` Quantity: ${asset.quantity}` : '';
             const text = `${tokenName}${quantity}`;
@@ -177,11 +193,12 @@ const addTextToImage = async (
     return buffer;
 };
 
-const createNaImage = async (getBuffer = false) => {
+const createTextImage = async (text: string, getBuffer = false) => {
     const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
     const image = new Jimp(width, height, 'white');
     const naText = {
-        text: 'Content not available yet',
+        // text: 'Content not available yet',
+        text: text,
         alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
         alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
     };
@@ -195,4 +212,4 @@ const createNaImage = async (getBuffer = false) => {
     return image;
 };
 
-export { createGif, createSwapGif, createNaImage, resizeImage };
+export { createGif, createSwapGif, createTextImage, resizeImage };
