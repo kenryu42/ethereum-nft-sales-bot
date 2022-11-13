@@ -1,7 +1,7 @@
 import axios from 'axios';
 import sharp from 'sharp';
 import { formatPrice } from '../utils/api.js';
-import { createGif, createNaImage, createSwapGif } from '../utils/image.js';
+import { createGif, createTextImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
 import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
@@ -69,7 +69,7 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             file = new MessageAttachment(gifImage as Buffer, 'image.gif');
             embed.setImage('attachment://image.gif');
         } else if (!tx.tokenData.image) {
-            const naImage = await createNaImage(true);
+            const naImage = await createTextImage('Content not available yet', true);
 
             file = new MessageAttachment(naImage, 'image.png');
             embed.setImage('attachment://image.png');
@@ -92,16 +92,13 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             embed.setImage(tx.tokenData.image);
         }
 
-        if (isAggregator) {
+        if (isAggregator || (tx.tokenType === 'ERC721' && tx.quantity > 1)) {
             const fields = [
                 {
-                    name: 'Quantity',
-                    value: `\`${tx.quantity}\``,
-                    inline: true
-                },
-                {
                     name: 'Sweeper',
-                    value: `[${tx.sweeper}](${tx.market.accountPage}${tx.sweeperAddr})`,
+                    value: `[${tx.sweeper || tx.to}](${tx.market.accountPage}${
+                        tx.sweeperAddr || tx.toAddr
+                    })`,
                     inline: false
                 }
             ];
