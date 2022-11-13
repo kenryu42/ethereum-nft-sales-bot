@@ -6,8 +6,6 @@ const parseBlur = (tx: TransactionData, logMarket: Market, decodedLogData: BlurO
     // const price = decodedLogData.sell.amount;
     const price = Number(ethers.utils.formatUnits(decodedLogData.sell.price, 18));
 
-    console.log(`price: ${price}`);
-
     tx.totalPrice += price;
     tx.marketList.push(logMarket);
     tx.prices.push(formatPrice(price));
