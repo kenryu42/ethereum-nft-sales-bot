@@ -4,7 +4,7 @@ import { formatPrice } from '../utils/api.js';
 import { createGif, createTextImage, createSwapGif } from '../utils/image.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
-import { formatBundleField, formatSweepField, formatSwapField } from './formatField.js';
+import { formatSweepField, formatSwapField } from './formatField.js';
 import type { TransactionData } from '../types';
 
 const sendEmbedMessage = async (tx: TransactionData) => {
