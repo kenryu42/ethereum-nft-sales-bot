@@ -145,7 +145,7 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
                 : await Jimp.read(imageData);
             image.resize(width, Jimp.AUTO);
             const quantity = asset.quantity ?? 0 > 1 ? ` Quantity: ${asset.quantity}` : '';
-            const text = `${tokenName}${quantity}`;
+            const text = quantity;
             const buffer = await addTextToImage(image, text, -20, 20, false, true);
 
             frames.push({ src: buffer, duration: GIF_DURATION });
