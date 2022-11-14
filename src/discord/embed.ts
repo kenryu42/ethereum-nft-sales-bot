@@ -116,6 +116,10 @@ const sendEmbedMessage = async (tx: TransactionData) => {
                     true
                 )
                 .addField('To', `[${tx.to}](${tx.market.accountPage}${tx.toAddr}${isX2Y2})`, true);
+        } else if (tx.tokenType === 'ERC721' && tx.quantity === 1) {
+            embed
+                .addField('From', `[${tx.from}](${tx.market.accountPage}${tx.fromAddr})`, true)
+                .addField('To', `[${tx.to}](${tx.market.accountPage}${tx.toAddr})`, true);
         }
     }
 
