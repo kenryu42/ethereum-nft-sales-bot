@@ -4,7 +4,7 @@ import { MessageEmbed } from 'discord.js';
 
 const formatSweepField = (tx: TransactionData, embed: MessageEmbed) => {
     const customField: Record<string, string[]> = {};
-    const sep = '\n\n';
+    const sep = '\n';
 
     for (let i = 0; i < tx.tokens.length; i++) {
         const currentMarket = tx.marketList[i].displayName;
@@ -30,25 +30,6 @@ const formatSweepField = (tx: TransactionData, embed: MessageEmbed) => {
         });
         embed.addField(market, value);
     }
-};
-
-const formatBundleField = (tx: TransactionData, embed: MessageEmbed) => {
-    let i = 0;
-    let values = '';
-
-    for (const token of tx.tokens) {
-        const sep = ++i % 4 === 0 ? '\n' : '\xa0\xa0\xa0\xa0\xa0\xa0';
-        const value =
-            `**[\`#${String(token).padStart(4, '0')}\`](${tx.market.site}${
-                tx.contractAddress
-            }/${token})**` + sep;
-        if ((values + value).length > 1024) {
-            embed.addField('Token Id', values);
-            values = '';
-        }
-        values += value;
-    }
-    embed.addField('Token Id', values);
 };
 
 const formatSwapField = async (swap: SwapData, address: string, embed: MessageEmbed) => {
@@ -77,4 +58,4 @@ const formatSwapField = async (swap: SwapData, address: string, embed: MessageEm
     embed.addField('Spent Amount', spentAmount);
 };
 
-export { formatSweepField, formatBundleField, formatSwapField };
+export { formatSweepField, formatSwapField };
