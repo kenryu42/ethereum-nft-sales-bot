@@ -12,7 +12,7 @@ import { saleEventTypes } from '../config/logEventTypes.js';
 import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent, BlurOrder } from '../types';
 import { initializeTransactionData } from '../config/initialize.js';
 import Web3EthAbi from 'web3-eth-abi';
-import { alchemy } from '../config/setup.js';
+import { alchemy, KODEX_FEE_ADDRESSES } from '../config/setup.js';
 import { parseSudoswap } from './parseSudoswap.js';
 
 const isSeaport = (
@@ -27,6 +27,17 @@ const isNftTrader = (decodedLogData: DecodedLogData | SwapEvent): decodedLogData
 
 const isBlur = (decodedLogData: DecodedLogData | BlurOrder): decodedLogData is BlurOrder => {
     return (decodedLogData as BlurOrder).sell !== undefined;
+};
+
+const isKodexSeaport = (
+    decodedLogData: DecodedLogData | SeaportOrder
+): decodedLogData is SeaportOrder => {
+    return (
+        isSeaport(decodedLogData) &&
+        decodedLogData.consideration.some((considerationItem) =>
+            KODEX_FEE_ADDRESSES.includes(considerationItem.recipient.toLowerCase())
+        )
+    );
 };
 
 async function parseTransaction(

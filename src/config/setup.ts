@@ -46,6 +46,11 @@ const DISCORD_ENABLED = process.env.DISCORD_ENABLED === '1';
 const WEBHOOK_1 = process.env.WEBHOOK_URL || '';
 const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== '');
 
+const KODEX_FEE_ADDRESSES = [
+    '0x541e9445e5482114b85f146ff6afe6b49cdf21d8',
+    '0x171940bfcbb287744d644e07333d6738fcc53dbf'
+];
+
 // Error handler for configuration
 const checkConfig = (config: {
     CONTRACT: [string, string];
@@ -108,5 +113,6 @@ export {
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
-    TWITTER_ACCESS_SECRET
+    TWITTER_ACCESS_SECRET,
+    KODEX_FEE_ADDRESSES
 };
