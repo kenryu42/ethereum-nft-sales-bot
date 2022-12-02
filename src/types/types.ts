@@ -135,6 +135,7 @@ export type Recipient =
     | 'sudoswap'
     | 'blur'
     | 'blurSwap'
+    | 'kodex'
     | 'unknown';
 
 export type TransactionData = {
