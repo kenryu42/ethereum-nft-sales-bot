@@ -18,10 +18,10 @@ const parseSeaport = (tx: TransactionData, logMarket: Market, decodedLogData: Se
     // if target nft on offer side, then consideration is the total price
     // else offer is the total price
     if (nftOnOfferSide) {
-        const totalConsiderationAmount = consideration.reduce(reducer, 0);
+        const totalConsiderationAmount = consideration.reduce(seaportOfferOrConsiderationReducer, 0);
         price = totalConsiderationAmount;
     } else {
-        const totalOfferAmount = offer.reduce(reducer, 0);
+        const totalOfferAmount = offer.reduce(seaportOfferOrConsiderationReducer, 0);
         price = totalOfferAmount;
     }
     tx.totalPrice += price;
@@ -31,7 +31,7 @@ const parseSeaport = (tx: TransactionData, logMarket: Market, decodedLogData: Se
     return [price, false];
 };
 
-function reducer(previous: number, current: OfferItem | ConsiderationItem) {
+function seaportOfferOrConsiderationReducer(previous: number, current: OfferItem | ConsiderationItem) {
     const currency = currencies[current.token.toLowerCase() as keyof typeof currencies];
     if (currency !== undefined) {
         const result =
@@ -43,4 +43,4 @@ function reducer(previous: number, current: OfferItem | ConsiderationItem) {
     }
 }
 
-export { parseSeaport };
+export { parseSeaport, seaportOfferOrConsiderationReducer };
