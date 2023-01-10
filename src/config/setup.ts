@@ -22,10 +22,8 @@ const DEFAULT_NFT_API = OPENSEA_API_KEY ? 'Opensea' : 'Alchemy';
 
 // Image size for the GIF
 const GIF_ENABLED = true;
-const IMAGE_SIZE = {
-    width: 500,
-    height: 180
-};
+const GIF_DURATION = 1500;
+const IMAGE_WIDTH = 500;
 
 // Alchemy sdk setup
 const settings = {
@@ -86,9 +84,10 @@ export {
     alchemy,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,
-    IMAGE_SIZE,
+    IMAGE_WIDTH,
     TOKEN_TYPE,
     GIF_ENABLED,
+    GIF_DURATION,
     TWITTER_ENABLED,
     DISCORD_ENABLED,
     OPENSEA_API_KEY,
