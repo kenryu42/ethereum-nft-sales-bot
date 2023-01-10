@@ -1,10 +1,11 @@
 import axios from 'axios';
 import sharp from 'sharp';
 import { formatPrice } from '../utils/api.js';
-import { createGif, createTextImage, createSwapGif } from '../utils/image.js';
-import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
 import { formatSweepField, formatSwapField } from './formatField.js';
+import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
+import { createGif, createTextImage, createSwapGif } from '../utils/image.js';
+
 import type { TransactionData } from '../types';
 
 const sendEmbedMessage = async (tx: TransactionData) => {
@@ -89,7 +90,15 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             file = new MessageAttachment(image, 'image.png');
             embed.setImage('attachment://image.png');
         } else {
-            embed.setImage(tx.tokenData.image);
+            const response = await axios(tx.tokenData.image, {
+                responseType: 'arraybuffer'
+            });
+            const buffer64 = Buffer.from(response.data, 'binary');
+            const fileName = `${tx.tokenId}.png`;
+
+            file = new MessageAttachment(buffer64, fileName);
+            embed.setImage(`attachment://${fileName}`);
+            // embed.setImage(tx.tokenData.image);
         }
 
         if (isAggregator || (tx.tokenType === 'ERC721' && tx.quantity > 1)) {
