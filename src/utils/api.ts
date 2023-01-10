@@ -291,7 +291,7 @@ const formatPrice = (price: number) => {
         formatedPrice = formatedPrice.slice(0, -i);
     }
 
-    return formatedPrice;
+    return formatedPrice === '' ? '0' : formatedPrice;
 };
 
 export {
