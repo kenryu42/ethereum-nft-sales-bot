@@ -45,14 +45,15 @@ const sendEmbedMessage = async (tx: TransactionData) => {
         embed.setImage('attachment://image.gif');
     } else if (tx.tokenData && tx.tokenData.image) {
         const priceTitle = tx.quantity > 1 ? 'Total Amount' : 'Price';
+        const price = formatPrice(tx.totalPrice);
+        const priceField =
+            price === '0'
+                ? `\`${price} ${tx.currency.name} (Possibly stolen. 🚨)\``
+                : `\`${formatPrice(tx.totalPrice)} ${tx.currency.name} ${tx.ethUsdValue}\``;
 
         embed
             .setURL(`${tx.market.site}${tx.contractAddress}/${tx.tokenId}`)
-            .addField(
-                priceTitle,
-                `\`${formatPrice(tx.totalPrice)} ${tx.currency.name} ${tx.ethUsdValue}\``,
-                isAggregator
-            )
+            .addField(priceTitle, priceField, isAggregator)
             .setFooter({ text: tx.market.displayName, iconURL: tx.market.iconURL })
             .setColor(tx.market.color)
             .setTimestamp();
