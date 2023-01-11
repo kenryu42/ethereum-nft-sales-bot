@@ -4,7 +4,7 @@ import sizeOf from 'image-size';
 import Jimp from 'jimp-compact';
 import { ethers } from 'ethers';
 import { Gif } from 'make-a-gif';
-import { getTokenData } from './api.js';
+import { getTokenData, readImageData } from './api.js';
 import { ABI, alchemy, IMAGE_WIDTH, GIF_DURATION } from '../config/setup.js';
 
 import type { BigNumberish } from 'ethers';
@@ -12,7 +12,7 @@ import type { SwapData, TokenData } from '../types';
 import type { AlchemyProvider, NftTokenType } from 'alchemy-sdk';
 
 const resizeImage = async (image: string) => {
-    const resizedImage = await Jimp.read(image);
+    const resizedImage = await readImageData(image);
     resizedImage.resize(IMAGE_WIDTH, Jimp.AUTO);
     const buffer = await resizedImage.getBufferAsync(Jimp.MIME_PNG);
 
@@ -77,7 +77,7 @@ const createGif = async (
         const imageData = await parseImage(tokenData);
         const image = !imageData
             ? await createTextImage('Content not available yet')
-            : await Jimp.read(imageData);
+            : await readImageData(imageData);
 
         image.resize(IMAGE_WIDTH, Jimp.AUTO);
         const idText = `# ${String(tokens[i]).padStart(4, '0')}`;
@@ -111,7 +111,7 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
     console.log('Creating Swap GIF...');
     let dynamicHeight;
     const frames = [];
-    const image = await Jimp.read('https://i.postimg.cc/qB8cqcM8/nft-trader-logo-black.png');
+    const image = await readImageData('https://i.postimg.cc/qB8cqcM8/nft-trader-logo-black.png');
     const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
     const provider = await alchemy.config.getProvider();
 
@@ -134,7 +134,7 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
             const imageData = await parseImage(tokenData);
             const image = !imageData
                 ? await createTextImage('Content not available yet')
-                : await Jimp.read(imageData);
+                : await readImageData(imageData);
             const bufferAsync = await image.getBufferAsync(Jimp.MIME_PNG);
             const quantityText = asset.quantity ?? 0 > 1 ? ` Quantity: ${asset.quantity}` : '';
 

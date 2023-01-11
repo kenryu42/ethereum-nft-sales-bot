@@ -1,6 +1,5 @@
-import axios from 'axios';
 import sharp from 'sharp';
-import { formatPrice } from '../utils/api.js';
+import { formatPrice, getArrayBuffer } from '../utils/api.js';
 import { WEBHOOK_URLS, GIF_ENABLED } from '../config/setup.js';
 import { formatSweepField, formatSwapField } from './formatField.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
@@ -76,10 +75,8 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             file = new MessageAttachment(naImage, 'image.png');
             embed.setImage('attachment://image.png');
         } else if (tx.tokenData.image.endsWith('.svg')) {
-            const buffer = await axios.get(tx.tokenData.image, {
-                responseType: 'arraybuffer'
-            });
-            const image = await sharp(buffer.data).png().toBuffer();
+            const arrayBuffer = await getArrayBuffer(tx.tokenData.image);
+            const image = await sharp(arrayBuffer).png().toBuffer();
 
             file = new MessageAttachment(image, 'image.png');
             embed.setImage('attachment://image.png');
@@ -91,13 +88,11 @@ const sendEmbedMessage = async (tx: TransactionData) => {
             file = new MessageAttachment(image, 'image.png');
             embed.setImage('attachment://image.png');
         } else {
-            const response = await axios(tx.tokenData.image, {
-                responseType: 'arraybuffer'
-            });
-            const buffer64 = Buffer.from(response.data, 'binary');
+            const arrayBuffer = await getArrayBuffer(tx.tokenData.image);
+            const buffer = Buffer.from(arrayBuffer, 'binary');
             const fileName = `${tx.tokenId}.png`;
 
-            file = new MessageAttachment(buffer64, fileName);
+            file = new MessageAttachment(buffer, fileName);
             embed.setImage(`attachment://${fileName}`);
             // embed.setImage(tx.tokenData.image);
         }
