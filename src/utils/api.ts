@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import _ from 'lodash';
 import axios from 'axios';
+import Jimp from 'jimp-compact';
 import { ethers } from 'ethers';
 import type { BigNumberish } from 'ethers';
 import retry from 'async-retry';
@@ -39,6 +40,28 @@ const openseaNftApi = async (tokenId: BigNumberish, contractAddress: string) => 
 
         return null;
     }
+};
+
+const getArrayBuffer = async (url: string) => {
+    const result = await retry(async () => {
+        const response = await axios.get(url, {
+            responseType: 'arraybuffer'
+        });
+
+        return response.data;
+    });
+
+    return result;
+};
+
+const readImageData = async (image: string | Buffer) => {
+    const result = await retry(async () => {
+        const response = await Jimp.read(image);
+
+        return response;
+    });
+
+    return result;
 };
 
 const retryOnOpenseaNftApi = async (
@@ -298,6 +321,8 @@ export {
     getENSName,
     formatPrice,
     getTokenData,
+    readImageData,
+    getArrayBuffer,
     shortenAddress,
     getEthUsdPrice,
     getOpenseaName,
