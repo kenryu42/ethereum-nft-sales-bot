@@ -307,7 +307,9 @@ const formatPrice = (price: number) => {
 
     while (formatedPrice[lastIdx] === '0' || formatedPrice[lastIdx] === '.') {
         i++;
-        lastIdx--;
+        if (formatedPrice[lastIdx--] === '.') {
+            break;
+        }
     }
 
     if (i > 0) {
