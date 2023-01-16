@@ -22,10 +22,8 @@ const DEFAULT_NFT_API = OPENSEA_API_KEY ? 'Opensea' : 'Alchemy';
 
 // Image size for the GIF
 const GIF_ENABLED = true;
-const IMAGE_SIZE = {
-    width: 500,
-    height: 500
-};
+const GIF_DURATION = 1500;
+const IMAGE_WIDTH = 500;
 
 // Alchemy sdk setup
 const settings = {
@@ -52,16 +50,18 @@ const KODEX_FEE_ADDRESSES = [
 ];
 
 // Error handler for configuration
-const checkConfig = (config: {
-    CONTRACT: [string, string];
-    ALCHEMY_API_KEY: string;
-    ETHERSCAN_API_KEY: string;
-    WEBHOOK_URL: string;
-    TWITTER_API_KEY: string;
-    TWITTER_API_SECRET: string;
-    TWITTER_ACCESS_TOKEN: string;
-    TWITTER_ACCESS_SECRET: string;
-}) => {
+(() => {
+    const config = {
+        CONTRACT: [CONTRACT_ADDRESS, CONTRACT_ADDRESSES],
+        ALCHEMY_API_KEY: ALCHEMY_API_KEY,
+        ETHERSCAN_API_KEY: ETHERSCAN_API_KEY,
+        WEBHOOK_URL: DISCORD_ENABLED ? WEBHOOK_1 : 'Disable',
+        TWITTER_API_KEY: TWITTER_ENABLED ? TWITTER_API_KEY : 'Disable',
+        TWITTER_API_SECRET: TWITTER_ENABLED ? TWITTER_API_SECRET : 'Disable',
+        TWITTER_ACCESS_TOKEN: TWITTER_ENABLED ? TWITTER_ACCESS_TOKEN : 'Disable',
+        TWITTER_ACCESS_SECRET: TWITTER_ENABLED ? TWITTER_ACCESS_SECRET : 'Disable'
+    };
+
     let configError = false;
 
     for (const [key, value] of Object.entries(config)) {
@@ -80,18 +80,7 @@ const checkConfig = (config: {
         console.log('https://github.com/kenryu42/ethereum-nft-sales-bot#configuration');
         process.exit(1);
     }
-};
-
-checkConfig({
-    CONTRACT: [CONTRACT_ADDRESS, CONTRACT_ADDRESSES],
-    ALCHEMY_API_KEY: ALCHEMY_API_KEY,
-    ETHERSCAN_API_KEY: ETHERSCAN_API_KEY,
-    WEBHOOK_URL: DISCORD_ENABLED ? WEBHOOK_1 : 'Disable',
-    TWITTER_API_KEY: TWITTER_ENABLED ? TWITTER_API_KEY : 'Disable',
-    TWITTER_API_SECRET: TWITTER_ENABLED ? TWITTER_API_SECRET : 'Disable',
-    TWITTER_ACCESS_TOKEN: TWITTER_ENABLED ? TWITTER_ACCESS_TOKEN : 'Disable',
-    TWITTER_ACCESS_SECRET: TWITTER_ENABLED ? TWITTER_ACCESS_SECRET : 'Disable'
-});
+})();
 
 export {
     ABI,
@@ -100,9 +89,10 @@ export {
     alchemy,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,
-    IMAGE_SIZE,
+    IMAGE_WIDTH,
     TOKEN_TYPE,
     GIF_ENABLED,
+    GIF_DURATION,
     TWITTER_ENABLED,
     DISCORD_ENABLED,
     OPENSEA_API_KEY,

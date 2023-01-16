@@ -300,8 +300,8 @@ const markets: { [key: string]: Market } = {
         name: 'blur',
         displayName: 'Blur 🟠',
         color: '#ff7a00',
-        site: 'https://opensea.io/assets/',
-        accountPage: 'https://opensea.io/',
+        site: 'https://blur.io/asset/',
+        accountPage: 'https://blur.io/',
         iconURL: 'https://pbs.twimg.com/profile_images/1518705644450291713/X2FLVDdn_400x400.jpg',
         logDecoder: [
             {

@@ -1,5 +1,5 @@
 import { parseTransaction } from './parseTransaction.js';
-import { sendEmbedMessage } from '../discord/embed.js';
+import { handleEmbedMessage } from '../discord/embed.js';
 import { tweet } from '../twitter/tweet.js';
 import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup.js';
 import type { ContractData } from '../types';
@@ -56,10 +56,10 @@ const runApp = async (
     }
 
     if (DISCORD_ENABLED && TWITTER_ENABLED && txData) {
-        const tweetConfig = await sendEmbedMessage(txData);
+        const tweetConfig = await handleEmbedMessage(txData);
         await tweet(tweetConfig);
     } else if (DISCORD_ENABLED && txData) {
-        await sendEmbedMessage(txData);
+        await handleEmbedMessage(txData);
     } else if (TWITTER_ENABLED && txData) {
         await tweet(txData);
     }
