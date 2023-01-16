@@ -15,6 +15,7 @@ import Web3EthAbi from 'web3-eth-abi';
 import { alchemy } from '../config/setup.js';
 import { parseSudoswap } from './parseSudoswap.js';
 import { parseKodexSeaport } from './parseKodexSeaport.js';
+import { getTagFromDomain } from '../utils/seaport.js';
 
 const isSeaport = (
     decodedLogData: DecodedLogData | SeaportOrder
@@ -31,14 +32,10 @@ const isBlur = (decodedLogData: DecodedLogData | BlurOrder): decodedLogData is B
 };
 
 const isKodexSeaport = (
-    decodedLogData: DecodedLogData | SeaportOrder
+    decodedLogData: DecodedLogData | SeaportOrder,
+    calldata: string
 ): decodedLogData is SeaportOrder => {
-    return (
-        isSeaport(decodedLogData) &&
-        decodedLogData.consideration.some((considerationItem) =>
-            KODEX_FEE_ADDRESSES.includes(considerationItem.recipient.toLowerCase())
-        )
-    );
+    return isSeaport(decodedLogData) && calldata.includes(getTagFromDomain('kodex.io'));
 };
 
 async function parseTransaction(
@@ -91,7 +88,7 @@ async function parseTransaction(
 
             const decodedLogData = Web3EthAbi.decodeLog(marketLogDecoder, log.data, []);
 
-            if (isKodexSeaport(decodedLogData)) {
+            if (isKodexSeaport(decodedLogData, data.data)) {
                 const parseResult = parseKodexSeaport(tx, logMarket, decodedLogData);
 
                 if (parseResult === null) continue;
