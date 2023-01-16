@@ -12,7 +12,7 @@ import { saleEventTypes } from '../config/logEventTypes.js';
 import type { ContractData, DecodedLogData, SeaportOrder, SwapEvent, BlurOrder } from '../types';
 import { initializeTransactionData } from '../config/initialize.js';
 import Web3EthAbi from 'web3-eth-abi';
-import { alchemy, KODEX_FEE_ADDRESSES } from '../config/setup.js';
+import { alchemy } from '../config/setup.js';
 import { parseSudoswap } from './parseSudoswap.js';
 import { parseKodexSeaport } from './parseKodexSeaport.js';
 
