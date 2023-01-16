@@ -47,9 +47,10 @@ async function parseTransaction(
     contractData: ContractData
 ) {
     const receipt = await alchemy.core.getTransactionReceipt(transactionHash);
+    const data = await alchemy.core.getTransaction(transactionHash);
     const recipient = receipt ? receipt.to.toLowerCase() : '';
 
-    if (!receipt || !(recipient in markets)) {
+    if (!receipt || !data || !data.data || !(recipient in markets)) {
         return null;
     }
     const tx = initializeTransactionData(transactionHash, contractData, recipient, contractAddress);
