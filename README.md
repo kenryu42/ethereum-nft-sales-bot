@@ -135,27 +135,10 @@ npm install
 
 ## Configuration
 
-> Create an `.env` file in the root directory of the project with the following contents:
-
-### Mandatory
+> Create an `.env` file in the root directory of the project with the following command:
 
 ```
-CONTRACT_ADDRESS=
-ALCHEMY_API_KEY=
-ETHERSCAN_API_KEY=
-```
-
-### Optional
-
-```
-OPENSEA_API_KEY=
-TWITTER_ENABLED=
-TWITTER_API_KEY=
-TWITTER_API_SECRET=
-TWITTER_ACCESS_TOKEN=
-TWITTER_ACCESS_SECRET=
-DISCORD_ENABLED=
-WEBHOOK_URL=
+cp .env.example .env
 ```
 
 ### Multi Monitoring
@@ -172,11 +155,7 @@ If `CONTRACT_ADDRESS` and `CONTRACT_ADDRESSES` are both set, `CONTRACT_ADDRESSES
 
 <br />
 
-🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
-
-**Do not commit/include your `.env` file in your repository.**
-
-🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+🚨🚨 **Do not commit/include your `.env` file in your repository.** 🚨🚨
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
