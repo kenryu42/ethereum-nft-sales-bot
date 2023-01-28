@@ -21,7 +21,8 @@ export const initializeTransactionData = (
         market: markets[recipient],
         currency: { name: 'ETH', decimals: 18 },
         contractAddress: contractAddress,
-        transactionHash: transactionHash
+        transactionHash: transactionHash,
+        seaportIdentifiers: []
     };
 
     return tx;
