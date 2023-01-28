@@ -190,7 +190,7 @@ describe('ERC 721 Integration Test', function () {
             assert.strictEqual(tx.totalPrice, 1.509);
         });
     });
-    
+
     describe('blur sales event', function () {
         it('should get the correct sales data', async function () {
             const azuki = '0xed5af388653567af2f388e6224dc7c4b3241c544';
