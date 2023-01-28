@@ -190,4 +190,69 @@ describe('ERC 721 Integration Test', function () {
             assert.strictEqual(tx.totalPrice, 1.509);
         });
     });
+    
+    describe('blur sales event', function () {
+        it('should get the correct sales data', async function () {
+            const azuki = '0xed5af388653567af2f388e6224dc7c4b3241c544';
+            const txHash = '0xbe99f782591be21c2f5872e29e975a1dfbf93638bf3c2fd7a2f7cd121ce12ae3';
+            const tx = await parseTransaction(txHash, azuki, contractData);
+
+            if (!tx) return;
+
+            const isSameSize =
+                tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
+
+            expect(isSameSize).to.be.true;
+            expect(tx.tokenData).to.not.be.null;
+            expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
+            assert.strictEqual(tx.market.name, 'blur');
+            assert.strictEqual(tx.market, tx.marketList[0]);
+            assert.strictEqual(tx.transactionHash, txHash);
+        });
+    });
+
+    describe('blur bundle sales event', function () {
+        it('should get the correct sales data', async function () {
+            const midnightBreeze = '0xd9c036e9eef725e5aca4a22239a23feb47c3f05d';
+            const txHash = '0xd1b255093a7816d82ae2903b12b42be0d6df967eaa59ffcdbabf29fb8686a6d5';
+            const tx = await parseTransaction(txHash, midnightBreeze, contractData);
+
+            if (!tx) return;
+
+            const isSameSize =
+                tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
+
+            expect(isSameSize).to.be.true;
+            expect(tx.tokenData).to.not.be.null;
+            expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
+            assert.strictEqual(tx.market.name, 'blur');
+            assert.strictEqual(tx.market, tx.marketList[0]);
+            assert.strictEqual(tx.transactionHash, txHash);
+        });
+    });
+
+    describe('blurSwap sale event', function () {
+        it('should get the correct sales data', async function () {
+            const murakamiFlowers = '0x7d8820fa92eb1584636f4f5b8515b5476b75171a';
+            const txHash = '0xaa8e649981d364353631415ebfb70f5634641c61853bc072fba1c8b05dc7a8c0';
+            const tx = await parseTransaction(txHash, murakamiFlowers, contractData);
+
+            if (!tx) return;
+
+            const isSameSize =
+                tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
+
+            expect(isSameSize).to.be.true;
+            expect(tx.tokenData).to.not.be.null;
+            expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
+            assert.strictEqual(tx.market.name, 'blurSwap');
+            assert.strictEqual(tx.transactionHash, txHash);
+        });
+    });
 });
