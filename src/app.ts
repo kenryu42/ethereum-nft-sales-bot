@@ -10,16 +10,20 @@ import { options } from './config/commander.js';
 import { getContractData } from './utils/api.js';
 import type { ContractData } from './types';
 import { transferEventTypes } from './config/logEventTypes.js';
+import { NftTokenType } from 'alchemy-sdk';
 
 let lastTransactionHash: string;
 
 console.log(`Default NFT Api: ${DEFAULT_NFT_API}`);
 
-async function main(contractAddress: string) {
+async function main(contractAddress: string, test = false) {
     const contractData: ContractData = await getContractData(contractAddress);
-    const tokenType = contractData.tokenType === 'UNKNOWN' ? TOKEN_TYPE : contractData.tokenType;
+    contractData.tokenType =
+        contractData.tokenType === 'UNKNOWN'
+            ? (TOKEN_TYPE as NftTokenType)
+            : contractData.tokenType;
 
-    if (tokenType !== 'ERC721' && tokenType !== 'ERC1155') {
+    if (contractData.tokenType !== 'ERC721' && contractData.tokenType !== 'ERC1155') {
         console.log(contractData);
         console.log('Alchemy getContractMetadata api cannot get the correct token type.');
         console.log('Please enter the TOKEN_TYPE in (file:./.env)');
@@ -27,36 +31,32 @@ async function main(contractAddress: string) {
     }
     const eventFilter = {
         address: contractAddress,
-        topics: [transferEventTypes[tokenType]]
+        topics: [transferEventTypes[contractData.tokenType]]
     };
 
-    console.log(`Listening to ${tokenType} transfer events on collection: ${contractData.name}`);
-    console.log(`Contract address: ${contractAddress}\n`);
-    alchemy.ws.on(eventFilter, async (log) => {
-        const transactionHash = log.transactionHash.toLowerCase();
+    if (test) {
+        console.log(`Running test for tx: ${options.test}`);
+        await runApp(options.test, CONTRACT_ADDRESS, contractData);
+    } else {
+        console.log(
+            `Listening to ${contractData.tokenType} transfer events on collection: ${contractData.name}`
+        );
+        console.log(`Contract address: ${contractAddress}\n`);
+        alchemy.ws.on(eventFilter, async (log) => {
+            const transactionHash = log.transactionHash.toLowerCase();
 
-        if (transactionHash === lastTransactionHash) return;
-        lastTransactionHash = transactionHash;
+            if (transactionHash === lastTransactionHash) return;
+            lastTransactionHash = transactionHash;
 
-        await runApp(transactionHash, contractAddress, contractData);
-    });
+            await runApp(transactionHash, contractAddress, contractData);
+        });
+    }
 }
 
 (async () => {
     if (options.test) {
         try {
-            const contractData = await getContractData(CONTRACT_ADDRESS);
-            const tokenType =
-                contractData.tokenType === 'UNKNOWN' ? TOKEN_TYPE : contractData.tokenType;
-
-            if (tokenType !== 'ERC721' && tokenType !== 'ERC1155') {
-                console.log(contractData);
-                console.log('Alchemy getContractMetadata api cannot get the correct token type.');
-                console.log('Please enter the TOKEN_TYPE in (file:./.env)');
-                process.exit(1);
-            }
-            console.log(`Running test for tx: ${options.test}`);
-            await runApp(options.test, CONTRACT_ADDRESS, contractData);
+            await main(CONTRACT_ADDRESS, true);
         } catch (error) {
             console.error(error);
             process.exit(1);
