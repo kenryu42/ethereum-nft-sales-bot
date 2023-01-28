@@ -104,7 +104,7 @@ const markets: { [key: string]: Market } = {
         color: '#00e0ff',
         site: 'https://x2y2.io/eth/',
         accountPage: 'https://x2y2.io/user/',
-        iconURL: 'https://pbs.twimg.com/profile_images/1482386069891198978/mMFwXNj8_400x400.jpg',
+        iconURL: 'https://pbs.twimg.com/profile_images/1610305658695618560/4pLyofR7_400x400.png',
         logDecoder: [
             {
                 type: 'bytes32',
@@ -131,7 +131,7 @@ const markets: { [key: string]: Market } = {
         color: '#0ce465',
         site: 'https://looksrare.org/collections/',
         accountPage: 'https://looksrare.org/accounts/',
-        iconURL: 'https://pbs.twimg.com/profile_images/1493172984240308225/Nt6RFdmb_400x400.jpg',
+        iconURL: 'https://pbs.twimg.com/profile_images/1607554816049545216/WbL9E92K_400x400.jpg',
         logDecoder: [
             {
                 type: 'bytes32',
@@ -300,8 +300,8 @@ const markets: { [key: string]: Market } = {
         name: 'blur',
         displayName: 'Blur 🟠',
         color: '#ff7a00',
-        site: 'https://blur.io/asset/',
-        accountPage: 'https://blur.io/',
+        site: 'https://opensea.io/assets/',
+        accountPage: 'https://opensea.io/',
         iconURL: 'https://pbs.twimg.com/profile_images/1518705644450291713/X2FLVDdn_400x400.jpg',
         logDecoder: [
             {
