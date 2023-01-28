@@ -166,4 +166,5 @@ export type TransactionData = {
     addressMaker?: string;
     addressTaker?: string;
     transactionHash: string;
+    seaportIdentifiers: string[];
 };
