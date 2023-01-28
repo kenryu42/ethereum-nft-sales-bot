@@ -22,7 +22,7 @@ describe('ERC 721 Integration Test', function () {
         });
     });
 
-    describe('opensea sale event', function () {
+    describe('opensea sale event with fulfillBasicOrder', function () {
         it('should get the correct sales data', async function () {
             const txHash = '0xfd859948fcefe8ccb68a76fb18cc5c6bada9b117767b6bfa8280233b8567dbae';
             const tx = await parseTransaction(txHash, bayc, contractData);
@@ -165,6 +165,29 @@ describe('ERC 721 Integration Test', function () {
             assert.strictEqual(tx.market.name, 'genie');
             assert.strictEqual(tx.transactionHash, txHash);
             expect(tx.tokenData).to.not.be.null;
+        });
+    });
+
+    describe('opensea sale event with matchAdvancedOrders', function () {
+        it('should get the correct sales data', async function () {
+            const murakamiFlowers = '0x7d8820fa92eb1584636f4f5b8515b5476b75171a';
+            const txHash = '0x5199ba954f7963e059dc55d9d9f87cff111471f03b5c6f1dc926c17556893ab3';
+            const tx = await parseTransaction(txHash, murakamiFlowers, contractData);
+
+            if (!tx) return;
+
+            const isSameSize =
+                tx.tokens.length === tx.prices.length && tx.tokens.length === tx.marketList.length;
+
+            expect(isSameSize).to.be.true;
+            expect(tx.tokenData).to.not.be.null;
+            expect(ethers.utils.isAddress(tx.fromAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.toAddr ?? '')).to.be.true;
+            expect(ethers.utils.isAddress(tx.sweeperAddr ?? '')).to.be.true;
+            assert.strictEqual(tx.market.name, 'opensea');
+            assert.strictEqual(tx.market, tx.marketList[0]);
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.totalPrice, 1.509);
         });
     });
 });
