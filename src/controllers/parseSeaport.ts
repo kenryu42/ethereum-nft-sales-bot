@@ -6,13 +6,12 @@ import { formatPrice } from '../utils/api.js';
 const parseSeaport = (tx: TransactionData, logMarket: Market, decodedLogData: SeaportOrder) => {
     const offer = decodedLogData.offer;
     const consideration = decodedLogData.consideration;
-    const nftOnOfferSide = offer.some((item) => item.token.toLowerCase() === tx.contractAddress);
-    const nftOnConsiderationSide = consideration.some(
-        (item) => item.token.toLowerCase() === tx.contractAddress
+    const nftOnOfferSide = offer.some((item) => checkDuplicatedIdentifier(item, tx));
+    const nftOnConsiderationSide = consideration.some((item) =>
+        checkDuplicatedIdentifier(item, tx)
     );
     let price;
 
-    // Skip if the target token is not on both sides (offer & consideration)
     if (!nftOnOfferSide && !nftOnConsiderationSide) return null;
 
     // if target nft on offer side, then consideration is the total price
@@ -42,5 +41,19 @@ function reducer(previous: number, current: OfferItem | ConsiderationItem) {
         return previous;
     }
 }
+
+// Fix double counting sales price when seaport using matchAdvancedOrders function
+// Might need to improve this temporary solution in the future
+const checkDuplicatedIdentifier = (item: OfferItem | ConsiderationItem, tx: TransactionData) => {
+    if (item.token.toLowerCase() === tx.contractAddress) {
+        const uniqueIdentifier = item.token.toLowerCase() + item.identifier;
+        if (tx.seaportIdentifiers.includes(uniqueIdentifier)) {
+            return false;
+        } else {
+            tx.seaportIdentifiers.push(uniqueIdentifier);
+            return true;
+        }
+    }
+};
 
 export { parseSeaport };
