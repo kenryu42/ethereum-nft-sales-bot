@@ -1,6 +1,7 @@
 export {
     Market,
-    SwapData,
+    Swap,
+    ItemType,
     Recipient,
     TokenData,
     CustomError,

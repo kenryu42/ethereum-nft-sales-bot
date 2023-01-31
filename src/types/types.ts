@@ -28,20 +28,37 @@ type SwapTokenData = {
     contractAddress: string;
 };
 
-interface Swap {
-    [key: string]: {
-        name?: string;
-        receivedAssets: SwapTokenData[];
-        spentAssets?: SwapTokenData[];
-        receivedAmount?: string;
-        spentAmount?: string;
-    };
+interface SwapData {
+    name?: string;
+    address?: string;
+    spentAssets: SwapTokenData[];
+    spentAmount?: string;
 }
 
-export type SwapData = Swap & {
-    id?: string;
-    monitorTokenId?: string;
-};
+export interface Swap {
+    maker: SwapData;
+    taker: SwapData;
+}
+
+export enum ItemType {
+    // 0: ETH on mainnet, MATIC on polygon, etc.
+    NATIVE,
+
+    // 1: ERC20 items (ERC777 and ERC20 analogues could also technically work)
+    ERC20,
+
+    // 2: ERC721 items
+    ERC721,
+
+    // 3: ERC1155 items
+    ERC1155,
+
+    // 4: ERC721 items where a number of tokenIds are supported
+    ERC721_WITH_CRITERIA,
+
+    // 5: ERC1155 items where a number of ids are supported
+    ERC1155_WITH_CRITERIA
+}
 
 export type Market = {
     name: Recipient;
@@ -67,14 +84,14 @@ export type Market = {
 export type DecodedLogData = { [key: string]: string };
 
 export type OfferItem = {
-    itemType: string;
+    itemType: ItemType;
     token: string;
     identifier: string;
     amount: BigNumberish;
 };
 
 export type ConsiderationItem = {
-    itemType: string;
+    itemType: ItemType;
     token: string;
     identifier: string;
     amount: BigNumberish;
@@ -82,8 +99,10 @@ export type ConsiderationItem = {
 };
 
 export type SeaportOrder = {
+    offerer: string;
     offer: OfferItem[];
     consideration: ConsiderationItem[];
+    recipient: string;
 };
 
 export type Fee = {
@@ -139,7 +158,8 @@ export type Recipient =
 
 export type TransactionData = {
     recipient: Recipient;
-    swap: SwapData;
+    swap: Swap;
+    isNftTrader?: boolean;
     prices: string[];
     totalPrice: number;
     tokens: BigNumberish[];
@@ -163,8 +183,6 @@ export type TransactionData = {
     sweeperAddr?: string;
     usdPrice?: string | null;
     ethUsdValue?: string;
-    addressMaker?: string;
-    addressTaker?: string;
     transactionHash: string;
     seaportIdentifiers: string[];
 };
