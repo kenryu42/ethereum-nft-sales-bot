@@ -8,7 +8,14 @@ export const initializeTransactionData = (
     contractAddress: string
 ) => {
     const tx: TransactionData = {
-        swap: {},
+        swap: {
+            taker: {
+                spentAssets: []
+            },
+            maker: {
+                spentAssets: []
+            }
+        },
         recipient: markets[recipient].name,
         tokens: [],
         prices: [],
