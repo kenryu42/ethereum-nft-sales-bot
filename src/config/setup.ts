@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import ABI from '../abi/transferEvent.json' assert { type: 'json' };
-import NFT_TRADER_ABI from '../abi/nftTrader.json' assert { type: 'json' };
 import SUDOSWAP_ABI from '../abi/sudoSwap.json' assert { type: 'json' };
 import { Network, Alchemy } from 'alchemy-sdk';
 
@@ -79,7 +78,6 @@ const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== '');
 
 export {
     ABI,
-    NFT_TRADER_ABI,
     SUDOSWAP_ABI,
     alchemy,
     DEFAULT_NFT_API,
