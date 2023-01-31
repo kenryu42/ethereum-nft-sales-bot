@@ -1,3 +1,15 @@
+# [0.3.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v0.2.0...v0.3.0) (2023-01-31)
+
+
+### Features
+
+* replace old nft trader related types with new types ([ec7650b](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/ec7650b3caf5ea2e66991d97872b676151cc5858))
+* replace old swap initialization with new swap ([155dd74](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/155dd742167f04862c4524db14b4f3f3a72ac612))
+* update nft trader contract address with gnosis safe address ([70f1f0e](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/70f1f0e99a304c90dbbd47a54777bd4d3f41444c))
+* update nft-trader for migration on Seaport ([4392b41](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/4392b4171d298a883285fe4d0b7d14a2209a840c))
+
+
+
 # [0.2.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v0.1.0...v0.2.0) (2023-01-28)
 
 
