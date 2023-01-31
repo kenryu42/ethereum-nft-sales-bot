@@ -31,21 +31,20 @@ const tweet = async (tx: TransactionData) => {
     let tweetContent;
     const isAggregator =
         tx.recipient === 'gem' || tx.recipient === 'genie' || tx.recipient === 'blurSwap';
-    const isSwap = tx.recipient === 'nft-trader';
 
     if (!client || !rwClient || !tx.tokenType || !tx.tokenData || !tx.tokenData.image) {
         return;
     }
 
-    if (isSwap && tx.addressMaker && tx.addressTaker && !DISCORD_ENABLED) {
-        tx.gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
+    if (tx.isNftTrader && tx.swap.maker.address && tx.swap.taker.address && !DISCORD_ENABLED) {
+        tx.gifImage = await createSwapGif(tx.swap);
     } else if (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721' && !DISCORD_ENABLED) {
         tx.gifImage = await createGif(tx.tokens, tx.contractAddress, tx.tokenType);
     }
 
     if (!tx.tokenData.image) {
         imageBuffer = await createTextImage('Content not available yet', true);
-    } else if (isSwap || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
+    } else if (tx.isNftTrader || (GIF_ENABLED && tx.quantity > 1 && tx.tokenType === 'ERC721')) {
         imageBuffer = tx.gifImage;
         imageType = EUploadMimeType.Gif;
     } else if (tx.tokenData.image.endsWith('.svg')) {
@@ -79,17 +78,17 @@ ${tx.market.accountPage}${tx.sweeperAddr}
 
 🔍 https://etherscan.io/tx/${tx.transactionHash}	
 			`;
-    } else if (isSwap && tx.addressMaker && tx.addressTaker) {
+    } else if (tx.isNftTrader && tx.swap.maker.address && tx.swap.taker.address) {
         tweetContent = `
 New ${tx.contractName} Swap on NFT Trader
 
-Maker: ${tx.swap[tx.addressMaker].name}
-${tx.market.accountPage}${tx.addressMaker}
+Maker: ${tx.swap.maker.name}
+${tx.market.accountPage}${tx.swap.maker.address}
 			
-Taker: ${tx.swap[tx.addressTaker].name}
-${tx.market.accountPage}${tx.addressTaker}
+Taker: ${tx.swap.taker.name}
+${tx.market.accountPage}${tx.swap.taker.address}
 			
-🔍 ${tx.market.site}${tx.transactionHash}
+🔍 https://etherscan.io/tx/${tx.transactionHash}	
             `;
     } else {
         const isX2Y2 = tx.market.name === 'x2y2' ? '/items' : '';

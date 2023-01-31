@@ -1,5 +1,5 @@
 import { getEthUsdPrice } from '../utils/api.js';
-import type { SwapData, TransactionData } from '../types';
+import type { Swap, TransactionData } from '../types';
 import { MessageEmbed } from 'discord.js';
 
 const formatSweepField = (tx: TransactionData, embed: MessageEmbed) => {
@@ -32,10 +32,11 @@ const formatSweepField = (tx: TransactionData, embed: MessageEmbed) => {
     }
 };
 
-const formatSwapField = async (swap: SwapData, address: string, embed: MessageEmbed) => {
+const formatSwapField = async (swap: Swap, takerOrMaker: string, embed: MessageEmbed) => {
     let values = '';
     const sep = '\n';
-    const spentAssets = swap[address].spentAssets ?? [];
+    const side: keyof typeof swap = takerOrMaker === 'taker' ? 'taker' : 'maker';
+    const spentAssets = swap[side].spentAssets ?? [];
 
     for (const asset of spentAssets) {
         const value =
@@ -49,12 +50,10 @@ const formatSwapField = async (swap: SwapData, address: string, embed: MessageEm
     }
     values = values || '`-`';
     embed.addField('Spent Assets', values);
-    const usdValue = await getEthUsdPrice(Number(swap[address].spentAmount));
+    const usdValue = await getEthUsdPrice(Number(swap[side].spentAmount));
     const usdPrice = usdValue !== '0' ? ` ($ ${usdValue})` : '';
     const spentAmount =
-        swap[address].spentAmount !== '0.0'
-            ? `\`${swap[address].spentAmount} ETH${usdPrice}\``
-            : '`-`';
+        swap[side].spentAmount !== '0.0' ? `\`${swap[side].spentAmount} ETH${usdPrice}\`` : '`-`';
     embed.addField('Spent Amount', spentAmount);
 };
 

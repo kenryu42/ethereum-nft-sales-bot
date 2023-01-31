@@ -8,25 +8,19 @@ import { createGif, createTextImage, createSwapGif } from '../utils/image.js';
 import type { TransactionData } from '../types';
 
 const handleSWapField = async (tx: TransactionData, embed: MessageEmbed) => {
-    if (!tx.addressMaker || !tx.addressTaker) throw new Error('Missing swap address');
-
-    const gifImage = await createSwapGif(tx.swap, tx.addressMaker, tx.addressTaker);
+    const gifImage = await createSwapGif(tx.swap);
 
     embed.addField(
         'Maker',
-        `[${tx.swap[tx.addressMaker as keyof typeof tx.swap].name}](${tx.market.accountPage}${
-            tx.addressMaker
-        })`
+        `[${tx.swap.maker.name}](${tx.market.accountPage}${tx.swap.maker.address})`
     );
-    await formatSwapField(tx.swap, tx.addressMaker, embed);
+    await formatSwapField(tx.swap, 'maker', embed);
 
     embed.addField(
         'Taker',
-        `[${tx.swap[tx.addressTaker as keyof typeof tx.swap].name}](${tx.market.accountPage}${
-            tx.addressTaker
-        })`
+        `[${tx.swap.taker.name}](${tx.market.accountPage}${tx.swap.taker.address})`
     );
-    await formatSwapField(tx.swap, tx.addressTaker, embed);
+    await formatSwapField(tx.swap, 'taker', embed);
 
     embed
         .setTitle(`New ${tx.contractName || tx.tokenName} Swap!`)
@@ -153,7 +147,7 @@ const handleEmbedMessage = async (tx: TransactionData) => {
     const embed = new MessageEmbed();
     const isAggregator =
         tx.recipient === 'gem' || tx.recipient === 'genie' || tx.recipient === 'blurSwap';
-    const isSwap = tx.recipient === 'nft-trader';
+    const isSwap = tx.isNftTrader;
 
     if (isSwap) {
         const attachmentFile = await handleSWapField(tx, embed);

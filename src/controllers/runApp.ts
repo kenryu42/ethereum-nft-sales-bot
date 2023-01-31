@@ -12,35 +12,20 @@ const runApp = async (
     const txData = await parseTransaction(transactionHash, contractAddress, contractData);
 
     if (txData) {
-        const {
-            tokenName,
-            contractName,
-            recipient,
-            swap,
-            addressMaker,
-            addressTaker,
-            market,
-            totalPrice,
-            currency,
-            quantity
-        } = txData;
+        const { tokenName, contractName, swap, market, totalPrice, currency, quantity } = txData;
 
-        if (recipient === 'nft-trader' && addressMaker && addressTaker) {
+        if (txData.isNftTrader && txData.swap.taker.address && txData.swap.maker.address) {
             console.log(
                 '--------------------------------------------------------------------------------'
             );
-            console.log(`${contractName} Swap on NFTTrader.io #${swap.id}`);
-            console.log(`Maker: ${swap[addressMaker].name}`);
-            console.log(`Spent Assets: ${JSON.stringify(swap[addressMaker].spentAssets)}`);
-            console.log(`Spent Value: ${swap[addressMaker].spentAmount} ETH`);
-            console.log(`Received Assets: ${JSON.stringify(swap[addressMaker].receivedAssets)}`);
-            console.log(`Received Value: ${swap[addressMaker].receivedAmount} ETH`);
+            console.log(`${contractName} Swap on NFTTrader.io`);
+            console.log(`Maker: ${swap.maker.name}`);
+            console.log(`Spent Assets: ${JSON.stringify(swap.maker.spentAssets, null, 2)}`);
+            console.log(`Spent Value: ${swap.maker.spentAmount} ETH`);
             console.log('🔄');
-            console.log(`Taker: ${swap[addressTaker].name}`);
-            console.log(`Spent Assets: ${JSON.stringify(swap[addressTaker].spentAssets)}`);
-            console.log(`Spent Value: ${swap[addressTaker].spentAmount} ETH`);
-            console.log(`Received Assets: ${JSON.stringify(swap[addressTaker].receivedAssets)}`);
-            console.log(`Received Value: ${swap[addressTaker].receivedAmount} ETH`);
+            console.log(`Taker: ${swap.taker.name}`);
+            console.log(`Spent Assets: ${JSON.stringify(swap.taker.spentAssets, null, 2)}`);
+            console.log(`Spent Value: ${swap.taker.spentAmount} ETH`);
             console.log(`\nhttps://etherscan.io/tx/${transactionHash}`);
             console.log(
                 '--------------------------------------------------------------------------------'
@@ -56,11 +41,15 @@ const runApp = async (
     }
 
     if (DISCORD_ENABLED && TWITTER_ENABLED && txData) {
+        console.log('Sending to Discord...');
         const tweetConfig = await handleEmbedMessage(txData);
+        console.log('Tweeting...');
         await tweet(tweetConfig);
     } else if (DISCORD_ENABLED && txData) {
+        console.log('Sending to Discord...');
         await handleEmbedMessage(txData);
     } else if (TWITTER_ENABLED && txData) {
+        console.log('Tweeting...');
         await tweet(txData);
     }
 };

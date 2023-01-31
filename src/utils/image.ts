@@ -8,7 +8,7 @@ import { getTokenData, readImageData } from './api.js';
 import { ABI, alchemy, IMAGE_WIDTH, GIF_DURATION } from '../config/setup.js';
 
 import type { BigNumberish } from 'ethers';
-import type { SwapData, TokenData } from '../types';
+import type { Swap, TokenData } from '../types';
 import type { AlchemyProvider, NftTokenType } from 'alchemy-sdk';
 
 const resizeImage = async (image: string) => {
@@ -107,7 +107,7 @@ const createGif = async (
     return gifImage;
 };
 
-const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker: string) => {
+const createSwapGif = async (swap: Swap) => {
     console.log('Creating Swap GIF...');
     let dynamicHeight;
     const frames = [];
@@ -117,14 +117,16 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
 
     frames.push({ src: buffer, duration: GIF_DURATION });
 
-    for (const address of [addressMaker, addressTaker]) {
+    let participant: keyof typeof swap;
+
+    for (participant in swap) {
         let image = new Jimp(IMAGE_WIDTH, IMAGE_WIDTH, 'white');
-        image = await addTextToImage(image, swap[address].name ?? 'NoName', 0, -25, true);
-        const buffer = await addTextToImage(image, 'Received:', 0, 25);
+        image = await addTextToImage(image, swap[participant].name ?? 'NoName', 0, -25, true);
+        const buffer = await addTextToImage(image, 'Offer:', 0, 25);
 
         frames.push({ src: buffer, duration: GIF_DURATION });
 
-        for (const asset of swap[address].receivedAssets) {
+        for (const asset of swap[participant].spentAssets) {
             const symbol = await getSymbolName(asset.contractAddress, provider);
             const tokenData = await getTokenData(
                 asset.contractAddress,
@@ -144,12 +146,17 @@ const createSwapGif = async (swap: SwapData, addressMaker: string, addressTaker:
             frames.push({ src: buffer, duration: GIF_DURATION });
             asset.name = tokenData.name || `${symbol} #${String(asset.tokenId).padStart(4, '0')}`;
         }
-        if (parseFloat(swap[address].receivedAmount ?? '0') > 0) {
+        if (parseFloat(swap[participant].spentAmount ?? '0') > 0) {
             const image = new Jimp(IMAGE_WIDTH, IMAGE_WIDTH, 'white');
-            const buffer = await addTextToImage(image, `${swap[address].receivedAmount} ETH`, 0, 0);
+            const buffer = await addTextToImage(
+                image,
+                `${swap[participant].spentAmount} ETH`,
+                0,
+                0
+            );
 
             frames.push({ src: buffer, duration: GIF_DURATION });
-        } else if (!swap[address].receivedAssets) {
+        } else if (!swap[participant].spentAssets.length) {
             const image = new Jimp(IMAGE_WIDTH, IMAGE_WIDTH, 'white');
             const buffer = await addTextToImage(image, 'Nothing 🫡', 0, 0);
 
