@@ -9,8 +9,6 @@ const parseBlur = (tx: TransactionData, logMarket: Market, decodedLogData: BlurO
     tx.totalPrice += price;
     tx.marketList.push(logMarket);
     tx.prices.push(formatPrice(price));
-
-    return [price, false];
 };
 
 export { parseBlur };
