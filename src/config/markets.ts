@@ -11,8 +11,8 @@ const markets: { [key: string]: Market } = {
         iconURL: 'https://pbs.twimg.com/profile_images/1542272594686054401/vOi42ixp_400x400.jpg',
         logDecoder: []
     },
-    // NFT Trader BatchSwap Address
-    '0x657e383edb9a7407e468acbcc9fe4c9730c7c275': {
+    // NFT Trader Gnosis Safe Address
+    '0x83db44123e76503203fdf83d2be58be60c15b894': {
         name: 'nft-trader',
         displayName: 'NFT Trader 🔄',
         color: '#dbff00',
