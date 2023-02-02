@@ -154,6 +154,8 @@ export type Recipient =
     | 'sudoswap'
     | 'blur'
     | 'blurSwap'
+    | 'dooplicator'
+    | 'dooplicator-marketplace'
     | 'unknown';
 
 export type TransactionData = {
@@ -185,4 +187,26 @@ export type TransactionData = {
     ethUsdValue?: string;
     transactionHash: string;
     seaportIdentifiers: string[];
+};
+
+export type DoopData = {
+    recipient: Recipient;
+    totalPrice: number;
+    tokenId: string;
+    dooplicatorId: string;
+    dooplicatorVault: string | undefined;
+    tokenContract: string;
+    tokenVault: string | undefined;
+    addressOnTheOtherSide: string;
+    contractName: string | undefined;
+    currency: { name: string; decimals: number };
+    contractAddress: string;
+    to?: string;
+    from?: string;
+    toAddr?: string;
+    fromAddr?: string;
+    tokenName?: string;
+    usdPrice?: string | null;
+    ethUsdValue?: string;
+    transactionHash: string;
 };
