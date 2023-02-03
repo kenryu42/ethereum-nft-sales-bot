@@ -12,8 +12,9 @@ async function parseDoopTransaction(transactionHash: string, contractAddress: st
     const receipt = await alchemy.core.getTransactionReceipt(transactionHash);
 
     const recipient = receipt ? receipt.to.toLowerCase() : '';
+    const initiator = receipt ? receipt.from.toLowerCase() : '';
 
-    const tx = initializeDoopData(transactionHash, recipient, contractAddress);
+    const tx = initializeDoopData(transactionHash, recipient, contractAddress, initiator);
 
     if (!receipt || !(recipient in doops)) {
         return null;
@@ -34,9 +35,15 @@ async function parseDoopTransaction(transactionHash: string, contractAddress: st
             if (parseResult === null) return null;
         }
     }
+    if (tx.fromAddr) tx.from = await getReadableName(tx.fromAddr);
 
     tx.tokenData = await getTokenData(tx.tokenAddress, tx.tokenId, NftTokenType.ERC721);
     tx.dooplicatorData = await getTokenData(tx.dooplicatorAddress, tx.dooplicatorId, NftTokenType.ERC721);
+    tx.usdPrice =
+        tx.currency.name === 'ETH' || tx.currency.name === 'WETH'
+            ? await getEthUsdPrice(tx.totalPrice)
+            : null;
+    tx.ethUsdValue = tx.usdPrice ? `($ ${tx.usdPrice})` : '';
 
     return tx;
 }

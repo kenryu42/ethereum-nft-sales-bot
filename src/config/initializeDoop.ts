@@ -4,10 +4,12 @@ import type { DoopData } from '../types';
 export const initializeDoopData = (
     transactionHash: string,
     recipient: string,
-    contractAddress: string
+    contractAddress: string,
+    initiator: string
 ) => {
     const tx: DoopData = {
         recipient: doops[recipient].name,
+        fromAddr: initiator,
         totalPrice: 0,
         tokenId: '',
         tokenAddress: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e',

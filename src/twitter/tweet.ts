@@ -129,19 +129,18 @@ const tweetDoop = async (tx: DoopData) => {
     let imageBuffer;
     let tweetContent;
     
-    const { tokenId, dooplicatorId, totalPrice, addressOnTheOtherSide, buyerAddress, tokenData, dooplicatorData } = tx;
     const isMarketplace = tx.recipient === 'dooplicator-marketplace';
 
     if (!client || !rwClient) {
         return;
     }
 
-    if (tokenData && tokenData.image) {
-        const buffer = await axios.get(tokenData.image, { responseType: 'arraybuffer' });
+    if (tx.tokenData && tx.tokenData.image) {
+        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
         imageBuffer = buffer.data;
         // if image size exceeds 5MB, resize it
         if (imageBuffer.length > 5242880) {
-            imageBuffer = await resizeImage(tokenData.image);
+            imageBuffer = await resizeImage(tx.tokenData.image);
         }
     }
     
@@ -150,17 +149,24 @@ const tweetDoop = async (tx: DoopData) => {
     });
 
     if (isMarketplace) {
-        tweetContent = `Doodle #${tokenId} sold it's dooplication rights to ${buyerAddress} for ${totalPrice} ETH and then doop'd with ${dooplicatorData?.attributes[1].value + ' '}Dooplicator #${dooplicatorId}	
+        let bigBuy = '';
+        if (tx.totalPrice > 1.99) bigBuy = '🔥🌈 Big Buy 🌈🔥!'
+        tweetContent = `Doodle #${tx.tokenId} Dooplication rights sold for ${tx.totalPrice} ETH ${tx.ethUsdValue}!
+        ${bigBuy}
+        Then doop'd with ${tx.dooplicatorData?.attributes[1].value + ' '}Dooplicator #${tx.dooplicatorId}	
+        Congrats ${tx.from}!
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
-        💻 https://ongaia.com/account/${addressOnTheOtherSide}
-        🌈 https://doodles.app/dooplicator/result/${tokenId}`;
+        💻 https://ongaia.com/account/${tx.addressOnTheOtherSide}
+        🌈 https://doodles.app/dooplicator/result/${tx.tokenId}`;
     } else {
-        tweetContent = `Doodle #${tokenId} was just dooplicated with ${dooplicatorData?.attributes[1].value + ' '}Dooplicator #${dooplicatorId}	
+        tweetContent = `Doodle #${tx.tokenId} was just Dooplicated!
+
+        ${tx.from} used ${tx.dooplicatorData?.attributes[1].value + ' '}Dooplicator #${tx.dooplicatorId}	
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
-        💻 https://ongaia.com/account/${addressOnTheOtherSide}
-        🌈 https://doodles.app/dooplicator/result/${tokenId}`;
+        💻 https://ongaia.com/account/${tx.addressOnTheOtherSide}
+        🌈 https://doodles.app/dooplicator/result/${tx.tokenId}`;
     }
 
     try {
