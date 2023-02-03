@@ -7,7 +7,7 @@ const runDoopApp = async (transactionHash: string, contractAddress: string) => {
     const txData = await parseDoopTransaction(transactionHash, contractAddress);
 
     if (txData) {
-        const { tokenId, dooplicatorId, totalPrice, addressOnTheOtherSide, buyerAddress } = txData;
+        const { tokenId, dooplicatorId, totalPrice, addressOnTheOtherSide, buyerAddress, tokenData } = txData;
         if (buyerAddress) {
             console.log(
                 `Doodle #${tokenId} sold it's dooplication rights to ${buyerAddress} for ${totalPrice} ETH`

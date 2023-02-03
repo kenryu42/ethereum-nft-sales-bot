@@ -80,7 +80,8 @@ const retryOnOpenseaNftApi = async (
 
             return {
                 name: _.get(data, 'name'),
-                image: _.get(data, 'image_url')
+                image: _.get(data, 'image_url'),
+                attributes: null // TODO
             };
         },
         {
@@ -132,7 +133,8 @@ const retryOnGetNFTMetadata = async (
 
             return {
                 name: _.get(response, 'title'),
-                image: _.get(response, 'media[0].gateway')
+                image: _.get(response, 'media[0].gateway'),
+                attributes: _.get(response, 'rawMetadata.attributes')
             };
         },
         {

@@ -28,7 +28,6 @@ export async function parseDooplicate(tx: DoopData) {
         tx.addressOnTheOtherSide = args['addressOnTheOtherSide'];
     } else if (functionName === 'dooplicateItem') {
         console.log('dooplicateItem already occurred from marketplace');
-        return null;
     } else {
         console.log(functionName);
         return null;

@@ -18,6 +18,12 @@ export type ContractData = {
 export type TokenData = {
     name: string | null;
     image: string | null;
+    attributes: AttributeData[] | null;
+};
+
+type AttributeData = {
+    trait_type?: string;
+    value: string;
 };
 
 type SwapTokenData = {
@@ -192,11 +198,14 @@ export type TransactionData = {
 export type DoopData = {
     recipient: Recipient;
     totalPrice: number;
+    tokenData?: TokenData;
     tokenId: string;
     dooplicatorId: string;
+    dooplicatorAddress: string;
+    dooplicatorData?: TokenData;
     dooplicatorVault: string | undefined;
     tokenContract?: string;
-    tokenAddress?: string;
+    tokenAddress: string;
     dooplicationAddress?: string;
     tokenVault: string | undefined;
     addressOnTheOtherSide: string;

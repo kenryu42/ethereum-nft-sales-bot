@@ -96,9 +96,9 @@ async function doop(contractAddress: string, test = false) {
         if (CONTRACT_ADDRESSES) {
             const contractAddresses = JSON.parse(CONTRACT_ADDRESSES);
             console.log(contractAddresses);
-            for (const contractAddress of contractAddresses) {
-                await main(contractAddress);
-            }
+            // for (const contractAddress of contractAddresses) {
+            //     await main(contractAddress);
+            // }
         }
         if (DOOP_ADDRESSES) {
             const contractAddresses = JSON.parse(DOOP_ADDRESSES);

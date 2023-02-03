@@ -125,23 +125,38 @@ ${field}
 };
 
 const tweetDoop = async (tx: DoopData) => {
+    let imageType = EUploadMimeType.Png;
+    let imageBuffer;
     let tweetContent;
-    const { tokenId, dooplicatorId, totalPrice, addressOnTheOtherSide, buyerAddress } = tx;
+    
+    const { tokenId, dooplicatorId, totalPrice, addressOnTheOtherSide, buyerAddress, tokenData, dooplicatorData } = tx;
     const isMarketplace = tx.recipient === 'dooplicator-marketplace';
 
     if (!client || !rwClient) {
         return;
     }
 
+    if (tokenData && tokenData.image) {
+        const buffer = await axios.get(tokenData.image, { responseType: 'arraybuffer' });
+        imageBuffer = buffer.data;
+        // if image size exceeds 5MB, resize it
+        if (imageBuffer.length > 5242880) {
+            imageBuffer = await resizeImage(tokenData.image);
+        }
+    }
+    
+    const mediaId = await client.v1.uploadMedia(imageBuffer, {
+        mimeType: imageType
+    });
+
     if (isMarketplace) {
-        tweetContent = `Doodle #${tokenId} sold it's dooplication rights to ${buyerAddress} \
-        for ${totalPrice} ETH and then doop'd with Dooplicator #${dooplicatorId}	
+        tweetContent = `Doodle #${tokenId} sold it's dooplication rights to ${buyerAddress} for ${totalPrice} ETH and then doop'd with ${dooplicatorData?.attributes[1].value + ' '}Dooplicator #${dooplicatorId}	
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
         💻 https://ongaia.com/account/${addressOnTheOtherSide}
         🌈 https://doodles.app/dooplicator/result/${tokenId}`;
     } else {
-        tweetContent = `Doodle #${tokenId} was just dooplicated with Dooplicator #${dooplicatorId}	
+        tweetContent = `Doodle #${tokenId} was just dooplicated with ${dooplicatorData?.attributes[1].value + ' '}Dooplicator #${dooplicatorId}	
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
         💻 https://ongaia.com/account/${addressOnTheOtherSide}
@@ -149,7 +164,7 @@ const tweetDoop = async (tx: DoopData) => {
     }
 
     try {
-        await rwClient.v1.tweet(tweetContent);
+        await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
     } catch (error) {
         console.log(error);
     }

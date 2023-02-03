@@ -1,9 +1,12 @@
+import { formatPrice, getTokenData, getReadableName, getEthUsdPrice } from '../utils/api.js';
 import _ from 'lodash';
 import { doops } from '../config/doops.js';
 import { parseDooplicate } from './parseDooplicate.js';
 import { parseDoopMarket } from './parseDoopMarket.js';
 import { initializeDoopData } from '../config/initializeDoop.js';
 import { alchemy } from '../config/setup.js';
+import { NftTokenType } from 'alchemy-sdk';
+
 
 async function parseDoopTransaction(transactionHash: string, contractAddress: string) {
     const receipt = await alchemy.core.getTransactionReceipt(transactionHash);
@@ -31,6 +34,9 @@ async function parseDoopTransaction(transactionHash: string, contractAddress: st
             if (parseResult === null) return null;
         }
     }
+
+    tx.tokenData = await getTokenData(tx.tokenAddress, tx.tokenId, NftTokenType.ERC721);
+    tx.dooplicatorData = await getTokenData(tx.dooplicatorAddress, tx.dooplicatorId, NftTokenType.ERC721);
 
     return tx;
 }
