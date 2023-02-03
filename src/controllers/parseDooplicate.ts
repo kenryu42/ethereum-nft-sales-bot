@@ -1,13 +1,20 @@
 import { ethers } from 'ethers';
 import type { DoopData } from '../types';
-import { alchemy, DOOP_ABI } from '../config/setup.js';
+import { alchemy, DOOP_ABI, DOOPPROXY_ABI } from '../config/setup.js';
 
 export async function parseDooplicate(tx: DoopData) {
     const transaction = await alchemy.core.getTransaction(tx.transactionHash ?? '');
     if (!transaction) return;
 
-    const iface = new ethers.utils.Interface(DOOP_ABI);
-    const parsedTxn = iface.parseTransaction(transaction);
+    let parsedTxn = {};
+
+    try {
+        const iface = new ethers.utils.Interface(DOOP_ABI);
+        parsedTxn = iface.parseTransaction(transaction);
+    } catch (error) {
+        const iface = new ethers.utils.Interface(DOOPPROXY_ABI);
+        parsedTxn = iface.parseTransaction(transaction);
+    }
     const functionName = parsedTxn.functionFragment.name;
 
     if (functionName === 'dooplicate') {
@@ -19,9 +26,11 @@ export async function parseDooplicate(tx: DoopData) {
         tx.tokenContract = args['tokenContract'];
         tx.tokenVault = args['tokenVault'];
         tx.addressOnTheOtherSide = args['addressOnTheOtherSide'];
+    } else if (functionName === 'dooplicateItem') {
+        console.log('dooplicateItem already occurred from marketplace');
+        return null;
     } else {
         console.log(functionName);
-
         return null;
     }
 }

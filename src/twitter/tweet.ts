@@ -12,7 +12,7 @@ import {
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET
 } from '../config/setup.js';
-import type { TransactionData } from '../types';
+import type { DoopData, TransactionData } from '../types';
 
 const client = TWITTER_ENABLED
     ? new TwitterApi({
@@ -124,4 +124,35 @@ ${field}
     }
 };
 
-export { tweet };
+const tweetDoop = async (tx: DoopData) => {
+    let tweetContent;
+    const { tokenId, dooplicatorId, totalPrice, addressOnTheOtherSide, buyerAddress } = tx;
+    const isMarketplace = tx.recipient === 'dooplicator-marketplace';
+
+    if (!client || !rwClient) {
+        return;
+    }
+
+    if (isMarketplace) {
+        tweetContent = `Doodle #${tokenId} sold it's dooplication rights to ${buyerAddress} \
+        for ${totalPrice} ETH and then doop'd with Dooplicator #${dooplicatorId}	
+		
+        🔍 https://etherscan.io/tx/${tx.transactionHash}
+        💻 https://ongaia.com/account/${addressOnTheOtherSide}
+        🌈 https://doodles.app/dooplicator/result/${tokenId}`;
+    } else {
+        tweetContent = `Doodle #${tokenId} was just dooplicated with Dooplicator #${dooplicatorId}	
+		
+        🔍 https://etherscan.io/tx/${tx.transactionHash}
+        💻 https://ongaia.com/account/${addressOnTheOtherSide}
+        🌈 https://doodles.app/dooplicator/result/${tokenId}`;
+    }
+
+    try {
+        await rwClient.v1.tweet(tweetContent);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export { tweet, tweetDoop };

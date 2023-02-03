@@ -3,6 +3,7 @@ import ABI from '../abi/transferEvent.json' assert { type: 'json' };
 import SUDOSWAP_ABI from '../abi/sudoSwap.json' assert { type: 'json' };
 import DOOP_ABI from '../abi/dooplicationContract.json' assert { type: 'json' };
 import DOOPMARKET_ABI from '../abi/dooplicationMarketplaceContract.json' assert { type: 'json' };
+import DOOPPROXY_ABI from '../abi/dooplicationMarketplaceProxyContract.json' assert { type: 'json' };
 import { Network, Alchemy } from 'alchemy-sdk';
 
 // Required settings
@@ -84,6 +85,7 @@ export {
     SUDOSWAP_ABI,
     DOOP_ABI,
     DOOPMARKET_ABI,
+    DOOPPROXY_ABI,
     alchemy,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,

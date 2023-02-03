@@ -1,32 +1,39 @@
 import { parseDoopTransaction } from './parseDoopTransaction.js';
-import { handleEmbedMessage } from '../discord/embed.js';
-import { tweet } from '../twitter/tweet.js';
+import { handleDoopEmbedMessage } from '../discord/embed.js';
+import { tweetDoop } from '../twitter/tweet.js';
 import { DISCORD_ENABLED, TWITTER_ENABLED } from '../config/setup.js';
-import type { ContractData } from '../types';
 
 const runDoopApp = async (transactionHash: string, contractAddress: string) => {
     const txData = await parseDoopTransaction(transactionHash, contractAddress);
 
     if (txData) {
-        console.log(
-            `${quantity} ${contractName || tokenName} sold on ${
-                market.displayName
-            } for ${totalPrice} ${currency.name}`
-        );
+        const { tokenId, dooplicatorId, totalPrice, addressOnTheOtherSide, buyerAddress } = txData;
+        if (buyerAddress) {
+            console.log(
+                `Doodle #${tokenId} sold it's dooplication rights to ${buyerAddress} for ${totalPrice} ETH`
+            );
+        } else {
+            console.log(
+                `Doodle #${tokenId} was just dooplicated with Dooplicator #${dooplicatorId}`
+            );
+        }
+
+        console.log(`https://doodles.app/dooplicator/result/${tokenId}\n`);
+        console.log(`https://ongaia.com/account/${addressOnTheOtherSide}\n`);
         console.log(`https://etherscan.io/tx/${transactionHash}\n`);
     }
 
     if (DISCORD_ENABLED && TWITTER_ENABLED && txData) {
         console.log('Sending to Discord...');
-        const tweetConfig = await handleEmbedMessage(txData);
+        const tweetConfig = await handleDoopEmbedMessage(txData);
         console.log('Tweeting...');
-        await tweet(tweetConfig);
+        await tweetDoop(tweetConfig);
     } else if (DISCORD_ENABLED && txData) {
         console.log('Sending to Discord...');
-        await handleEmbedMessage(txData);
+        await handleDoopEmbedMessage(txData);
     } else if (TWITTER_ENABLED && txData) {
         console.log('Tweeting...');
-        await tweet(txData);
+        await tweetDoop(txData);
     }
 };
 

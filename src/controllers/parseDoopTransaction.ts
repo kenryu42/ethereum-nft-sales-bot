@@ -7,8 +7,9 @@ import { alchemy } from '../config/setup.js';
 
 async function parseDoopTransaction(transactionHash: string, contractAddress: string) {
     const receipt = await alchemy.core.getTransactionReceipt(transactionHash);
+
     const recipient = receipt ? receipt.to.toLowerCase() : '';
-    console.log(recipient);
+
     const tx = initializeDoopData(transactionHash, recipient, contractAddress);
 
     if (!receipt || !(recipient in doops)) {
@@ -21,7 +22,7 @@ async function parseDoopTransaction(transactionHash: string, contractAddress: st
 
         if (logDoop.name === 'dooplicator') {
             const parseResult = await parseDooplicate(tx);
-            console.log(tx);
+
             if (parseResult === null) return null;
         }
         if (logDoop.name === 'dooplicator-marketplace') {

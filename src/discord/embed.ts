@@ -5,7 +5,7 @@ import { formatSweepField, formatSwapField } from './formatField.js';
 import { MessageEmbed, WebhookClient, MessageAttachment } from 'discord.js';
 import { createGif, createTextImage, createSwapGif } from '../utils/image.js';
 
-import type { TransactionData } from '../types';
+import type { DoopData, TransactionData } from '../types';
 
 const handleSWapField = async (tx: TransactionData, embed: MessageEmbed) => {
     const gifImage = await createSwapGif(tx.swap);
@@ -164,4 +164,23 @@ const handleEmbedMessage = async (tx: TransactionData) => {
     return tx;
 };
 
-export { handleEmbedMessage };
+const handleDoopEmbedMessage = async (tx: DoopData) => {
+    const embed = new MessageEmbed();
+    const isMarketplace = tx.recipient === 'dooplicator-marketplace';
+
+    // if (isSwap) {
+    //     const attachmentFile = await handleSWapField(tx, embed);
+
+    //     sendEmbedMessage(WEBHOOK_URLS, embed, attachmentFile);
+    // } else if (tx.tokenData && tx.tokenData.image) {
+    //     const attachmentFile = await handleImageField(tx, embed);
+
+    //     handleBasicField(tx, embed, isAggregator);
+    //     handleAdvancedField(tx, embed, isAggregator);
+    //     sendEmbedMessage(WEBHOOK_URLS, embed, attachmentFile);
+    // }
+
+    return tx;
+};
+
+export { handleEmbedMessage, handleDoopEmbedMessage };

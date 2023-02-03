@@ -1,28 +1,26 @@
 import { ethers } from 'ethers';
 import type { DoopData } from '../types';
-import { alchemy, DOOPMARKET_ABI } from '../config/setup.js';
+import { alchemy, DOOPMARKET_ABI, DOOPPROXY_ABI } from '../config/setup.js';
 
 export async function parseDoopMarket(tx: DoopData) {
     const transaction = await alchemy.core.getTransaction(tx.transactionHash ?? '');
     if (!transaction) return;
 
-    const iface = new ethers.utils.Interface(DOOPMARKET_ABI);
+    const iface = new ethers.utils.Interface(DOOPPROXY_ABI);
     const parsedTxn = iface.parseTransaction(transaction);
     const functionName = parsedTxn.functionFragment.name;
 
-    if (functionName === 'ItemDooplicated') {
+    if (functionName === 'dooplicateItem') {
         const args = parsedTxn.args;
-        console.log('parsedDoopMarket, ', args);
-        tx.totalPrice = Number(ethers.utils.formatEther(transaction.value.toString()));
+        (tx.buyerAddress = transaction.from),
+            (tx.totalPrice = Number(ethers.utils.formatEther(transaction.value.toString())));
         tx.dooplicatorId = ethers.BigNumber.from(args['dooplicatorId']).toString();
-        tx.dooplicatorVault = args['dooplicatorVault'];
         tx.tokenId = ethers.BigNumber.from(args['tokenId']).toString();
-        tx.tokenContract = args['tokenContract'];
-        tx.tokenVault = args['tokenVault'];
+        tx.tokenAddress = args['tokenAddress']; // asset or ie. Doodles contract address
+        tx.dooplicationAddress = args['dooplicationAddress']; // dooplication contract address
         tx.addressOnTheOtherSide = args['addressOnTheOtherSide'];
     } else {
         console.log(functionName);
-
         return null;
     }
 }

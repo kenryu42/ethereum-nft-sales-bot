@@ -195,12 +195,15 @@ export type DoopData = {
     tokenId: string;
     dooplicatorId: string;
     dooplicatorVault: string | undefined;
-    tokenContract: string;
+    tokenContract?: string;
+    tokenAddress?: string;
+    dooplicationAddress?: string;
     tokenVault: string | undefined;
     addressOnTheOtherSide: string;
     contractName: string | undefined;
     currency: { name: string; decimals: number };
     contractAddress: string;
+    buyerAddress?: string;
     to?: string;
     from?: string;
     toAddr?: string;
