@@ -153,7 +153,7 @@ const tweetDoop = async (tx: DoopData) => {
         if (tx.totalPrice > 1.99) bigBuy = '🔥🌈 Big Buy 🌈🔥!'
         tweetContent = `Doodle #${tx.tokenId} Dooplication rights sold for ${tx.totalPrice} ETH ${tx.ethUsdValue}!
         ${bigBuy}
-        Then doop'd with ${tx.dooplicatorData?.attributes[1].value + ' '}Dooplicator #${tx.dooplicatorId}	
+        Then doop'd with ${tx.dooplicatorData.attributes ? tx.dooplicatorData.attributes[1]?.value + ' ' : ''}Dooplicator #${tx.dooplicatorId}	
         Congrats ${tx.from}!
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
@@ -162,7 +162,7 @@ const tweetDoop = async (tx: DoopData) => {
     } else {
         tweetContent = `Doodle #${tx.tokenId} was just Dooplicated!
 
-        ${tx.from} used ${tx.dooplicatorData?.attributes[1].value + ' '}Dooplicator #${tx.dooplicatorId}	
+        ${tx.from} used ${tx.dooplicatorData.attributes ? tx.dooplicatorData.attributes[1]?.value + ' ' : ''}Dooplicator #${tx.dooplicatorId}	
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
         💻 https://ongaia.com/account/${tx.addressOnTheOtherSide}

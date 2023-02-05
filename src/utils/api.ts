@@ -80,8 +80,7 @@ const retryOnOpenseaNftApi = async (
 
             return {
                 name: _.get(data, 'name'),
-                image: _.get(data, 'image_url'),
-                attributes: null // TODO
+                image: _.get(data, 'image_url')
             };
         },
         {

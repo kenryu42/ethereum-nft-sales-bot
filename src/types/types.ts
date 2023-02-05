@@ -18,7 +18,7 @@ export type ContractData = {
 export type TokenData = {
     name: string | null;
     image: string | null;
-    attributes: AttributeData[] | null;
+    attributes?: AttributeData[];
 };
 
 type AttributeData = {
@@ -202,7 +202,7 @@ export type DoopData = {
     tokenId: string;
     dooplicatorId: string;
     dooplicatorAddress: string;
-    dooplicatorData?: TokenData;
+    dooplicatorData: TokenData;
     dooplicatorVault: string | undefined;
     tokenContract?: string;
     tokenAddress: string;

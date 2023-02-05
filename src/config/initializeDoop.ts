@@ -16,6 +16,11 @@ export const initializeDoopData = (
         dooplicatorId: '',
         dooplicatorVault: '',
         dooplicatorAddress: '0x466cfcd0525189b573e794f554b8a751279213ac',
+        dooplicatorData: {
+            name: '',
+            image: '',
+            attributes: []
+        },
         tokenContract: '',
         tokenVault: '',
         addressOnTheOtherSide: '',
