@@ -1,6 +1,6 @@
 # Contribution guide
 
-## Developing Ethereum NFT Sales Bot
+## Developing ENFT
 
 Please consider these guidelines when filing a pull request:
 
