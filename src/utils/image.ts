@@ -1,216 +1,367 @@
 import axios from 'axios';
 import sharp from 'sharp';
-import sizeOf from 'image-size';
-import Jimp from 'jimp-compact';
-import { ethers } from 'ethers';
-import { Gif } from 'make-a-gif';
-import { getTokenData, readImageData } from './api.js';
-import { ABI, alchemy, IMAGE_WIDTH, GIF_DURATION } from '../config/setup.js';
+import retry from 'async-retry';
+import pkg from 'gifenc';
+import { getNftMetadata } from '../api/api.js';
+import { getSymbolName } from '../utils/helper.js';
+import { Logger, log } from '../Logger/index.js';
 
-import type { BigNumberish } from 'ethers';
-import type { Swap, TokenData } from '../types';
-import type { AlchemyProvider, NftTokenType } from 'alchemy-sdk';
+import type { Swap } from '../types/contracts/swap.contract';
+import type { Config } from '../types/interfaces/enft.interface';
+import type { TokenData } from '../types/contracts/token.contract.js';
 
-const resizeImage = async (image: string) => {
-    const resizedImage = await readImageData(image);
-    resizedImage.resize(IMAGE_WIDTH, Jimp.AUTO);
-    const buffer = await resizedImage.getBufferAsync(Jimp.MIME_PNG);
+interface GifConfig {
+    gif: pkg.Encoder;
+    imageBuffer: Buffer | Uint8Array;
+}
 
-    return buffer;
-};
+const API_CALL_LIMIT = 10;
+const IMAGE_WIDTH = 512;
+const { GIFEncoder, quantize, applyPalette } = pkg;
 
-const generateDynamicHeight = (buffer: string | Buffer) => {
-    const dimensions = sizeOf(buffer);
-    const imageWidth = dimensions.width ?? 1;
-    const imageHeight = dimensions.height ?? 0;
+/**
+ *
+ * A function that parses and returns sharp instance image.
+ *
+ * @async
+ * @function
+ * @param {string} image - The image url or raw data to be parsed.
+ * @returns {Promise<sharp.Sharp>} A sharp object containing the parsed image.
+ **/
+const parseImage = async (image: string): Promise<sharp.Sharp> => {
+    const isBase64Image = image.startsWith('data:image/svg+xml;base64,');
 
-    return Math.round((imageHeight / imageWidth) * IMAGE_WIDTH);
-};
+    if (isBase64Image) {
+        const svgImage = image.replace('data:image/svg+xml;base64,', '');
+        const buffer = Buffer.from(svgImage, 'base64');
 
-const parseImage = async (tokenData: TokenData) => {
-    let imageData;
-    const endsWithSvg = tokenData.image ? tokenData.image.endsWith('.svg') : false;
-    const startsWithSvg = tokenData.image
-        ? tokenData.image.startsWith('data:image/svg+xml;base64,')
-        : false;
-
-    if (endsWithSvg) {
-        const response = await axios.get(tokenData.image ?? '', {
-            responseType: 'arraybuffer'
-        });
-        const buffer = await sharp(response.data).png().toBuffer();
-
-        imageData = buffer;
-    } else if (startsWithSvg) {
-        const base64Image = (tokenData.image ?? '').replace('data:image/svg+xml;base64,', '');
-        const buffer = Buffer.from(base64Image, 'base64');
-
-        imageData = await sharp(buffer).png().toBuffer();
+        return sharp(buffer);
     } else {
-        imageData = tokenData.image;
-    }
+        const arrayBuffer = await getArrayBuffer(image);
 
-    return imageData;
-};
-
-const getSymbolName = async (contractAddress: string, provider: AlchemyProvider) => {
-    const contract = new ethers.Contract(contractAddress, ABI, provider);
-
-    try {
-        return await contract.symbol();
-    } catch {
-        return '';
+        return sharp(arrayBuffer, { animated: true });
     }
 };
 
-const createGif = async (
-    tokens: BigNumberish[],
-    contractAddress: string,
-    tokenType: NftTokenType
-) => {
-    console.log('Creating GIF...');
-    const frames = [];
-    let dynamicHeight = 0;
+/**
+ *
+ * Creates a GIF from an Object of tokens.
+ *
+ * @async
+ * @function
+ * @param {TokenData} tokens - An object containing token data.
+ * @returns {Promise<Buffer>} A buffer object that contains the finalize GIF.
+ **/
+const createGif = async (tokens: {
+    [key: string]: TokenData;
+}): Promise<Buffer> => {
+    let i = 0;
+    const gif = GIFEncoder();
 
-    for (let i = 0; i < tokens.length; i++) {
-        const tokenData = await getTokenData(contractAddress, tokens[i], tokenType);
-        const imageData = await parseImage(tokenData);
-        const image = !imageData
-            ? await createTextImage('Content not available yet')
-            : await readImageData(imageData);
+    for (const tokenId in tokens) {
+        const token = tokens[tokenId];
+        const sharpImage = await parseImage(token.image);
+        const addedTokenIdBuffer = await addTokenIdToImage(sharpImage, tokenId);
 
-        image.resize(IMAGE_WIDTH, Jimp.AUTO);
-        const idText = `# ${String(tokens[i]).padStart(4, '0')}`;
-        const buffer = await addTextToImage(image, idText, -20, 20, false, true);
+        await writeSingleGifFrame({
+            gif: gif,
+            imageBuffer: addedTokenIdBuffer
+        });
 
-        if (!dynamicHeight) {
-            dynamicHeight = generateDynamicHeight(buffer);
-        }
-        frames.push({ src: buffer, duration: GIF_DURATION });
+        if (++i >= API_CALL_LIMIT) {
+            const textBuffer = await createTextImage('And more ...');
 
-        if (i === 9 && tokens.length > 10) {
-            const textImage = await createTextImage('And more ...');
-
-            textImage.resize(IMAGE_WIDTH, Jimp.AUTO);
-            const buffer = await textImage.getBufferAsync(Jimp.MIME_PNG);
-            frames.push({ src: buffer, duration: GIF_DURATION });
+            await writeSingleGifFrame({
+                gif: gif,
+                imageBuffer: textBuffer
+            });
             break;
         }
     }
 
-    const myGif = new Gif(IMAGE_WIDTH, dynamicHeight, 100);
-    await myGif.setFrames(frames);
-
-    const gifImage = await myGif.encode();
-    console.log('GIF created.');
+    const gifImage = await gifToBuffer(gif);
 
     return gifImage;
 };
 
-const createSwapGif = async (swap: Swap) => {
-    console.log('Creating Swap GIF...');
-    let dynamicHeight;
-    const frames = [];
-    const image = await readImageData('https://i.postimg.cc/qB8cqcM8/nft-trader-logo-black.png');
-    const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
-    const provider = await alchemy.config.getProvider();
+/**
+ *
+ * Writes a single frame to an animated GIF.
+ *
+ * @async
+ * @function
+ * @param {GifConfig} cfg - The configuration object that contains the image buffer and instance of GifEncoder
+ * @param {pkg.Encoder} cfg.gif - Instance of GifEncoder.
+ * @param {Buffer | Uint8Array} cfg.imageBuffer - The image buffer to be written to the GIF.
+ **/
+const writeSingleGifFrame = async (cfg: GifConfig): Promise<void> => {
+    const { width, height } = await sharp(cfg.imageBuffer).metadata();
 
-    frames.push({ src: buffer, duration: GIF_DURATION });
+    if (!width || !height) {
+        throw log.throwError(
+            'Image width or height is not defined',
+            Logger.code.IMAGE_ERROR,
+            {
+                location: Logger.location.IMAGE_PREPARE_GIF_ENCODING_DATA
+            }
+        );
+    }
+
+    const { buffer } = await sharp(cfg.imageBuffer)
+        .ensureAlpha()
+        .raw()
+        .toBuffer();
+    const data = new Uint8ClampedArray(buffer);
+    const palette = quantize(data, 256);
+    const index = applyPalette(data, palette);
+
+    cfg.gif.writeFrame(index, width, height, {
+        palette: palette
+    });
+};
+
+/**
+ *
+ * Converts a GIFEncoder instance to a Buffer object.
+ *
+ * @async
+ * @function
+ * @param {pkg.Encoder} gif - Instance of GIFEncoder.
+ * @param {number} [duration=1500] - An optional param duration between frames in milliseconds, defaults to 1500.
+ * @returns {Promise<Buffer>} A buffer object that representing the GIF.
+ **/
+const gifToBuffer = async (
+    gif: pkg.Encoder,
+    duration = 1500
+): Promise<Buffer> => {
+    gif.finish();
+
+    const bytes = gif.bytes();
+    const gifImage = await sharp(bytes, { animated: true })
+        .gif({ delay: duration })
+        .toBuffer();
+
+    return gifImage;
+};
+
+/**
+ *
+ * Creates a GIF image with required information of swap objects.
+ *
+ * @async
+ * @function
+ * @param {Swap} swap An object which contains the swap details.
+ * @param {Config} config A configuration object with authentication info.
+ * @returns {Promise<Buffer>} Buffer object that contains the finalized GIF.
+ **/
+const createSwapGif = async (swap: Swap, config: Config): Promise<Buffer> => {
+    const gif = GIFEncoder();
+    const arrayBuffer = await getArrayBuffer(
+        'https://i.postimg.cc/qB8cqcM8/nft-trader-logo-black.png'
+    );
+
+    await writeSingleGifFrame({
+        gif: gif,
+        imageBuffer: arrayBuffer
+    });
 
     let participant: keyof typeof swap;
 
     for (participant in swap) {
-        let image = new Jimp(IMAGE_WIDTH, IMAGE_WIDTH, 'white');
-        image = await addTextToImage(image, swap[participant].name ?? 'NoName', 0, -25, true);
-        const buffer = await addTextToImage(image, 'Offer:', 0, 25);
+        const textImage = await createTextImage(
+            `${swap[participant].name}\rOffer:`
+        );
 
-        frames.push({ src: buffer, duration: GIF_DURATION });
+        await writeSingleGifFrame({ gif: gif, imageBuffer: textImage });
 
         for (const asset of swap[participant].spentAssets) {
-            const symbol = await getSymbolName(asset.contractAddress, provider);
-            const tokenData = await getTokenData(
+            let imageBuffer;
+            const tokenData = await getNftMetadata(
                 asset.contractAddress,
                 asset.tokenId,
-                asset.tokenType
+                config.apiAuth
             );
-            const imageData = await parseImage(tokenData);
-            const image = !imageData
-                ? await createTextImage('Content not available yet')
-                : await readImageData(imageData);
-            const bufferAsync = await image.getBufferAsync(Jimp.MIME_PNG);
-            const quantityText = asset.quantity ?? 0 > 1 ? ` Quantity: ${asset.quantity}` : '';
+            const sharpImage = await parseImage(tokenData.image);
+            const quantityText = asset.amount ?? 0 > 1 ? `${asset.amount}` : '';
 
-            dynamicHeight = generateDynamicHeight(bufferAsync);
-            image.resize(IMAGE_WIDTH, dynamicHeight);
-            const buffer = await addTextToImage(image, quantityText, -20, 20, false, true);
-            frames.push({ src: buffer, duration: GIF_DURATION });
-            asset.name = tokenData.name || `${symbol} #${String(asset.tokenId).padStart(4, '0')}`;
+            asset.image = tokenData.image;
+
+            if (tokenData.name) {
+                asset.name = tokenData.name;
+            } else {
+                const symbol = await getSymbolName(
+                    asset.contractAddress,
+                    config.provider
+                );
+                asset.name = `${symbol} #${String(asset.tokenId).padStart(
+                    4,
+                    '0'
+                )}`;
+            }
+            if (quantityText) {
+                imageBuffer = await addQuantityToImage(
+                    sharpImage,
+                    quantityText
+                );
+            } else {
+                imageBuffer = await sharpImage.png().resize(512).toBuffer();
+            }
+            await writeSingleGifFrame({ gif: gif, imageBuffer: imageBuffer });
         }
-        if (parseFloat(swap[participant].spentAmount ?? '0') > 0) {
-            const image = new Jimp(IMAGE_WIDTH, IMAGE_WIDTH, 'white');
-            const buffer = await addTextToImage(
-                image,
-                `${swap[participant].spentAmount} ETH`,
-                0,
-                0
+        if (swap[participant].spentAmount !== '0') {
+            const imageBuffer = await createTextImage(
+                `${swap[participant].spentAmount} ETH`
             );
 
-            frames.push({ src: buffer, duration: GIF_DURATION });
-        } else if (!swap[participant].spentAssets.length) {
-            const image = new Jimp(IMAGE_WIDTH, IMAGE_WIDTH, 'white');
-            const buffer = await addTextToImage(image, 'Nothing 🫡', 0, 0);
-
-            frames.push({ src: buffer, duration: GIF_DURATION });
+            await writeSingleGifFrame({ gif: gif, imageBuffer: imageBuffer });
         }
     }
 
-    const myGif = new Gif(IMAGE_WIDTH, dynamicHeight ?? IMAGE_WIDTH, 100);
-    await myGif.setFrames(frames);
-    const gifImage = await myGif.encode();
-
-    console.log('Swap GIF created.');
+    const gifImage = await gifToBuffer(gif);
 
     return gifImage;
 };
 
-const addTextToImage = async (
-    image: Jimp,
-    text: string,
-    x: number,
-    y: number,
-    jimp = false,
-    idText = false
-) => {
-    const font = await Jimp.loadFont(idText ? Jimp.FONT_SANS_32_WHITE : Jimp.FONT_SANS_32_BLACK);
-    const textObject = {
-        text: text,
-        alignmentX: idText ? Jimp.HORIZONTAL_ALIGN_RIGHT : Jimp.HORIZONTAL_ALIGN_CENTER,
-        alignmentY: idText ? Jimp.VERTICAL_ALIGN_TOP : Jimp.VERTICAL_ALIGN_MIDDLE
-    };
-    image.print(font, x, y, textObject, IMAGE_WIDTH, IMAGE_WIDTH);
-    if (jimp) return image;
-    const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+/**
+ *
+ * Adds a given token ID to an image.
+ *
+ * @async
+ * @function
+ * @param {sharp.Sharp} image The image to add the given token ID to.
+ * @param {string} tokenId The token ID that should be added to the given image.
+ * @returns {Promise<Buffer>} Buffer object that representing the image with the token ID added.
+ **/
+const addTokenIdToImage = async (
+    image: sharp.Sharp,
+    tokenId: string
+): Promise<Buffer> => {
+    const tokenIdPadding = tokenId.padStart(4, '0');
+    const padding = (tokenIdPadding.length - 4) * 20 + 125;
+    const tokenIdImage = await sharp({
+        text: {
+            text: `<span foreground="#B0C4DE" size="x-large"><b># ${tokenIdPadding}</b></span>`,
+            font: 'sans',
+            rgba: true,
+            dpi: 150
+        }
+    })
+        .png()
+        .toBuffer();
 
-    return buffer;
+    return image
+        .composite([
+            { input: tokenIdImage, top: 20, left: IMAGE_WIDTH - padding }
+        ])
+        .resize(IMAGE_WIDTH)
+        .png()
+        .toBuffer();
 };
 
-const createTextImage = async (text: string, getBuffer = false) => {
-    const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
-    const image = new Jimp(IMAGE_WIDTH, IMAGE_WIDTH, 'white');
-    const naText = {
-        // text: 'Content not available yet',
-        text: text,
-        alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-        alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-    };
-    image.print(font, 0, 0, naText, IMAGE_WIDTH, IMAGE_WIDTH);
-    if (getBuffer) {
-        const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+/**
+ *
+ * Adds a given quantity to an image.
+ *
+ * @async
+ * @function
+ * @param {sharp.Sharp} image The image to add the given quantity to.
+ * @param {string} quantity The quantity that should be added to the given image.
+ * @returns {Promise<Buffer>} A Promise resolving buffer object that representing the image with the quantity added.
+ **/
+const addQuantityToImage = async (
+    image: sharp.Sharp,
+    quantity: string
+): Promise<Buffer> => {
+    const metadata = await image.metadata();
 
-        return buffer;
+    if (!metadata.width) {
+        throw log.throwMissingArgumentError('image.metadata.width', {
+            location: Logger.location.IMAGE_ADD_QUANTITY_TO_IMAGE
+        });
     }
 
-    return image;
+    const tokenIdImage = await sharp({
+        text: {
+            text: `<span foreground="#B0C4DE" size="medium"><b>Amount: ${quantity}</b></span>`,
+            font: 'Roboto',
+            rgba: true,
+            dpi: 150
+        }
+    })
+        .png()
+        .toBuffer();
+    const padding = quantity.toString().length * 20 + 195;
+
+    return image
+        .composite([
+            { input: tokenIdImage, top: 20, left: metadata.width - padding }
+        ])
+        .resize(IMAGE_WIDTH)
+        .png()
+        .toBuffer();
 };
 
-export { createGif, createSwapGif, createTextImage, resizeImage };
+/**
+ *
+ * Creates an image with a text string centered.
+ *
+ * @async
+ * @function
+ * @param {string} text - The text string to be displayed
+ * @returns {Promise<Buffer>} Promise resolving to a buffer of the generated image
+ **/
+const createTextImage = async (text: string) => {
+    const blankImage = sharp({
+        create: {
+            width: IMAGE_WIDTH,
+            height: IMAGE_WIDTH,
+            channels: 4,
+            background: { r: 255, g: 255, b: 255, alpha: 1 }
+        }
+    });
+    const textImage = await sharp({
+        text: {
+            text: `<span foreground="black" size="x-large"><b>${text}</b></span>`,
+            font: 'Roboto',
+            align: 'center',
+            rgba: true,
+            dpi: 150
+        }
+    })
+        .png()
+        .toBuffer();
+
+    return blankImage
+        .composite([{ input: textImage, gravity: 'center' }])
+        .png()
+        .toBuffer();
+};
+
+/**
+ *
+ * Get an array buffer of the specified image URL.
+ *
+ * @async
+ * @function
+ * @param {string} url - The URL from which to fetch the array buffer.
+ * @returns {Promise<Uint8Array>} - An array buffer object of the specified image URL.
+ */
+const getArrayBuffer = async (url: string): Promise<Uint8Array> => {
+    const result = await retry(async () => {
+        const response = await axios.get(url, {
+            responseType: 'arraybuffer'
+        });
+
+        return response.data;
+    });
+
+    return result;
+};
+
+export {
+    parseImage,
+    createGif,
+    createSwapGif,
+    getArrayBuffer,
+    createTextImage
+};

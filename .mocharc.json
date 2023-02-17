@@ -5,5 +5,9 @@
     "extension": ["ts"],
     "timeout": "180000",
     "check-leaks": true,
-    "node-option": ["experimental-specifier-resolution=node", "loader=ts-node/esm", "no-warnings"]
+    "node-option": [
+        "experimental-specifier-resolution=node",
+        "loader=ts-node/esm",
+        "no-warnings"
+    ]
 }
