@@ -47,7 +47,6 @@
     "publishConfig": {
         "access": "public"
     },
-    "private": true,
     "repository": {
         "type": "git",
         "url": "https://github.com/kenryu42/ethereum-nft-sales-bot.git"
