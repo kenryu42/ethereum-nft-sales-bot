@@ -66,6 +66,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - run: echo $ENV_FILE | base64 -d > .env
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
