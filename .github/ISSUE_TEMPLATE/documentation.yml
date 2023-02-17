@@ -3,21 +3,21 @@ description: Documentation update, change or suggestion
 title: 'Documentation Title'
 labels: ['documentation']
 body:
-    - type: markdown
-      attributes:
-          value: |
-              Please include anything about the [documentation](https://github.com/kenryu42/ethereum-nft-sales-bot#readme) you would like to see improved.
+  - type: markdown
+    attributes:
+      value: |
+        Please include anything about the [documentation](https://github.com/kenryu42/ethereum-nft-sales-bot#readme) you would like to see improved.
 
-                - Missing information or details?
-                - Spelling or Grammar mistakes?
-                - Wrong Information?
-                - Dead or wrong links?
-                - Something needs code examples?
-                - General feedback or anything else?
-    - type: textarea
-      id: suggestion
-      attributes:
-          label: Suggestion
-          placeholder: e.g. please add an example for ...
-      validations:
-          required: true
+          - Missing information or details?
+          - Spelling or Grammar mistakes?
+          - Wrong Information?
+          - Dead or wrong links?
+          - Something needs code examples?
+          - General feedback or anything else?
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggestion
+      placeholder: e.g. please add an example for ...
+    validations:
+      required: true

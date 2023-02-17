@@ -8,7 +8,7 @@
     "scripts": {
         "clean": "rimraf dist",
         "build": "npm run clean && npx tsc",
-        "format": "prettier --write '**/*.{js,ts,yml,json,md}'",
+        "format": "prettier --write '**/*.{js,ts,yml,json}'",
         "lint": "eslint '**/*.{js,ts}' --ext .ts",
         "fix": "npm run format && npm run lint",
         "test:unit": "npx mocha test/unit/*",
