@@ -201,7 +201,7 @@ enft.onItemSold({
 
 ## Twitter
 
--   [Murakami.Flowers Sales](https://twitter.com/mftm_sales)
+-   [ENFT SDK](https://twitter.com/enft_sdk)
 
 ## Discord
 
