@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.0...v1.0.1) (2023-02-18)
+
+
+### Bug Fixes
+
+* fix token id size on gif image ([8479a13](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/8479a1318b55d66e272966d25226d276b893f021))
+
 # [0.3.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v0.2.0...v0.3.0) (2023-01-31)
 
 ### Features
