@@ -1,9 +1,18 @@
 ## [1.0.1](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.0...v1.0.1) (2023-02-18)
 
-
 ### Bug Fixes
 
-* fix token id size on gif image ([8479a13](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/8479a1318b55d66e272966d25226d276b893f021))
+-   fix token id size on gif image ([8479a13](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/8479a1318b55d66e272966d25226d276b893f021))
+
+# [1.0.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v0.3.0...v1.0.0) (2023-02-17)
+
+### Features
+
+-   publish to npm as SDK library ([57b5f03](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/57b5f03acd2587f8bab5bd0ff959487a2d468512))
+
+### BREAKING CHANGES
+
+-   Converted the script into a well-structured SDK library with clear module exports.
 
 # [0.3.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v0.2.0...v0.3.0) (2023-01-31)
 
