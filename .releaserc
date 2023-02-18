@@ -4,18 +4,7 @@
         "@semantic-release/release-notes-generator",
         "@semantic-release/changelog",
         "@semantic-release/npm",
-        [
-            "@semantic-release/git",
-            {
-                "tagFormat": "v${version}",
-                "assets": [
-                    "CHANGELOG.md",
-                    "dist/**/*",
-                    "docs",
-                    "package.json"
-                ]
-            }
-        ]
+        "@semantic-release/github"
     ],
     "branches": [
         "main"
