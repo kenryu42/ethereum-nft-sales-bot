@@ -6,12 +6,19 @@ import type {
 } from '../contracts/token.contract.js';
 
 export interface ClientOptions {
+    /** NFT contract address (required) */
     contractAddress: string;
+    /** Transaction hash (only required for debugTransaction) */
     transactionHash?: string;
+    /** Token type <ERC721, ERC1155> (optional) */
     tokenType?: TokenType;
+    /** Discord webhook for built-in notification (optional) */
     discordWebhook?: string;
+    /** Twitter api config for built-in notification (optional) */
     twitterConfig?: TwitterConfig;
+    /** Etherscan api key for eth to usd conversion (optional) */
     etherscanApiKey?: string;
+    /** Test mode (optional) */
     test?: boolean;
 }
 

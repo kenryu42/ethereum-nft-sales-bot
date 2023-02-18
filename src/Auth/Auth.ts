@@ -15,6 +15,17 @@ export class Auth {
     };
     private readonly provider: Provider;
 
+    /**
+     *
+     * The main class for the Auth library.
+     *
+     * @param {AuthOptions} opts - An object containing the authentication options for the Ethereum API providers.
+     * @param {Object} opts.alchemy - An object containing the Alchemy API key (required if no Infura key is provided).
+     * @param {string} opts.alchemy.apiKey - The Alchemy API key.
+     * @param {Object} opts.infura - An object containing the Infura API key and secret (required if no Alchemy key is provided).
+     * @param {string} opts.infura.apiKey - The Infura API key.
+     * @param {string} opts.infura.apiKeySecret - The Infura API key secret.
+     */
     constructor(opts: AuthOptions) {
         const { error } = authSchema.validate(opts);
 

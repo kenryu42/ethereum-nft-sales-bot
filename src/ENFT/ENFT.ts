@@ -39,8 +39,16 @@ export class ENFT {
      *
      * @async
      * @function
-     * @param {ClientOptions} opts - Options for the client.
-     * @param {Callback} callback - Callback for the transaction data.
+     * @param {ClientOptions} opts - An object containing the options to subscribe to the sales event.
+     * @param {string} opts.contractAddress - The address of the NFT contract (required).
+     * @param {string} opts.transactionHash - The transaction hash only required for debugTransaction (optional).
+     * @param {string} opts.tokenType - The token type <ERC721, ERC1155> (optional).
+     * @param {string} opts.etherscanApiKey - The etherscan api key for eth to usd conversion (optional).
+     * @param {string} opts.discordWebhook - The discord webhook for built-in notification (optional).
+     * @param {TwitterConfig} opts.twitterConfig - The twitter api config for built-in notification (optional).
+     * @param {boolean} opts.test - Test mode (optional).
+     * @param {Callback} callback - An optional callback function to execute after the transaction is debugged.
+     * @throws {Error} If the "opts" parameter is missing required properties.
      * @returns {Promise<() => void>} Returns a promise that resolves to a function.
      **/
     onItemSold = async (
@@ -73,8 +81,16 @@ export class ENFT {
      * @async
      * @function
      * @param {ClientOptions} opts - An object containing the options for the transaction to debug.
-     * @param {Callback} [callback] - An optional callback function to execute after the transaction is debugged.
+     * @param {string} opts.contractAddress - The address of the NFT contract (required).
+     * @param {string} opts.transactionHash - The transaction hash only required for debugTransaction (optional).
+     * @param {string} opts.tokenType - The token type <ERC721, ERC1155> (optional).
+     * @param {string} opts.etherscanApiKey - The etherscan api key for eth to usd conversion (optional).
+     * @param {string} opts.discordWebhook - The discord webhook for built-in notification (optional).
+     * @param {TwitterConfig} opts.twitterConfig - The twitter api config for built-in notification (optional).
+     * @param {boolean} opts.test - Test mode (optional).
+     * @param {Callback} callback - An optional callback function to execute after the transaction is debugged.
      * @throws {Error} If the "opts" parameter is missing required properties.
+     * @throws {Error} If the "transactionHash" property is missing from the "opts" parameter.
      * @returns {Promise<TransactionData | null | undefined>} A promise that resolves with the transaction data if available, otherwise null or undefined.
      **/
     debugTransaction = async (
