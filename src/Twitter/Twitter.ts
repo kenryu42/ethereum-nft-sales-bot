@@ -145,11 +145,11 @@ ${this.tx.interactedMarket.accountPage}${this.tx.toAddr}
         const isX2Y2 = this.tx.interactedMarket.name === 'x2y2' ? '/items' : '';
 
         const content = `
-${token.name} sold for ${formatPrice(this.tx.totalPrice)} ${
-            this.tx.currency.name
-        } ${this.tx.usdPrice ? `($${this.tx.usdPrice})` : ''} on ${
-            this.tx.interactedMarket.displayName
-        }
+${
+    token.name || `${this.tx.contractData.symbol} #${tokenId}`
+} sold for ${formatPrice(this.tx.totalPrice)} ${this.tx.currency.name} ${
+            this.tx.usdPrice ? `($${this.tx.usdPrice})` : ''
+        } on ${this.tx.interactedMarket.displayName}
 
 From: ${this.tx.fromAddrName}
 ${this.tx.interactedMarket.accountPage}${this.tx.fromAddr}${isX2Y2}
