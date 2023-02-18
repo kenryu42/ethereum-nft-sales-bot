@@ -240,8 +240,7 @@ const addTokenIdToImage = async (
     const padding = (tokenIdPadding.length - 4) * 20 + 125;
     const tokenIdImage = await sharp({
         text: {
-            text: `<span foreground="#B0C4DE" size="x-large"><b># ${tokenIdPadding}</b></span>`,
-            font: 'sans',
+            text: `<span foreground="#B0C4DE" size="large"><b># ${tokenIdPadding}</b></span>`,
             rgba: true,
             dpi: 150
         }
