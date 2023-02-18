@@ -10,7 +10,6 @@
         "declarationMap": true,
         "declarationDir": "dist/types",
         "outDir": "dist",
-        "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
