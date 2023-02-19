@@ -30,8 +30,6 @@ export interface Config {
 }
 
 export interface Options {
-    discordEnabled: boolean;
-    twitterEnabled: boolean;
     discordWebhook?: string;
     twitterConfig?: TwitterConfig;
     etherscanApiKey?: string;

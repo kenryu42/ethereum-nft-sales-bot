@@ -27,7 +27,7 @@
 
 #### Defined in
 
-ENFT/ENFT.ts:29
+[ENFT/ENFT.ts:29](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/ENFT/ENFT.ts#L29)
 
 ## Methods
 
@@ -45,6 +45,10 @@ Debugs a transaction on the Ethereum blockchain using the provided options.
 
 If the "opts" parameter is missing required properties.
 
+**`Throws`**
+
+If the "transactionHash" property is missing from the "opts" parameter.
+
 #### Parameters
 
 | Name | Type | Description |
@@ -60,7 +64,7 @@ A promise that resolves with the transaction data if available, otherwise null o
 
 #### Defined in
 
-ENFT/ENFT.ts:80
+[ENFT/ENFT.ts:96](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/ENFT/ENFT.ts#L96)
 
 ___
 
@@ -74,12 +78,16 @@ Subscribes to the sales event of an NFT contract.
 
 **`Function`**
 
+**`Throws`**
+
+If the "opts" parameter is missing required properties.
+
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `opts` | [`ClientOptions`](../interfaces/ClientOptions.md) | Options for the client. |
-| `callback?` | [`Callback`](../modules.md#callback)<[`TransactionData`](../modules.md#transactiondata)\> | Callback for the transaction data. |
+| `opts` | [`ClientOptions`](../interfaces/ClientOptions.md) | An object containing the options to subscribe to the sales event. |
+| `callback?` | [`Callback`](../modules.md#callback)<[`TransactionData`](../modules.md#transactiondata)\> | An optional callback function to execute after the transaction is debugged. |
 
 #### Returns
 
@@ -89,4 +97,4 @@ Returns a promise that resolves to a function.
 
 #### Defined in
 
-ENFT/ENFT.ts:46
+[ENFT/ENFT.ts:54](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/ENFT/ENFT.ts#L54)

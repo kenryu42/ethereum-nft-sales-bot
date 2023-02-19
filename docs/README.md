@@ -3,11 +3,11 @@ enft / [Exports](modules.md)
 <div id="top"></div>
 
 ![GitHub contributors](https://img.shields.io/github/contributors-anon/kenryu42/ethereum-nft-sales-bot)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/kenryu42/ethereum-nft-sales-bot/run-test.yml?branch=main)
+[![CI](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/CI.yml/badge.svg)](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/CI.yml)
+[![Release](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/release.yml/badge.svg)](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/release.yml)
 ![GitHub issues](https://img.shields.io/github/issues-raw/kenryu42/ethereum-nft-sales-bot)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/kenryu42/ethereum-nft-sales-bot)
 [![GitHub license](https://img.shields.io/github/license/kenryu42/ethereum-nft-sales-bot)](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/main/LICENSE)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 <div align="center">
 
@@ -74,6 +74,37 @@ npm install enft
 -   Alchemy API Key - [apply here](https://auth.alchemyapi.io/signup) (**Recommended**)
 -   **OR**
 -   Infura NFT (Open Beta) API Key and API Key Secret - [apply here](https://www.infura.io/resources/apis/nft-api-beta-signup)
+-   [fontconfig](https://www.freedesktop.org/software/fontconfig/fontconfig-user.html) is also required for generating image with text. If your system doesn't have it, please install it first.
+
+**Ubuntu/Debian:**
+
+```bash
+sudo apt-get install fontconfig
+```
+
+**Fedora/RHEL/CentOS:**
+
+```bash
+sudo yum install fontconfig
+```
+
+**Arch Linux:**
+
+```bash
+sudo pacman -S fontconfig
+```
+
+**MacOS (Homebrew):**
+
+```bash
+brew install fontconfig
+```
+
+**Windows (Chocolatey):**
+
+```bash
+choco install fontconfig
+```
 
 ## Optional
 
@@ -203,7 +234,7 @@ enft.onItemSold({
 
 ## Twitter
 
--   [Murakami.Flowers Sales](https://twitter.com/mftm_sales)
+-   [ENFT SDK](https://twitter.com/enft_sdk)
 
 ## Discord
 

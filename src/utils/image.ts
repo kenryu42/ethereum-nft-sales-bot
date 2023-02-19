@@ -39,7 +39,7 @@ const parseImage = async (image: string): Promise<sharp.Sharp> => {
     } else {
         const arrayBuffer = await getArrayBuffer(image);
 
-        return sharp(arrayBuffer, { animated: true });
+        return sharp(arrayBuffer);
     }
 };
 
@@ -182,7 +182,8 @@ const createSwapGif = async (swap: Swap, config: Config): Promise<Buffer> => {
                 config.apiAuth
             );
             const sharpImage = await parseImage(tokenData.image);
-            const quantityText = asset.amount ?? 0 > 1 ? `${asset.amount}` : '';
+            const quantityText =
+                (asset.amount ?? 0) > 1 ? `${asset.amount}` : '';
 
             asset.image = tokenData.image;
 
@@ -271,29 +272,20 @@ const addQuantityToImage = async (
     image: sharp.Sharp,
     quantity: string
 ): Promise<Buffer> => {
-    const metadata = await image.metadata();
-
-    if (!metadata.width) {
-        throw log.throwMissingArgumentError('image.metadata.width', {
-            location: Logger.location.IMAGE_ADD_QUANTITY_TO_IMAGE
-        });
-    }
-
-    const tokenIdImage = await sharp({
+    const quantityImage = await sharp({
         text: {
             text: `<span foreground="#B0C4DE" size="medium"><b>Amount: ${quantity}</b></span>`,
-            font: 'Roboto',
             rgba: true,
             dpi: 150
         }
     })
         .png()
         .toBuffer();
-    const padding = quantity.toString().length * 20 + 195;
+    const padding = quantity.toString().length * 20 + 125;
 
     return image
         .composite([
-            { input: tokenIdImage, top: 20, left: metadata.width - padding }
+            { input: quantityImage, top: 20, left: IMAGE_WIDTH - padding }
         ])
         .resize(IMAGE_WIDTH)
         .png()
@@ -321,7 +313,6 @@ const createTextImage = async (text: string) => {
     const textImage = await sharp({
         text: {
             text: `<span foreground="black" size="x-large"><b>${text}</b></span>`,
-            font: 'Roboto',
             align: 'center',
             rgba: true,
             dpi: 150

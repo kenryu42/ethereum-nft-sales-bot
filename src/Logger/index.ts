@@ -43,10 +43,12 @@ export enum ErrorLocation {
     // DISCORD
     DISCORD_SET_IMAGE_FIELD = '[Discord.setImageField]',
     DISCORD_SEND_EMBED_MESSAGE = '[Discord.sendEmbedMessage]',
+    DISCORD_HANDLE_DISCORD_WEBHOOK = '[Discord.handleDiscordWebhook]',
 
     // TWITTER
     TWITTER_CONSTRUCTOR = '[Twitter.constructor]',
     TWITTER_SEND_SWAP_TWEET = '[Twitter.sendSwapTweet]',
+    TWITTER_TWEET = '[Twitter.tweet]',
 
     // IMAGE
     IMAGE_CREATE_GIF = '[image_createGif]',
@@ -229,12 +231,12 @@ export class Logger {
 
         console.log(
             `Built-in Discord Notify: ${
-                options.discordEnabled ? 'Enabled' : 'Disabled'
+                options.discordWebhook ? 'Enabled' : 'Disabled'
             }`
         );
         console.log(
             `Built-in Twitter Notify: ${
-                options.twitterEnabled ? 'Enabled' : 'Disabled'
+                options.twitterConfig ? 'Enabled' : 'Disabled'
             }`
         );
         console.log(`Token Type: ${config.contractMetadata.tokenType}`);

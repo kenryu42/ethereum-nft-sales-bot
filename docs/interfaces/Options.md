@@ -6,24 +6,12 @@
 
 ### Properties
 
-- [discordEnabled](Options.md#discordenabled)
 - [discordWebhook](Options.md#discordwebhook)
 - [etherscanApiKey](Options.md#etherscanapikey)
 - [test](Options.md#test)
 - [twitterConfig](Options.md#twitterconfig)
-- [twitterEnabled](Options.md#twitterenabled)
 
 ## Properties
-
-### discordEnabled
-
-• **discordEnabled**: `boolean`
-
-#### Defined in
-
-types/interfaces/enft.interface.ts:26
-
-___
 
 ### discordWebhook
 
@@ -31,7 +19,7 @@ ___
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:28
+[types/interfaces/enft.interface.ts:33](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L33)
 
 ___
 
@@ -41,7 +29,7 @@ ___
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:30
+[types/interfaces/enft.interface.ts:35](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L35)
 
 ___
 
@@ -51,7 +39,7 @@ ___
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:31
+[types/interfaces/enft.interface.ts:36](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L36)
 
 ___
 
@@ -61,14 +49,4 @@ ___
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:29
-
-___
-
-### twitterEnabled
-
-• **twitterEnabled**: `boolean`
-
-#### Defined in
-
-types/interfaces/enft.interface.ts:27
+[types/interfaces/enft.interface.ts:34](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L34)
