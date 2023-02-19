@@ -19,7 +19,7 @@
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:38
+[types/interfaces/enft.interface.ts:43](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L43)
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:37
+[types/interfaces/enft.interface.ts:42](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L42)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:35
+[types/interfaces/enft.interface.ts:40](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L40)
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 #### Defined in
 
-types/interfaces/enft.interface.ts:36
+[types/interfaces/enft.interface.ts:41](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L41)
