@@ -72,6 +72,37 @@ npm install enft
 -   Alchemy API Key - [apply here](https://auth.alchemyapi.io/signup) (**Recommended**)
 -   **OR**
 -   Infura NFT (Open Beta) API Key and API Key Secret - [apply here](https://www.infura.io/resources/apis/nft-api-beta-signup)
+-   [fontconfig](https://www.freedesktop.org/software/fontconfig/fontconfig-user.html) is also required for generating image with text. If your system doesn't have it, please install it first.
+
+**Ubuntu/Debian:**
+
+```bash
+sudo apt-get install fontconfig
+```
+
+**Fedora/RHEL/CentOS:**
+
+```bash
+sudo yum install fontconfig
+```
+
+**Arch Linux:**
+
+```bash
+sudo pacman -S fontconfig
+```
+
+**MacOS (Homebrew):**
+
+```bash
+brew install fontconfig
+```
+
+**Windows (Chocolatey):**
+
+```bash
+choco install fontconfig
+```
 
 ## Optional
 
