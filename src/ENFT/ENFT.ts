@@ -142,15 +142,13 @@ export class ENFT {
         );
         this.checkTokenType(contractMetadata, opts.tokenType);
 
-        const config = {
+        const config: Config = {
             apiAuth: this.auth.getApiAuth(),
             provider: this.auth.getProvider(),
             contractAddress: opts.contractAddress.toLowerCase(),
             contractMetadata: contractMetadata
         };
-        const options = {
-            discordEnabled: opts.discordWebhook !== undefined,
-            twitterEnabled: opts.twitterConfig !== undefined,
+        const options: Options = {
             discordWebhook: opts.discordWebhook,
             twitterConfig: opts.twitterConfig,
             etherscanApiKey: opts.etherscanApiKey,
