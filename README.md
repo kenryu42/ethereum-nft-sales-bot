@@ -126,7 +126,7 @@ See the [auto-generated docs](https://github.com/kenryu42/ethereum-nft-sales-bot
 
 # Built-in Notification
 
-Notification is optional. You can enabling it by setting the coresponding argument when calling `onItemSold` method.
+Notification is optional. You can enable it by setting the corresponding argument when calling `onItemSold` method.
 
 ```javascript
 enft.onItemSold({
