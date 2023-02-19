@@ -1,3 +1,11 @@
+## [1.0.4](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.3...v1.0.4) (2023-02-19)
+
+
+### Bug Fixes
+
+* image text wrong padding ([ee47e43](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/ee47e43b044e5a750719a39d26c00279eb6e80ba))
+* possible memory leaks ([10d077e](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/10d077e905e11ea275dc2b9fdb0e764a5a78249b))
+
 ## [1.0.1](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.0...v1.0.1) (2023-02-18)
 
 ### Bug Fixes
