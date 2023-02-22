@@ -36,7 +36,7 @@ const parseTransferEvent = (
         tx.totalAmount += 1;
 
         setTokenData({
-            tokenData: tx.tokens,
+            tokens: tx.tokens,
             tokenId: tokenId,
             amount: 1,
             market: tx.interactedMarket,
@@ -54,7 +54,7 @@ const parseTransferEvent = (
         tx.toAddr = abiCoder.decode(['address'], log.topics[3]).toString();
 
         setTokenData({
-            tokenData: tx.tokens,
+            tokens: tx.tokens,
             tokenId: tokenId,
             amount: amount,
             market: tx.interactedMarket,

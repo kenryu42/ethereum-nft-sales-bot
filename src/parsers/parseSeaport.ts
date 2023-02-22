@@ -168,7 +168,7 @@ const parse = (
             tx.totalAmount += amount;
 
             setTokenData({
-                tokenData: tx.tokens,
+                tokens: tx.tokens,
                 tokenId: tokenId,
                 amount: amount,
                 market: market

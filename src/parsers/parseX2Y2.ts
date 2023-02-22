@@ -67,7 +67,7 @@ const parseX2Y2 = (
     tx.totalAmount += Number(amount);
 
     setTokenData({
-        tokenData: tx.tokens,
+        tokens: tx.tokens,
         tokenId: tokenId.toString(),
         price: price,
         amount: Number(amount),
