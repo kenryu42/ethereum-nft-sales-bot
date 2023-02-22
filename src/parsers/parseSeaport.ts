@@ -90,22 +90,33 @@ const parseSeaport = (
         tx.toAddr = abiCoder.decode(['address'], log.topics[1]).toString();
     }
 
-    if (token.markets) {
+    // Fix double counting sales price when seaport
+    // using matchAdvancedOrders function.
+    let doubleCounting = false;
+
+    for (const tokenId in tx.tokens) {
+        const _token = tx.tokens[tokenId];
+
+        if (_token.markets) {
+            const _opensea = _token.markets[market.name];
+
+            if (_opensea.amount > 1 && tx.contractData.tokenType === 'ERC721') {
+                doubleCounting = true;
+                tx.totalAmount -= _opensea.amount - 1;
+                _opensea.amount = 1;
+            }
+        }
+    }
+
+    if (!doubleCounting && token.markets) {
         const opensea = token.markets[market.name];
 
-        // Fix double counting sales price when seaport
-        // using matchAdvancedOrders function.
-        if (opensea.amount === 2 && tx.contractData.tokenType === 'ERC721') {
-            opensea.amount -= 1;
-            tx.totalAmount -= 1;
-        } else {
-            opensea.price.value =
-                opensea.price.value !== '~'
-                    ? formatPrice(Number(opensea.price.value) + price)
-                    : formatPrice(price);
-            opensea.price.currency = tx.currency;
-            tx.totalPrice += price;
-        }
+        opensea.price.value =
+            opensea.price.value !== '~'
+                ? formatPrice(Number(opensea.price.value) + price)
+                : formatPrice(price);
+        opensea.price.currency = tx.currency;
+        tx.totalPrice += price;
     }
 };
 
