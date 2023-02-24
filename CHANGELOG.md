@@ -1,3 +1,11 @@
+## [1.0.5](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.4...v1.0.5) (2023-02-24)
+
+
+### Bug Fixes
+
+* add missing opensea reserved sale event parser ([109fef9](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/109fef94717a5f832f9c274d77e0398515030dfb))
+* seaport double counting amount ([d2f9280](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/d2f9280cb5129a64635af709d6a6eafa0c5b9b50))
+
 ## [1.0.4](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.3...v1.0.4) (2023-02-19)
 
 
