@@ -28,6 +28,8 @@ describe('ERC721 Integration Test', function () {
         });
     });
 
+    // Opensea test
+
     describe('opensea sale event with fulfillBasicOrder', function () {
         it('should get the correct sales data', async function () {
             const bayc = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
@@ -69,89 +71,6 @@ describe('ERC721 Integration Test', function () {
         });
     });
 
-    describe('looksrare sale event', function () {
-        it('should get the correct sales data', async function () {
-            const bayc = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
-            const txHash =
-                '0x0667c6400daf1d306f84fe17ae454de73d4c002bb3b6eb650135dc65aefafb11';
-            const tx = await client.debugTransaction({
-                test: true,
-                transactionHash: txHash,
-                contractAddress: bayc
-            });
-
-            if (!tx || !tx.fromAddr || !tx.toAddr) return;
-
-            const [tokenId] = Object.keys(tx.tokens);
-
-            expect(tx.tokens).to.not.be.undefined;
-            expect(tx.fromAddr).to.not.be.undefined;
-            expect(tx.toAddr).to.not.be.undefined;
-            expect(tx.fromAddrName).to.not.be.undefined;
-            expect(tx.toAddrName).to.not.be.undefined;
-            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
-            expect(ethers.isAddress(tx.toAddr)).to.be.true;
-            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
-            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
-            assert.strictEqual(
-                tx.fromAddr,
-                '0xff0288877e2b1186c701e024C02f17DA04b2b913'
-            );
-            assert.strictEqual(
-                tx.toAddr,
-                '0x138B9057D61E893b72B33AB2d17F24aC87bD33CB'
-            );
-            assert.strictEqual(tokenId, '7572');
-            assert.strictEqual(formatPrice(tx.totalPrice), '90');
-            assert.strictEqual(tx.currency.name, 'WETH');
-            assert.strictEqual(tx.totalAmount, 1);
-            assert.strictEqual(tx.contractAddress, bayc);
-            assert.strictEqual(tx.transactionHash, txHash);
-            assert.strictEqual(tx.interactedMarket.name, 'looksrare');
-        });
-    });
-
-    describe('x2y2 sale event', function () {
-        it('should get the correct sales data', async function () {
-            const bayc = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
-            const txHash =
-                '0x1637a01b632cc5e350b2f87d328fe0b9cf31dddb6158a7c5c27b502a3077367b';
-            const tx = await client.debugTransaction({
-                test: true,
-                transactionHash: txHash,
-                contractAddress: bayc
-            });
-
-            if (!tx || !tx.fromAddr || !tx.toAddr) return;
-            const [tokenId] = Object.keys(tx.tokens);
-
-            expect(tx.tokens).to.not.be.undefined;
-            expect(tx.fromAddr).to.not.be.undefined;
-            expect(tx.toAddr).to.not.be.undefined;
-            expect(tx.fromAddrName).to.not.be.undefined;
-            expect(tx.toAddrName).to.not.be.undefined;
-            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
-            expect(ethers.isAddress(tx.toAddr)).to.be.true;
-            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
-            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
-            assert.strictEqual(
-                tx.fromAddr,
-                '0x888E552FC9A9DbFaA5B854bc6F128c1A4142aD28'
-            );
-            assert.strictEqual(
-                tx.toAddr,
-                '0xFa89ec40699Bbfd749c4eb6643dC2B22fF0e2aa6'
-            );
-            assert.strictEqual(tokenId, '5919');
-            assert.strictEqual(formatPrice(tx.totalPrice), '105');
-            assert.strictEqual(tx.currency.name, 'ETH');
-            assert.strictEqual(tx.totalAmount, 1);
-            assert.strictEqual(tx.contractAddress, bayc);
-            assert.strictEqual(tx.transactionHash, txHash);
-            assert.strictEqual(tx.interactedMarket.name, 'x2y2');
-        });
-    });
-
     describe('opensea bundle sale event', function () {
         it('should get the correct sales data', async function () {
             const txHash =
@@ -187,128 +106,6 @@ describe('ERC721 Integration Test', function () {
             assert.strictEqual(tx.contractAddress, lilChimps);
             assert.strictEqual(tx.transactionHash, txHash);
             assert.strictEqual(tx.interactedMarket.name, 'opensea');
-        });
-    });
-
-    describe('gem swap event', function () {
-        it('should get the correct sales data', async function () {
-            const otherDeed = '0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258';
-            const txHash =
-                '0x97f8a3fa7f3e69959ec716e9d0395497ef01cf25c526eadb243a9a0747210245';
-            const tx = await client.debugTransaction({
-                test: true,
-                transactionHash: txHash,
-                contractAddress: otherDeed
-            });
-
-            if (!tx || !tx.fromAddr || !tx.toAddr) return;
-            const tokenIds = Object.keys(tx.tokens);
-            const tokenIdsTruth = [
-                '62017',
-                '76196',
-                '80831',
-                '99013',
-                '66801',
-                '88926'
-            ];
-
-            expect(tx.tokens).to.not.be.undefined;
-            expect(tx.fromAddr).to.not.be.undefined;
-            expect(tx.toAddr).to.not.be.undefined;
-            expect(tx.fromAddrName).to.be.undefined;
-            expect(tx.toAddrName).to.not.be.undefined;
-            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
-            expect(ethers.isAddress(tx.toAddr)).to.be.true;
-            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
-            expect(tokenIds).to.have.members(tokenIdsTruth);
-            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
-            assert.strictEqual(
-                tx.toAddr,
-                '0x1B380BAa5b597CFA53bCC6A9C71e01C86D02370f'
-            );
-            assert.strictEqual(formatPrice(tx.totalPrice), '10.456');
-            assert.strictEqual(tx.currency.name, 'WETH');
-            assert.strictEqual(tx.totalAmount, 6);
-            assert.strictEqual(tx.contractAddress, otherDeed);
-            assert.strictEqual(tx.transactionHash, txHash);
-            assert.strictEqual(tx.interactedMarket.name, 'gem');
-        });
-    });
-
-    describe('genie swap event', function () {
-        it('should get the correct sales data', async function () {
-            const pudgyPeguin = '0xbd3531da5cf5857e7cfaa92426877b022e612cf8';
-            const txHash =
-                '0x2f142466062b0c6565144c9eb2a57e0aebcda40ce194950be76532d99a3d465a';
-            const tx = await client.debugTransaction({
-                test: true,
-                transactionHash: txHash,
-                contractAddress: pudgyPeguin
-            });
-
-            if (!tx || !tx.fromAddr || !tx.toAddr) return;
-            const tokenIds = Object.keys(tx.tokens);
-            const tokenIdsTruth = ['3351', '1854', '5801'];
-
-            expect(tx.tokens).to.not.be.undefined;
-            expect(tx.fromAddr).to.not.be.undefined;
-            expect(tx.toAddr).to.not.be.undefined;
-            expect(tx.fromAddrName).to.be.undefined;
-            expect(tx.toAddrName).to.not.be.undefined;
-            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
-            expect(ethers.isAddress(tx.toAddr)).to.be.true;
-            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
-            expect(tokenIds).to.have.members(tokenIdsTruth);
-            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
-            assert.strictEqual(
-                tx.toAddr,
-                '0x0881F1b273693f1a2eE01a5B0c2F06F3F8432754'
-            );
-            assert.strictEqual(formatPrice(tx.totalPrice), '13.97');
-            assert.strictEqual(tx.currency.name, 'ETH');
-            assert.strictEqual(tx.totalAmount, 3);
-            assert.strictEqual(tx.contractAddress, pudgyPeguin);
-            assert.strictEqual(tx.transactionHash, txHash);
-            assert.strictEqual(tx.interactedMarket.name, 'genie');
-        });
-    });
-
-    describe('genie swap event with mixed nft', function () {
-        it('should get the correct sales data of specify nft', async function () {
-            const murakamiFlowers =
-                '0x7d8820fa92eb1584636f4f5b8515b5476b75171a';
-            const txHash =
-                '0x60115b829689c4f64d68ecdffa25d3a4070514594e87bb8891b600d48db884c1';
-            const tx = await client.debugTransaction({
-                test: true,
-                transactionHash: txHash,
-                contractAddress: murakamiFlowers
-            });
-
-            if (!tx || !tx.fromAddr || !tx.toAddr) return;
-            const tokenIds = Object.keys(tx.tokens);
-            const tokenIdsTruth = ['203'];
-
-            expect(tx.tokens).to.not.be.undefined;
-            expect(tx.fromAddr).to.not.be.undefined;
-            expect(tx.toAddr).to.not.be.undefined;
-            expect(tx.fromAddrName).to.be.undefined;
-            expect(tx.toAddrName).to.not.be.undefined;
-            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
-            expect(ethers.isAddress(tx.toAddr)).to.be.true;
-            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
-            expect(tokenIds).to.have.members(tokenIdsTruth);
-            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
-            assert.strictEqual(
-                tx.toAddr,
-                '0x7C9d38515a8999DdD3E4DDCc5e0133e68c18587d'
-            );
-            assert.strictEqual(formatPrice(tx.totalPrice), '2.85');
-            assert.strictEqual(tx.currency.name, 'WETH');
-            assert.strictEqual(tx.totalAmount, 1);
-            assert.strictEqual(tx.contractAddress, murakamiFlowers);
-            assert.strictEqual(tx.transactionHash, txHash);
-            assert.strictEqual(tx.interactedMarket.name, 'genie');
         });
     });
 
@@ -352,6 +149,177 @@ describe('ERC721 Integration Test', function () {
             assert.strictEqual(tx.contractAddress, murakamiFlowers);
             assert.strictEqual(tx.transactionHash, txHash);
             assert.strictEqual(tx.interactedMarket.name, 'opensea');
+        });
+    });
+
+    describe('opensea sale event with matchOrders (reserved sale)', function () {
+        it('should get the correct sales data', async function () {
+            const midnightBreeze = '0xd9c036e9eef725e5aca4a22239a23feb47c3f05d';
+            const txHash =
+                '0xd3b59b614dcbd4d00117eaf2db58706e4d3cf46a4d3d229f6604631388fdd3e6';
+            const tx = await client.debugTransaction({
+                test: true,
+                transactionHash: txHash,
+                contractAddress: midnightBreeze
+            });
+
+            if (!tx || !tx.fromAddr || !tx.toAddr) return;
+            const tokenIds = Object.keys(tx.tokens);
+            const tokenIdsTruth = ['2058'];
+
+            expect(tx.tokens).to.not.be.undefined;
+            expect(tx.fromAddr).to.not.be.undefined;
+            expect(tx.toAddr).to.not.be.undefined;
+            expect(tx.fromAddrName).to.not.be.undefined;
+            expect(tx.toAddrName).to.not.be.undefined;
+            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
+            expect(ethers.isAddress(tx.toAddr)).to.be.true;
+            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
+            expect(tokenIds).to.have.members(tokenIdsTruth);
+            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
+            assert.strictEqual(
+                tx.fromAddr,
+                '0xfA21cd545911E45e80a8CbE5466aa811FFaeb938'
+            );
+            assert.strictEqual(
+                tx.toAddr,
+                '0xD57721B29F2A17AB6A0635210CE05dBbECF5cBF4'
+            );
+            assert.strictEqual(formatPrice(tx.totalPrice), '0.945');
+            assert.strictEqual(tx.currency.name, 'ETH');
+            assert.strictEqual(tx.totalAmount, 1);
+            assert.strictEqual(tx.contractAddress, midnightBreeze);
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.interactedMarket.name, 'opensea');
+        });
+    });
+
+    // Looksrare test
+
+    describe('looksrare sale event', function () {
+        it('should get the correct sales data', async function () {
+            const bayc = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
+            const txHash =
+                '0x0667c6400daf1d306f84fe17ae454de73d4c002bb3b6eb650135dc65aefafb11';
+            const tx = await client.debugTransaction({
+                test: true,
+                transactionHash: txHash,
+                contractAddress: bayc
+            });
+
+            if (!tx || !tx.fromAddr || !tx.toAddr) return;
+
+            const [tokenId] = Object.keys(tx.tokens);
+
+            expect(tx.tokens).to.not.be.undefined;
+            expect(tx.fromAddr).to.not.be.undefined;
+            expect(tx.toAddr).to.not.be.undefined;
+            expect(tx.fromAddrName).to.not.be.undefined;
+            expect(tx.toAddrName).to.not.be.undefined;
+            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
+            expect(ethers.isAddress(tx.toAddr)).to.be.true;
+            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
+            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
+            assert.strictEqual(
+                tx.fromAddr,
+                '0xff0288877e2b1186c701e024C02f17DA04b2b913'
+            );
+            assert.strictEqual(
+                tx.toAddr,
+                '0x138B9057D61E893b72B33AB2d17F24aC87bD33CB'
+            );
+            assert.strictEqual(tokenId, '7572');
+            assert.strictEqual(formatPrice(tx.totalPrice), '90');
+            assert.strictEqual(tx.currency.name, 'WETH');
+            assert.strictEqual(tx.totalAmount, 1);
+            assert.strictEqual(tx.contractAddress, bayc);
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.interactedMarket.name, 'looksrare');
+        });
+    });
+
+    // X2Y2 test
+
+    describe('x2y2 sale event', function () {
+        it('should get the correct sales data', async function () {
+            const bayc = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
+            const txHash =
+                '0x1637a01b632cc5e350b2f87d328fe0b9cf31dddb6158a7c5c27b502a3077367b';
+            const tx = await client.debugTransaction({
+                test: true,
+                transactionHash: txHash,
+                contractAddress: bayc
+            });
+
+            if (!tx || !tx.fromAddr || !tx.toAddr) return;
+            const [tokenId] = Object.keys(tx.tokens);
+
+            expect(tx.tokens).to.not.be.undefined;
+            expect(tx.fromAddr).to.not.be.undefined;
+            expect(tx.toAddr).to.not.be.undefined;
+            expect(tx.fromAddrName).to.not.be.undefined;
+            expect(tx.toAddrName).to.not.be.undefined;
+            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
+            expect(ethers.isAddress(tx.toAddr)).to.be.true;
+            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
+            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
+            assert.strictEqual(
+                tx.fromAddr,
+                '0x888E552FC9A9DbFaA5B854bc6F128c1A4142aD28'
+            );
+            assert.strictEqual(
+                tx.toAddr,
+                '0xFa89ec40699Bbfd749c4eb6643dC2B22fF0e2aa6'
+            );
+            assert.strictEqual(tokenId, '5919');
+            assert.strictEqual(formatPrice(tx.totalPrice), '105');
+            assert.strictEqual(tx.currency.name, 'ETH');
+            assert.strictEqual(tx.totalAmount, 1);
+            assert.strictEqual(tx.contractAddress, bayc);
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.interactedMarket.name, 'x2y2');
+        });
+    });
+
+    // Blur test
+
+    describe('blurswap sale event', function () {
+        it('should get the correct sales data', async function () {
+            const murakamiFlowers =
+                '0x7d8820fa92eb1584636f4f5b8515b5476b75171a';
+            const txHash =
+                '0xaa8e649981d364353631415ebfb70f5634641c61853bc072fba1c8b05dc7a8c0';
+            const tx = await client.debugTransaction({
+                test: true,
+                transactionHash: txHash,
+                contractAddress: murakamiFlowers
+            });
+
+            if (!tx || !tx.fromAddr || !tx.toAddr) return;
+            const tokenIds = Object.keys(tx.tokens);
+            const tokenIdsTruth = ['5532'];
+
+            expect(tx.tokens).to.not.be.undefined;
+            expect(tx.fromAddr).to.not.be.undefined;
+            expect(tx.toAddr).to.not.be.undefined;
+            expect(tx.fromAddrName).to.be.undefined;
+            expect(tx.toAddrName).to.not.be.undefined;
+            expect(tx.isBlurBid).to.be.undefined;
+            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
+            expect(ethers.isAddress(tx.toAddr)).to.be.true;
+            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
+            expect(tokenIds).to.have.members(tokenIdsTruth);
+            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
+            assert.strictEqual(
+                tx.toAddr,
+                '0x82cA345C167BDCAd56FbedC7cc85a488885BDAdc'
+            );
+            assert.strictEqual(formatPrice(tx.totalPrice), '1.09');
+            assert.strictEqual(tx.currency.name, 'ETH');
+            assert.strictEqual(tx.totalAmount, 1);
+            assert.strictEqual(tx.contractAddress, murakamiFlowers);
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.interactedMarket.name, 'blurswap');
         });
     });
 
@@ -436,12 +404,99 @@ describe('ERC721 Integration Test', function () {
         });
     });
 
-    describe('blurswap sale event', function () {
+    // Gem test
+
+    describe('gem swap event', function () {
         it('should get the correct sales data', async function () {
+            const otherDeed = '0x34d85c9cdeb23fa97cb08333b511ac86e1c4e258';
+            const txHash =
+                '0x97f8a3fa7f3e69959ec716e9d0395497ef01cf25c526eadb243a9a0747210245';
+            const tx = await client.debugTransaction({
+                test: true,
+                transactionHash: txHash,
+                contractAddress: otherDeed
+            });
+
+            if (!tx || !tx.fromAddr || !tx.toAddr) return;
+            const tokenIds = Object.keys(tx.tokens);
+            const tokenIdsTruth = [
+                '62017',
+                '76196',
+                '80831',
+                '99013',
+                '66801',
+                '88926'
+            ];
+
+            expect(tx.tokens).to.not.be.undefined;
+            expect(tx.fromAddr).to.not.be.undefined;
+            expect(tx.toAddr).to.not.be.undefined;
+            expect(tx.fromAddrName).to.be.undefined;
+            expect(tx.toAddrName).to.not.be.undefined;
+            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
+            expect(ethers.isAddress(tx.toAddr)).to.be.true;
+            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
+            expect(tokenIds).to.have.members(tokenIdsTruth);
+            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
+            assert.strictEqual(
+                tx.toAddr,
+                '0x1B380BAa5b597CFA53bCC6A9C71e01C86D02370f'
+            );
+            assert.strictEqual(formatPrice(tx.totalPrice), '10.456');
+            assert.strictEqual(tx.currency.name, 'WETH');
+            assert.strictEqual(tx.totalAmount, 6);
+            assert.strictEqual(tx.contractAddress, otherDeed);
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.interactedMarket.name, 'gem');
+        });
+    });
+
+    // Genie test
+
+    describe('genie swap event', function () {
+        it('should get the correct sales data', async function () {
+            const pudgyPeguin = '0xbd3531da5cf5857e7cfaa92426877b022e612cf8';
+            const txHash =
+                '0x2f142466062b0c6565144c9eb2a57e0aebcda40ce194950be76532d99a3d465a';
+            const tx = await client.debugTransaction({
+                test: true,
+                transactionHash: txHash,
+                contractAddress: pudgyPeguin
+            });
+
+            if (!tx || !tx.fromAddr || !tx.toAddr) return;
+            const tokenIds = Object.keys(tx.tokens);
+            const tokenIdsTruth = ['3351', '1854', '5801'];
+
+            expect(tx.tokens).to.not.be.undefined;
+            expect(tx.fromAddr).to.not.be.undefined;
+            expect(tx.toAddr).to.not.be.undefined;
+            expect(tx.fromAddrName).to.be.undefined;
+            expect(tx.toAddrName).to.not.be.undefined;
+            expect(ethers.isAddress(tx.fromAddr)).to.be.true;
+            expect(ethers.isAddress(tx.toAddr)).to.be.true;
+            expect(ethers.isAddress(tx.contractAddress)).to.be.true;
+            expect(tokenIds).to.have.members(tokenIdsTruth);
+            assert.strictEqual(tx.contractData.tokenType, 'ERC721');
+            assert.strictEqual(
+                tx.toAddr,
+                '0x0881F1b273693f1a2eE01a5B0c2F06F3F8432754'
+            );
+            assert.strictEqual(formatPrice(tx.totalPrice), '13.97');
+            assert.strictEqual(tx.currency.name, 'ETH');
+            assert.strictEqual(tx.totalAmount, 3);
+            assert.strictEqual(tx.contractAddress, pudgyPeguin);
+            assert.strictEqual(tx.transactionHash, txHash);
+            assert.strictEqual(tx.interactedMarket.name, 'genie');
+        });
+    });
+
+    describe('genie swap event with mixed nft', function () {
+        it('should get the correct sales data of specify nft', async function () {
             const murakamiFlowers =
                 '0x7d8820fa92eb1584636f4f5b8515b5476b75171a';
             const txHash =
-                '0xaa8e649981d364353631415ebfb70f5634641c61853bc072fba1c8b05dc7a8c0';
+                '0x60115b829689c4f64d68ecdffa25d3a4070514594e87bb8891b600d48db884c1';
             const tx = await client.debugTransaction({
                 test: true,
                 transactionHash: txHash,
@@ -450,14 +505,13 @@ describe('ERC721 Integration Test', function () {
 
             if (!tx || !tx.fromAddr || !tx.toAddr) return;
             const tokenIds = Object.keys(tx.tokens);
-            const tokenIdsTruth = ['5532'];
+            const tokenIdsTruth = ['203'];
 
             expect(tx.tokens).to.not.be.undefined;
             expect(tx.fromAddr).to.not.be.undefined;
             expect(tx.toAddr).to.not.be.undefined;
             expect(tx.fromAddrName).to.be.undefined;
             expect(tx.toAddrName).to.not.be.undefined;
-            expect(tx.isBlurBid).to.be.undefined;
             expect(ethers.isAddress(tx.fromAddr)).to.be.true;
             expect(ethers.isAddress(tx.toAddr)).to.be.true;
             expect(ethers.isAddress(tx.contractAddress)).to.be.true;
@@ -465,14 +519,14 @@ describe('ERC721 Integration Test', function () {
             assert.strictEqual(tx.contractData.tokenType, 'ERC721');
             assert.strictEqual(
                 tx.toAddr,
-                '0x82cA345C167BDCAd56FbedC7cc85a488885BDAdc'
+                '0x7C9d38515a8999DdD3E4DDCc5e0133e68c18587d'
             );
-            assert.strictEqual(formatPrice(tx.totalPrice), '1.09');
-            assert.strictEqual(tx.currency.name, 'ETH');
+            assert.strictEqual(formatPrice(tx.totalPrice), '2.85');
+            assert.strictEqual(tx.currency.name, 'WETH');
             assert.strictEqual(tx.totalAmount, 1);
             assert.strictEqual(tx.contractAddress, murakamiFlowers);
             assert.strictEqual(tx.transactionHash, txHash);
-            assert.strictEqual(tx.interactedMarket.name, 'blurswap');
+            assert.strictEqual(tx.interactedMarket.name, 'genie');
         });
     });
 });
