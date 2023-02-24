@@ -60,8 +60,11 @@ const parseSeaport = (
 
     if (isNftTrader) return parseNftTrader(tx, log, decodedLogData, abiCoder);
 
+    let nftOnConsiderationSide = false;
     const nftOnOfferSide = parse(offer, tx, market, token_id);
-    const nftOnConsiderationSide = parse(consideration, tx, market, token_id);
+
+    if (!nftOnOfferSide)
+        nftOnConsiderationSide = parse(consideration, tx, market, token_id);
     const token = tx.tokens[token_id.value];
 
     if (!nftOnOfferSide && !nftOnConsiderationSide) return;
@@ -90,24 +93,41 @@ const parseSeaport = (
         tx.toAddr = abiCoder.decode(['address'], log.topics[1]).toString();
     }
 
-    if (token.markets) {
-        const opensea = token.markets[market.name];
+    // Fix double counting sales price when seaport
+    // using matchAdvancedOrders function.
+    let doubleCounting = false;
 
-        // Fix double counting sales price when seaport
-        // using matchAdvancedOrders function.
-        if (opensea.amount === 2 && tx.contractData.tokenType === 'ERC721') {
-            opensea.amount -= 1;
-            tx.totalAmount -= 1;
-        } else {
-            opensea.price.value =
-                opensea.price.value !== '~'
-                    ? formatPrice(Number(opensea.price.value) + price)
-                    : formatPrice(price);
-            opensea.price.currency = tx.currency;
-            tx.totalPrice += price;
+    for (const tokenId in tx.tokens) {
+        const _token = tx.tokens[tokenId];
+
+        if (_token.markets) {
+            const _opensea = _token.markets[market.name];
+
+            if (_opensea.amount > 1 && tx.contractData.tokenType === 'ERC721') {
+                doubleCounting = true;
+                tx.totalAmount -= _opensea.amount - 1;
+                _opensea.amount = 1;
+            }
         }
     }
+
+    if (!doubleCounting && token.markets) {
+        const opensea = token.markets[market.name];
+
+        opensea.price.value =
+            opensea.price.value !== '~'
+                ? formatPrice(Number(opensea.price.value) + price)
+                : formatPrice(price);
+        opensea.price.currency = tx.currency;
+        tx.totalPrice += price;
+    }
 };
+
+function isConsiderationItem(
+    item: OfferItem | ConsiderationItem
+): item is ConsiderationItem {
+    return (item as ConsiderationItem).recipient !== undefined;
+}
 
 /**
  *
@@ -126,6 +146,12 @@ function getReducer(
     return (previous: number, current: OfferItem | ConsiderationItem) => {
         const currency =
             currencies[current.token.toLowerCase() as keyof typeof currencies];
+        if (
+            isConsiderationItem(current) &&
+            current.token.toLowerCase() === tx.contractAddress.toLowerCase()
+        ) {
+            tx.toAddr = current.recipient;
+        }
         if (currency !== undefined) {
             tx.currency = currency;
             const result =
@@ -168,7 +194,7 @@ const parse = (
             tx.totalAmount += amount;
 
             setTokenData({
-                tokenData: tx.tokens,
+                tokens: tx.tokens,
                 tokenId: tokenId,
                 amount: amount,
                 market: market

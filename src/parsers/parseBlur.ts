@@ -58,7 +58,7 @@ const parseBlur = (
     tx.totalAmount += amount;
 
     setTokenData({
-        tokenData: tx.tokens,
+        tokens: tx.tokens,
         tokenId: tokenId,
         price: price,
         amount: amount,

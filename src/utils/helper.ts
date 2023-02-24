@@ -10,7 +10,7 @@ const require = createRequire(import.meta.url);
 const ABI = require('../abi/ABI.json');
 
 interface SetTokenDataOpts {
-    tokenData: { [key: string]: TokenData };
+    tokens: { [key: string]: TokenData };
     tokenId: string;
     price?: number;
     amount?: number;
@@ -76,7 +76,7 @@ const formatPrice = (price: number): string => {
  *
  * @function
  * @param {SetTokenDataOpts} opts - SetTokenDataOpts object.
- * @param {Token} opts.tokenData - The token data object.
+ * @param {{[key: string]: TokenData}} opts.tokens - The token data object with token id as key.
  * @param {string} opts.tokenId - The token id.
  * @param {number} [opts.price=] - An optional nft sale price.
  * @param {number} [opts.amount=] - An optional token amount.
@@ -84,7 +84,7 @@ const formatPrice = (price: number): string => {
  * @param {CurrencyAddress} [opts.currencyAddr=] - An optional currency address.
  */
 const setTokenData = (opts: SetTokenDataOpts): void => {
-    const token = opts.tokenData[opts.tokenId];
+    const token = opts.tokens[opts.tokenId];
     const currency = opts.currencyAddr
         ? currencies[opts.currencyAddr]
         : undefined;
@@ -99,7 +99,7 @@ const setTokenData = (opts: SetTokenDataOpts): void => {
             ? formatPrice(Number(currentMarket.price.value) + opts.price)
             : currentMarket.price.value;
     } else {
-        opts.tokenData[opts.tokenId] = {
+        opts.tokens[opts.tokenId] = {
             name: '',
             image: '',
             tokenId: opts.tokenId,
