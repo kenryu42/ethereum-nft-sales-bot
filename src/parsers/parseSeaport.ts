@@ -60,8 +60,11 @@ const parseSeaport = (
 
     if (isNftTrader) return parseNftTrader(tx, log, decodedLogData, abiCoder);
 
+    let nftOnConsiderationSide = false;
     const nftOnOfferSide = parse(offer, tx, market, token_id);
-    const nftOnConsiderationSide = parse(consideration, tx, market, token_id);
+
+    if (!nftOnOfferSide)
+        nftOnConsiderationSide = parse(consideration, tx, market, token_id);
     const token = tx.tokens[token_id.value];
 
     if (!nftOnOfferSide && !nftOnConsiderationSide) return;
@@ -120,6 +123,12 @@ const parseSeaport = (
     }
 };
 
+function isConsiderationItem(
+    item: OfferItem | ConsiderationItem
+): item is ConsiderationItem {
+    return (item as ConsiderationItem).recipient !== undefined;
+}
+
 /**
  *
  * Creates a reducer function for calculating the total value of
@@ -137,6 +146,12 @@ function getReducer(
     return (previous: number, current: OfferItem | ConsiderationItem) => {
         const currency =
             currencies[current.token.toLowerCase() as keyof typeof currencies];
+        if (
+            isConsiderationItem(current) &&
+            current.token.toLowerCase() === tx.contractAddress.toLowerCase()
+        ) {
+            tx.toAddr = current.recipient;
+        }
         if (currency !== undefined) {
             tx.currency = currency;
             const result =
