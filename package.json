@@ -36,7 +36,7 @@
     },
     "homepage": "https://github.com/kenryu42/ethereum-nft-sales-bot#readme",
     "engines": {
-        "node": ">=16.0.0",
+        "node": ">=18.0.0",
         "npm": ">=8.0.0"
     },
     "publishConfig": {
