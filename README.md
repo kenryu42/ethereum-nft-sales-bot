@@ -68,7 +68,7 @@ npm install enft
 
 ## Prerequisites
 
--   Support [Node.js](https://nodejs.org) version >= 16
+-   Support [Node.js](https://nodejs.org) version >= 18
 -   Alchemy API Key - [apply here](https://auth.alchemyapi.io/signup) (**Recommended**)
 -   **OR**
 -   Infura NFT (Open Beta) API Key and API Key Secret - [apply here](https://www.infura.io/resources/apis/nft-api-beta-signup)
