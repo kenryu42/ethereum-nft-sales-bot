@@ -56,7 +56,7 @@
 
 #### Defined in
 
-[types/interfaces/auth.interface.ts:41](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/auth.interface.ts#L41)
+[types/interfaces/auth.interface.ts:41](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/auth.interface.ts#L41)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[types/interfaces/auth.interface.ts:39](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/auth.interface.ts#L39)
+[types/interfaces/auth.interface.ts:39](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/auth.interface.ts#L39)
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[types/utils/type.utils.ts:1](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/utils/type.utils.ts#L1)
+[types/utils/type.utils.ts:1](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/utils/type.utils.ts#L1)
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[types/contracts/seaport.contract.ts:11](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/seaport.contract.ts#L11)
+[types/contracts/seaport.contract.ts:11](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/seaport.contract.ts#L11)
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 #### Defined in
 
-[types/contracts/token.contract.ts:21](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/token.contract.ts#L21)
+[types/contracts/token.contract.ts:21](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/token.contract.ts#L21)
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-[types/models/market.model.ts:31](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/models/market.model.ts#L31)
+[types/models/market.model.ts:31](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/models/market.model.ts#L31)
 
 ___
 
@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[types/models/market.model.ts:24](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/models/market.model.ts#L24)
+[types/models/market.model.ts:24](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/models/market.model.ts#L24)
 
 ___
 
@@ -177,7 +177,7 @@ ___
 
 #### Defined in
 
-[types/models/market.model.ts:1](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/models/market.model.ts#L1)
+[types/models/market.model.ts:1](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/models/market.model.ts#L1)
 
 ___
 
@@ -187,7 +187,7 @@ ___
 
 #### Defined in
 
-[types/models/market.model.ts:12](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/models/market.model.ts#L12)
+[types/models/market.model.ts:12](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/models/market.model.ts#L12)
 
 ___
 
@@ -206,7 +206,7 @@ ___
 
 #### Defined in
 
-[types/contracts/seaport.contract.ts:4](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/seaport.contract.ts#L4)
+[types/contracts/seaport.contract.ts:4](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/seaport.contract.ts#L4)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[types/interfaces/auth.interface.ts:12](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/auth.interface.ts#L12)
+[types/interfaces/auth.interface.ts:12](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/auth.interface.ts#L12)
 
 ___
 
@@ -244,7 +244,7 @@ ___
 
 #### Defined in
 
-[types/contracts/swap.contract.ts:15](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/swap.contract.ts#L15)
+[types/contracts/swap.contract.ts:15](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/swap.contract.ts#L15)
 
 ___
 
@@ -263,7 +263,7 @@ ___
 
 #### Defined in
 
-[types/contracts/token.contract.ts:5](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/token.contract.ts#L5)
+[types/contracts/token.contract.ts:5](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/token.contract.ts#L5)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 #### Defined in
 
-[types/contracts/token.contract.ts:3](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/token.contract.ts#L3)
+[types/contracts/token.contract.ts:3](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/token.contract.ts#L3)
 
 ___
 
@@ -307,4 +307,4 @@ ___
 
 #### Defined in
 
-[types/models/transaction.model.ts:8](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/models/transaction.model.ts#L8)
+[types/models/transaction.model.ts:8](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/models/transaction.model.ts#L8)

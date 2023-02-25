@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[ENFT/ENFT.ts:29](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/ENFT/ENFT.ts#L29)
+[ENFT/ENFT.ts:29](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/ENFT/ENFT.ts#L29)
 
 ## Methods
 
@@ -64,7 +64,7 @@ A promise that resolves with the transaction data if available, otherwise null o
 
 #### Defined in
 
-[ENFT/ENFT.ts:96](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/ENFT/ENFT.ts#L96)
+[ENFT/ENFT.ts:96](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/ENFT/ENFT.ts#L96)
 
 ___
 
@@ -97,4 +97,4 @@ Returns a promise that resolves to a function.
 
 #### Defined in
 
-[ENFT/ENFT.ts:54](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/ENFT/ENFT.ts#L54)
+[ENFT/ENFT.ts:54](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/ENFT/ENFT.ts#L54)

@@ -27,7 +27,7 @@ Alchemy object with API key (required if no Infura key is provided)
 
 #### Defined in
 
-[types/interfaces/auth.interface.ts:26](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/auth.interface.ts#L26)
+[types/interfaces/auth.interface.ts:26](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/auth.interface.ts#L26)
 
 ___
 
@@ -46,4 +46,4 @@ Infura object with API key and secret (required if no Alchemy key is provided)
 
 #### Defined in
 
-[types/interfaces/auth.interface.ts:31](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/auth.interface.ts#L31)
+[types/interfaces/auth.interface.ts:31](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/auth.interface.ts#L31)

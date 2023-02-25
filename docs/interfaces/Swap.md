@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[types/contracts/swap.contract.ts:4](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/swap.contract.ts#L4)
+[types/contracts/swap.contract.ts:4](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/swap.contract.ts#L4)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[types/contracts/swap.contract.ts:5](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/contracts/swap.contract.ts#L5)
+[types/contracts/swap.contract.ts:5](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/contracts/swap.contract.ts#L5)

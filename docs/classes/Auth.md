@@ -29,7 +29,7 @@ The main class for the Auth library.
 
 #### Defined in
 
-[Auth/Auth.ts:29](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/Auth/Auth.ts#L29)
+[Auth/Auth.ts:29](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/Auth/Auth.ts#L29)
 
 ## Methods
 
@@ -54,7 +54,7 @@ Retrieves the API authentication data for the Ethereum API providers.
 
 #### Defined in
 
-[Auth/Auth.ts:58](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/Auth/Auth.ts#L58)
+[Auth/Auth.ts:58](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/Auth/Auth.ts#L58)
 
 ___
 
@@ -74,4 +74,4 @@ Retrieves the Ethereum provider.
 
 #### Defined in
 
-[Auth/Auth.ts:49](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/Auth/Auth.ts#L49)
+[Auth/Auth.ts:49](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/Auth/Auth.ts#L49)
