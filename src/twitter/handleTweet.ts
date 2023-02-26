@@ -95,6 +95,7 @@ const sendSweepTweet = async (
     client: TwitterApi
 ): Promise<void> => {
     const titleName = tx.contractData.name || tx.contractData.symbol;
+    const stolen = tx.totalPrice === 0 ? '(Possibly stolen. 🚨)' : '';
 
     const content = `
 ${tx.totalAmount} ${titleName} sold for ${formatPrice(tx.totalPrice)} ${
@@ -102,6 +103,7 @@ ${tx.totalAmount} ${titleName} sold for ${formatPrice(tx.totalPrice)} ${
     } ${tx.usdPrice ? `($${tx.usdPrice})` : ''} on ${
         tx.interactedMarket.displayName
     }
+${stolen}
 
 ${tx.isBlurBid ? 'Seller' : 'Sweeper'}: ${tx.toAddrName}
 ${tx.interactedMarket.accountPage}${tx.toAddr}
@@ -131,6 +133,7 @@ const sendSaleTweet = async (
     const tokenId = Object.keys(tx.tokens)[0];
     const token = tx.tokens[tokenId];
     const isX2Y2 = tx.interactedMarket.name === 'x2y2' ? '/items' : '';
+    const stolen = tx.totalPrice === 0 ? '(Possibly stolen. 🚨)' : '';
 
     const content = `
 ${token.name || `${tx.contractData.symbol} #${tokenId}`} sold for ${formatPrice(
@@ -138,6 +141,7 @@ ${token.name || `${tx.contractData.symbol} #${tokenId}`} sold for ${formatPrice(
     )} ${tx.currency.name} ${tx.usdPrice ? `($${tx.usdPrice})` : ''} on ${
         tx.interactedMarket.displayName
     }
+${stolen}
 
 From: ${tx.fromAddrName}
 ${tx.interactedMarket.accountPage}${tx.fromAddr}${isX2Y2}

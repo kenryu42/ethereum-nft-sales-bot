@@ -1,6 +1,5 @@
 import axios from 'axios';
 import retry from 'async-retry';
-import FormData from 'form-data';
 import { getEthUsdPrice } from '../api/api.js';
 import { formatPrice } from '../utils/helper.js';
 import { Logger, log } from '../Logger/index.js';
@@ -170,14 +169,22 @@ const setImageField = async (
     if (tokenVariants > 1) {
         tx.gifImage = await createGif(tx.tokens);
 
-        data.append('file', tx.gifImage, 'image.gif');
+        data.append(
+            'file',
+            new Blob([tx.gifImage], { type: 'image/gif' }),
+            'image.gif'
+        );
         embed.image = { url: 'attachment://image.gif' };
     } else {
         const sharpImage = await parseImage(token.image);
         const imageBuffer = await sharpImage.resize(512).png().toBuffer();
         const fileName = `${tokenId}.png`;
 
-        data.append('file', imageBuffer, fileName);
+        data.append(
+            'file',
+            new Blob([imageBuffer], { type: 'image/png' }),
+            fileName
+        );
         embed.image = { url: `attachment://${fileName}` };
     }
 };
@@ -224,7 +231,11 @@ const setSwapFields = async (
     embed.color = tx.interactedMarket.color;
     embed.timestamp = new Date(Date.now()).toISOString();
     embed.image = { url: 'attachment://image.gif' };
-    data.append('file', tx.gifImage, 'image.gif');
+    data.append(
+        'file',
+        new Blob([tx.gifImage], { type: 'image/gif' }),
+        'image.gif'
+    );
 };
 
 /**
@@ -339,7 +350,7 @@ const sendEmbedMessage = async (
 
     const config = {
         headers: {
-            ...data.getHeaders()
+            'Content-Type': 'multipart/form-data'
         }
     };
 

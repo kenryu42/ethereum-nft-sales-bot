@@ -24,7 +24,7 @@ NFT contract address (required)
 
 #### Defined in
 
-[types/interfaces/enft.interface.ts:10](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L10)
+[types/interfaces/enft.interface.ts:10](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/enft.interface.ts#L10)
 
 ___
 
@@ -36,7 +36,7 @@ Discord webhook for built-in notification (optional)
 
 #### Defined in
 
-[types/interfaces/enft.interface.ts:16](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L16)
+[types/interfaces/enft.interface.ts:16](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/enft.interface.ts#L16)
 
 ___
 
@@ -48,7 +48,7 @@ Etherscan api key for eth to usd conversion (optional)
 
 #### Defined in
 
-[types/interfaces/enft.interface.ts:20](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L20)
+[types/interfaces/enft.interface.ts:20](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/enft.interface.ts#L20)
 
 ___
 
@@ -60,7 +60,7 @@ Test mode (optional)
 
 #### Defined in
 
-[types/interfaces/enft.interface.ts:22](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L22)
+[types/interfaces/enft.interface.ts:22](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/enft.interface.ts#L22)
 
 ___
 
@@ -72,7 +72,7 @@ Token type <ERC721, ERC1155> (optional)
 
 #### Defined in
 
-[types/interfaces/enft.interface.ts:14](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L14)
+[types/interfaces/enft.interface.ts:14](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/enft.interface.ts#L14)
 
 ___
 
@@ -84,7 +84,7 @@ Transaction hash (only required for debugTransaction)
 
 #### Defined in
 
-[types/interfaces/enft.interface.ts:12](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L12)
+[types/interfaces/enft.interface.ts:12](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/enft.interface.ts#L12)
 
 ___
 
@@ -96,4 +96,4 @@ Twitter api config for built-in notification (optional)
 
 #### Defined in
 
-[types/interfaces/enft.interface.ts:18](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/a276033/src/types/interfaces/enft.interface.ts#L18)
+[types/interfaces/enft.interface.ts:18](https://github.com/kenryu42/ethereum-nft-sales-bot/blob/d8d9fbf/src/types/interfaces/enft.interface.ts#L18)
