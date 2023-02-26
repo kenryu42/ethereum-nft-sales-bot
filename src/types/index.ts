@@ -6,6 +6,7 @@ export {
     TokenData,
     CustomError,
     ContractData,
+    DoopData,
     TransactionData,
     OfferItem,
     SwapEvent,

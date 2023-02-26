@@ -132,7 +132,8 @@ const retryOnGetNFTMetadata = async (
 
             return {
                 name: _.get(response, 'title'),
-                image: _.get(response, 'media[0].gateway')
+                image: _.get(response, 'media[0].gateway'),
+                attributes: _.get(response, 'rawMetadata.attributes')
             };
         },
         {

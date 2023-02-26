@@ -1,15 +1,17 @@
 import { runApp } from './controllers/runApp.js';
+import { runDoopApp } from './controllers/runDoopApp.js';
 import {
     alchemy,
     TOKEN_TYPE,
     CONTRACT_ADDRESS,
     CONTRACT_ADDRESSES,
-    DEFAULT_NFT_API
+    DEFAULT_NFT_API,
+    DOOP_ADDRESSES
 } from './config/setup.js';
 import { options } from './config/commander.js';
 import { getContractData } from './utils/api.js';
 import type { ContractData } from './types';
-import { transferEventTypes } from './config/logEventTypes.js';
+import { transferEventTypes, doopEventTypes } from './config/logEventTypes.js';
 import { NftTokenType } from 'alchemy-sdk';
 
 let lastTransactionHash: string;
@@ -17,7 +19,9 @@ let lastTransactionHash: string;
 console.log(`Default NFT Api: ${DEFAULT_NFT_API}`);
 
 async function main(contractAddress: string, test = false) {
+    console.log(contractAddress);
     const contractData: ContractData = await getContractData(contractAddress);
+    console.log(contractData);
     contractData.tokenType =
         contractData.tokenType === 'UNKNOWN'
             ? (TOKEN_TYPE as NftTokenType)
@@ -53,19 +57,55 @@ async function main(contractAddress: string, test = false) {
     }
 }
 
+async function doop(contractAddress: string, test = false) {
+    console.log(contractAddress);
+
+    const eventFilter = {
+        address: contractAddress,
+        topics: [doopEventTypes]
+    };
+
+    if (test) {
+        console.log(`Running doop test for tx: ${options.test}`);
+        await runDoopApp(options.test, contractAddress);
+    } else {
+        console.log('Listening to dooplication events on');
+        console.log(`Contract address: ${contractAddress}\n`);
+        alchemy.ws.on(eventFilter, async (log) => {
+            const transactionHash = log.transactionHash.toLowerCase();
+
+            if (transactionHash === lastTransactionHash) return;
+            lastTransactionHash = transactionHash;
+
+            await runDoopApp(transactionHash, contractAddress);
+        });
+    }
+}
+
 (async () => {
     if (options.test) {
         try {
-            await main(CONTRACT_ADDRESS, true);
+            // await main(CONTRACT_ADDRESS, true);
+            const contractAddresses = JSON.parse(DOOP_ADDRESSES);
+            await doop(contractAddresses[0], true);
         } catch (error) {
             console.error(error);
             process.exit(1);
         }
-    } else if (CONTRACT_ADDRESSES) {
-        const contractAddresses = JSON.parse(CONTRACT_ADDRESSES);
-
-        for (const contractAddress of contractAddresses) {
-            await main(contractAddress);
+    } else if (CONTRACT_ADDRESSES || DOOP_ADDRESSES) {
+        if (CONTRACT_ADDRESSES) {
+            const contractAddresses = JSON.parse(CONTRACT_ADDRESSES);
+            console.log(contractAddresses);
+            // for (const contractAddress of contractAddresses) {
+            //     await main(contractAddress);
+            // }
+        }
+        if (DOOP_ADDRESSES) {
+            const contractAddresses = JSON.parse(DOOP_ADDRESSES);
+            console.log(contractAddresses);
+            for (const contractAddress of contractAddresses) {
+                await doop(contractAddress);
+            }
         }
     } else {
         try {

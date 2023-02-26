@@ -15,4 +15,9 @@ const saleEventTypes = [
     '0x61cbb2a3dee0b6064c2e681aadd61677fb4ef319f0b547508d495626f5a62f64' // OrdersMatched (Blur)
 ];
 
-export { transferEventTypes, saleEventTypes };
+const doopEventTypes = [
+    '0x7129989d8fa402381eff23a98149e58d94429ba7921e5b5f2f0b00d8715c21a0', // Dooplicate (Both)
+    '0xd9599929b4f30375cdc70108bf8dd0ca57d73ccfbb9cca5639124233b41ebe86' // ItemDooplicated (Marketplace)
+];
+
+export { transferEventTypes, saleEventTypes, doopEventTypes };

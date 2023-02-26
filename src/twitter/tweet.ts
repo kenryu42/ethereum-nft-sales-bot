@@ -12,7 +12,7 @@ import {
     TWITTER_ACCESS_TOKEN,
     TWITTER_ACCESS_SECRET
 } from '../config/setup.js';
-import type { TransactionData } from '../types';
+import type { DoopData, TransactionData } from '../types';
 
 const client = TWITTER_ENABLED
     ? new TwitterApi({
@@ -124,4 +124,56 @@ ${field}
     }
 };
 
-export { tweet };
+const tweetDoop = async (tx: DoopData) => {
+    let imageType = EUploadMimeType.Png;
+    let imageBuffer;
+    let tweetContent;
+    
+    const isMarketplace = tx.recipient === 'dooplicator-marketplace';
+
+    if (!client || !rwClient) {
+        return;
+    }
+
+    if (tx.tokenData && tx.tokenData.image) {
+        const buffer = await axios.get(tx.tokenData.image, { responseType: 'arraybuffer' });
+        imageBuffer = buffer.data;
+        // if image size exceeds 5MB, resize it
+        if (imageBuffer.length > 5242880) {
+            imageBuffer = await resizeImage(tx.tokenData.image);
+        }
+    }
+    
+    const mediaId = await client.v1.uploadMedia(imageBuffer, {
+        mimeType: imageType
+    });
+
+    if (isMarketplace) {
+        let bigBuy = '';
+        if (tx.totalPrice > 1.99) bigBuy = '🔥🌈 Big Buy 🌈🔥!'
+        tweetContent = `Doodle #${tx.tokenId} Dooplication rights sold for ${tx.totalPrice} ETH ${tx.ethUsdValue}!
+        ${bigBuy}
+        Then doop'd with ${tx.dooplicatorData.attributes ? tx.dooplicatorData.attributes[1]?.value + ' ' : ''}Dooplicator #${tx.dooplicatorId}	
+        Congrats ${tx.from}!
+		
+        🔍 https://etherscan.io/tx/${tx.transactionHash}
+        💻 https://ongaia.com/account/${tx.addressOnTheOtherSide}
+        🌈 https://doodles.app/dooplicator/result/${tx.tokenId}`;
+    } else {
+        tweetContent = `Doodle #${tx.tokenId} was just Dooplicated!
+
+        ${tx.from} used ${tx.dooplicatorData.attributes ? tx.dooplicatorData.attributes[1]?.value + ' ' : ''}Dooplicator #${tx.dooplicatorId}	
+		
+        🔍 https://etherscan.io/tx/${tx.transactionHash}
+        💻 https://ongaia.com/account/${tx.addressOnTheOtherSide}
+        🌈 https://doodles.app/dooplicator/result/${tx.tokenId}`;
+    }
+
+    try {
+        await rwClient.v1.tweet(tweetContent, { media_ids: mediaId });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export { tweet, tweetDoop };

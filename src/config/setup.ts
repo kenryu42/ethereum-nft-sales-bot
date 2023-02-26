@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import ABI from '../abi/transferEvent.json' assert { type: 'json' };
 import SUDOSWAP_ABI from '../abi/sudoSwap.json' assert { type: 'json' };
+import DOOP_ABI from '../abi/dooplicationContract.json' assert { type: 'json' };
+import DOOPMARKET_ABI from '../abi/dooplicationMarketplaceContract.json' assert { type: 'json' };
+import DOOPPROXY_ABI from '../abi/dooplicationMarketplaceProxyContract.json' assert { type: 'json' };
 import { Network, Alchemy } from 'alchemy-sdk';
 
 // Required settings
@@ -10,6 +13,7 @@ const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS
 const CONTRACT_ADDRESSES = process.env.CONTRACT_ADDRESSES
     ? process.env.CONTRACT_ADDRESSES.toLowerCase()
     : '';
+const DOOP_ADDRESSES = process.env.DOOP_ADDRESSES ? process.env.DOOP_ADDRESSES.toLowerCase() : '';
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || '';
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || '';
 
@@ -79,6 +83,9 @@ const WEBHOOK_URLS = [WEBHOOK_1].filter((url) => url !== '');
 export {
     ABI,
     SUDOSWAP_ABI,
+    DOOP_ABI,
+    DOOPMARKET_ABI,
+    DOOPPROXY_ABI,
     alchemy,
     DEFAULT_NFT_API,
     WEBHOOK_URLS,
@@ -93,6 +100,7 @@ export {
     ETHERSCAN_API_KEY,
     CONTRACT_ADDRESS,
     CONTRACT_ADDRESSES,
+    DOOP_ADDRESSES,
     TWITTER_API_KEY,
     TWITTER_API_SECRET,
     TWITTER_ACCESS_TOKEN,
