@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.5...v1.0.6) (2023-02-26)
+
+
+### Bug Fixes
+
+* possible memory leak ([ad0c743](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/ad0c743f9d810f2f9e428f7d26479812d675102a))
+
 ## [1.0.5](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.4...v1.0.5) (2023-02-24)
 
 
