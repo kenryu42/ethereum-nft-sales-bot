@@ -181,6 +181,20 @@ const markets: { [key: string]: Market } = {
             '0x9d9af8e38d66c62e2c12f0225249fd9d721c54b83f48d9352c97c6cacdcb6f31'
         ]
     },
+    // Seaport 1.4
+    '0x00000000000001ad428e4906ae43d8f9852d0dd6': {
+        name: 'opensea',
+        displayName: 'Opensea 🌊',
+        contract: '0x00000000000001ad428e4906ae43d8f9852d0dd6',
+        color: 2130402,
+        site: 'https://opensea.io/assets/',
+        accountPage: 'https://opensea.io/',
+        iconURL:
+            'https://pbs.twimg.com/profile_images/1544105652330631168/ZuvjfGkT_400x400.png',
+        topics: [
+            '0x9d9af8e38d66c62e2c12f0225249fd9d721c54b83f48d9352c97c6cacdcb6f31'
+        ]
+    },
     '0x000000000000ad05ccc4f10045630fb830b95127': {
         name: 'blur',
         displayName: 'Blur 🟠',

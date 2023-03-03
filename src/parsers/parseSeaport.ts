@@ -78,9 +78,11 @@ const parseSeaport = (
         );
 
         price = totalConsiderationAmount;
-        tx.fromAddr = abiCoder.decode(['address'], log.topics[1]).toString();
+        tx.fromAddr =
+            tx.fromAddr ??
+            abiCoder.decode(['address'], log.topics[1]).toString();
         if (decodedLogData.recipient !== nullAddress) {
-            tx.toAddr = decodedLogData.recipient;
+            tx.toAddr = tx.toAddr ?? decodedLogData.recipient;
         }
     } else {
         const totalOfferAmount = offer.reduce(getReducer(tx), 0);
@@ -88,9 +90,10 @@ const parseSeaport = (
         price = totalOfferAmount;
 
         if (decodedLogData.recipient !== nullAddress) {
-            tx.fromAddr = decodedLogData.recipient;
+            tx.fromAddr = tx.fromAddr ?? decodedLogData.recipient;
         }
-        tx.toAddr = abiCoder.decode(['address'], log.topics[1]).toString();
+        tx.toAddr =
+            tx.toAddr ?? abiCoder.decode(['address'], log.topics[1]).toString();
     }
 
     // Fix double counting sales price when seaport
