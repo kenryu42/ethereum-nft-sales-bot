@@ -1,6 +1,6 @@
 {
     "name": "enft",
-    "version": "1.0.6",
+    "version": "1.1.0",
     "description": "An ethereum NFT events monitoring sdk.",
     "main": "dist/index.js",
     "types": "dist/types/index.d.ts",

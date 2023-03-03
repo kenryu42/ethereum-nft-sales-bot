@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.6...v1.1.0) (2023-03-03)
+
+
+### Features
+
+* add seaport 1.4 compatibility ([00491c0](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/00491c0db0fc31ef8a01d1e11f5c310ca6b62a64))
+
 ## [1.0.6](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.5...v1.0.6) (2023-02-26)
 
 
