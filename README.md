@@ -4,6 +4,7 @@
 [![CI](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/CI.yml/badge.svg)](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/CI.yml)
 [![CodeQL](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/github-code-scanning/codeql)
 [![Release](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/release.yml/badge.svg)](https://github.com/kenryu42/ethereum-nft-sales-bot/actions/workflows/release.yml)
+![npm](https://img.shields.io/npm/dm/enft)
 
 <div align="center">
 
