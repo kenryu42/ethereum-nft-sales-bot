@@ -61,8 +61,8 @@ body:
       description: What environment, platforms or frameworks are you using? Select all that apply.
       multiple: true
       options:
-        - node.js (v16 or newer)
-        - node.js (older than v16)
+        - node.js (v18 or newer)
+        - node.js (older than v18)
         - Other (please specify)
   - type: input
     id: other-envrionment
