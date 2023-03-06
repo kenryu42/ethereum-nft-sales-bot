@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { ethers } from 'ethers';
 import retry from 'async-retry';
 import {
@@ -132,16 +131,17 @@ const getENSName = async (
  **/
 const getOpenseaName = async (address: string): Promise<string | null> => {
     try {
-        const response = await axios.get(
-            `https://api.opensea.io/api/v1/account/${address}`
-        );
-        const result = response?.data;
-
-        return result?.data?.user?.username;
+      const response = await fetch(`https://api.opensea.io/api/v1/account/${address}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch account data for ${address}: ${response.status} ${response.statusText}`);
+      }
+      const result = await response.json();
+  
+      return result?.data?.user?.username;
     } catch {
-        return null;
+      return null;
     }
-};
+  };
 
 /**
  *
@@ -202,33 +202,36 @@ const getReadableName = async (
 const getEthUsdPrice = async (
     ethPrice: number,
     etherscanApiKey: string
-): Promise<string> => {
+  ): Promise<string> => {
     const url = `
         https://api.etherscan.io/api?module=stats&action=ethprice&apikey=${etherscanApiKey}
     `;
     const result = await retry(
-        async () => {
-            const response = await axios.get(url);
-            const result = response?.data?.result;
-            const ethusd = result?.ethusd;
-            const usdPrice = (ethPrice * ethusd).toFixed(2);
-
-            if (!response || !result || !ethusd || !usdPrice) {
-                throw new Error('Might hitting rate limit, try again');
-            }
-
-            return parseFloat(usdPrice).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        },
-        {
-            retries: 5
+      async () => {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ETH price data: ${response.status} ${response.statusText}`);
         }
+        const result = await response.json();
+        const ethusd = result?.result?.ethusd;
+        const usdPrice = (ethPrice * ethusd).toFixed(2);
+  
+        if (!ethusd || !usdPrice) {
+          throw new Error('Missing required data in response');
+        }
+  
+        return parseFloat(usdPrice).toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      },
+      {
+        retries: 5
+      }
     );
-
+  
     return result;
-};
+  };
 
 /**
  *
