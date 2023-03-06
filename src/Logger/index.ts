@@ -55,7 +55,8 @@ export enum ErrorLocation {
     IMAGE_CREATE_SWAP_GIF = '[image_createSwapGif]',
     IMAGE_ADD_TOKEN_ID_TO_IMAGE = '[image_addTokenIdToImage]',
     IMAGE_ADD_QUANTITY_TO_IMAGE = '[image_addQuantityToImage]',
-    IMAGE_PREPARE_GIF_ENCODING_DATA = '[image_prepareGifEncodingData]'
+    IMAGE_PREPARE_GIF_ENCODING_DATA = '[image_prepareGifEncodingData]',
+    IMAGE_GET_ARRAY_BUFFER = '[image_getArrayBuffer]'
 }
 
 export enum ErrorMessage {
