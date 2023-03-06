@@ -1,4 +1,3 @@
-import axios from 'axios';
 import sharp from 'sharp';
 import retry from 'async-retry';
 import pkg from 'gifenc';
@@ -338,11 +337,19 @@ const createTextImage = async (text: string) => {
  */
 const getArrayBuffer = async (url: string): Promise<Uint8Array> => {
     const result = await retry(async () => {
-        const response = await axios.get(url, {
-            responseType: 'arraybuffer'
-        });
-
-        return response.data;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw log.throwError(
+                `getArrayBuffer failed with status ${response.status}`,
+                Logger.code.NETWORK,
+                {
+                    status: response.status,
+                    body: await response.text(),
+                    location: Logger.location.IMAGE_GET_ARRAY_BUFFER
+                }
+            );
+        }
+        return new Uint8Array(await response.arrayBuffer());
     });
 
     return result;

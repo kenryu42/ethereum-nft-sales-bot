@@ -1,4 +1,3 @@
-import axios from 'axios';
 import retry from 'async-retry';
 import { Logger, log } from '../../Logger/index.js';
 
@@ -25,11 +24,11 @@ const getContractMetadata_Infura = async (
         Authorization: `Basic ${apiAuth.infura}`
     };
 
-    const result = retry(async () => {
-        const response = await axios.get(url, {
+    const result = await retry(async () => {
+        const response = await fetch(url, {
             headers
         });
-        const data = response.data;
+        const data = await response.json();
         const contractData = {
             name: data.name,
             symbol: data.symbol,
@@ -64,11 +63,11 @@ const getNftMetadata_Infura = async (
         Authorization: `Basic ${apiAuth.infura}`
     };
 
-    const result = retry(async () => {
-        const response = await axios.get(url, {
+    const result = await retry(async () => {
+        const response = await fetch(url, {
             headers
         });
-        const data = response.data;
+        const data = await response.json();
         const name = data?.metadata?.name;
         let image = data?.metadata?.image ?? data.metadata?.image_data;
 

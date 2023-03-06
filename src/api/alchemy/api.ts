@@ -1,4 +1,3 @@
-import axios from 'axios';
 import retry from 'async-retry';
 import { Logger, log } from '../../Logger/index.js';
 
@@ -28,25 +27,23 @@ const getContractMetadata_Alchemy = async (
         contractAddress: contractAddress
     };
 
-    const result = retry(
-        async () => {
-            const response = await axios.get(url, {
-                headers,
-                params
-            });
-            const contractMetadata = response.data.contractMetadata;
-            const data = {
-                name:
-                    contractMetadata.name ??
-                    contractMetadata.openSea.collectionName,
-                symbol: contractMetadata.symbol,
-                tokenType: contractMetadata.tokenType
-            };
+    const result = await retry(async () => {
+        const response = await fetch(`${url}?${new URLSearchParams(params)}`, {
+            headers
+        });
+        const data = await response.json();
 
-            return data;
-        },
-        { retries: 2 }
-    );
+        const contractMetadata = data.contractMetadata;
+        const metadata = {
+            name:
+                contractMetadata.name ??
+                contractMetadata.openSea.collectionName,
+            symbol: contractMetadata.symbol,
+            tokenType: contractMetadata.tokenType
+        };
+
+        return metadata;
+    });
 
     return result;
 };
@@ -75,15 +72,14 @@ const getNftMetadata_Alchemy = async (
     const params = {
         contractAddress: contractAddress,
         tokenId: tokenId,
-        refreshCache: true
+        refreshCache: 'true'
     };
 
-    const result = retry(async () => {
-        const response = await axios.get(url, {
-            headers,
-            params
+    const result = await retry(async () => {
+        const response = await fetch(`${url}?${new URLSearchParams(params)}`, {
+            headers
         });
-        const data = response.data;
+        const data = await response.json();
         const name = data?.metadata?.name;
         const isSvg = data?.media[0]?.format === 'svg+xml';
         let image = isSvg

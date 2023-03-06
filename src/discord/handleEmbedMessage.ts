@@ -1,4 +1,3 @@
-import axios from 'axios';
 import retry from 'async-retry';
 import { getEthUsdPrice } from '../api/api.js';
 import { formatPrice } from '../utils/helper.js';
@@ -348,15 +347,15 @@ const sendEmbedMessage = async (
 ): Promise<void> => {
     data.append('payload_json', JSON.stringify({ embeds: [embed] }));
 
-    const config = {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    };
-
-    await retry(async () => {
-        await axios.post(webhookUrl, data, config);
-    });
+    await retry(
+        async () => {
+            await fetch(webhookUrl, {
+                method: 'POST',
+                body: data
+            });
+        },
+        { retries: 5 }
+    );
 };
 
 export { handleEmbedMessage };

@@ -272,6 +272,7 @@ Open a Pull Request to add your collection below.
 | Collection       | Twitter                                   | Discord                                                |
 | ---------------- | ----------------------------------------- | ------------------------------------------------------ |
 | Murakami.Flowers | [@MFTMKKUS](https://twitter.com/MFTMKKUS) | [Murakami.Flowers](https://discord.gg/murakamiflowers) |
+| Rumble Kong League | [@RumbleKongs](https://twitter.com/RumbleKongs) | [Rumble Kong League](https://discord.com/invite/rkl) |
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
