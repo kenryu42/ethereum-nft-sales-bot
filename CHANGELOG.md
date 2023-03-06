@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.1.0...v1.1.1) (2023-03-06)
+
+
+### Bug Fixes
+
+* aggregator sale tweets output format ([15f8e10](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/15f8e10ac46d9e7a71459ab2b7e0f96bca1e8903))
+
 # [1.1.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.0.6...v1.1.0) (2023-03-03)
 
 
