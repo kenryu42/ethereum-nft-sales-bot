@@ -143,11 +143,20 @@ ${token.name || `${tx.contractData.symbol} #${tokenId}`} sold for ${formatPrice(
     }
 ${stolen}
 
+${
+    tx.isAggregator
+        ? `
+Buyer: ${tx.toAddrName}
+${tx.interactedMarket.accountPage}${tx.toAddr}${isX2Y2}
+        `
+        : `
 From: ${tx.fromAddrName}
 ${tx.interactedMarket.accountPage}${tx.fromAddr}${isX2Y2}
 
 To: ${tx.toAddrName}
 ${tx.interactedMarket.accountPage}${tx.toAddr}${isX2Y2}
+`
+}
 
 🔍 https://etherscan.io/tx/${tx.transactionHash}
         `;
@@ -175,11 +184,14 @@ const sendTweet = async (
     mediaId: string,
     rwclient: TwitterApiReadWrite
 ): Promise<void> => {
-    await retry(async () => {
-        await rwclient.v1.tweet(content, {
-            media_ids: mediaId
-        });
-    });
+    await retry(
+        async () => {
+            await rwclient.v1.tweet(content, {
+                media_ids: mediaId
+            });
+        },
+        { retries: 5 }
+    );
 };
 
 export { handleTweet };
