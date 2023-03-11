@@ -265,7 +265,7 @@ kenryu.eth - [@kenryu42](https://twitter.com/kenryu42) - ken0ryu@gmail.com
 
 # Collections
 
-Collections that using this bot.
+Collections that using this SDK.
 
 Open a Pull Request to add your collection below.
 
