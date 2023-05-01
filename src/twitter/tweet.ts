@@ -158,7 +158,7 @@ const tweetDoop = async (tx: DoopData) => {
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
         💻 https://ongaia.com/account/${tx.addressOnTheOtherSide}
-        🌈 https://doodles.app/dooplicator/result/${tx.tokenId}`;
+        🌈 https://home.doodles.app/dooplicator/result/${tx.tokenId}`;
     } else {
         tweetContent = `Doodle #${tx.tokenId} was just Dooplicated!
 
@@ -166,7 +166,7 @@ const tweetDoop = async (tx: DoopData) => {
 		
         🔍 https://etherscan.io/tx/${tx.transactionHash}
         💻 https://ongaia.com/account/${tx.addressOnTheOtherSide}
-        🌈 https://doodles.app/dooplicator/result/${tx.tokenId}`;
+        🌈 https://home.doodles.app/dooplicator/result/${tx.tokenId}`;
     }
 
     try {
