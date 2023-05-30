@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.2.0...v1.2.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* opensea link ([17291a3](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/17291a347f9fecf26fcecfb3b8aba63e90be88f6))
+* seaport 1.5 contract address ([c559f13](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/c559f13abb9a67f5cad0ac5e8d81e9e194b16f2d))
+
 # [1.2.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.1.1...v1.2.0) (2023-05-30)
 
 
