@@ -173,7 +173,7 @@ const markets: { [key: string]: Market } = {
         displayName: 'Opensea 🌊',
         contract: '0x00000000006c3852cbef3e08e8df289169ede581',
         color: 2130402,
-        site: 'https://opensea.io/assets/',
+        site: 'https://opensea.io/assets/ethereum/',
         accountPage: 'https://opensea.io/',
         iconURL:
             'https://pbs.twimg.com/profile_images/1544105652330631168/ZuvjfGkT_400x400.png',
@@ -187,7 +187,7 @@ const markets: { [key: string]: Market } = {
         displayName: 'Opensea 🌊',
         contract: '0x00000000000001ad428e4906ae43d8f9852d0dd6',
         color: 2130402,
-        site: 'https://opensea.io/assets/',
+        site: 'https://opensea.io/assets/ethereum/',
         accountPage: 'https://opensea.io/',
         iconURL:
             'https://pbs.twimg.com/profile_images/1544105652330631168/ZuvjfGkT_400x400.png',
@@ -199,9 +199,9 @@ const markets: { [key: string]: Market } = {
     '0x00000000000000adc04c56bf30ac9d3c0aaf14dc': {
         name: 'opensea',
         displayName: 'Opensea 🌊',
-        contract: '0x00000000000001ad428e4906ae43d8f9852d0dd6',
+        contract: '0x00000000000000adc04c56bf30ac9d3c0aaf14dc',
         color: 2130402,
-        site: 'https://opensea.io/assets/',
+        site: 'https://opensea.io/assets/ethereum/',
         accountPage: 'https://opensea.io/',
         iconURL:
             'https://pbs.twimg.com/profile_images/1544105652330631168/ZuvjfGkT_400x400.png',
