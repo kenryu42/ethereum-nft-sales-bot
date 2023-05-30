@@ -116,11 +116,11 @@ Subscribe to NFT sales events by calling `onItemSold` method.
 ```javascript
 import { Auth, ENFT } from 'enft';
 
-const auth = {
+const auth = new Auth({
     alchemy: {
         apiKey: 'YOUR_ALCHEMY_API_KEY'
     }
-};
+});
 
 const enft = new ENFT(auth);
 
