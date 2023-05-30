@@ -1,3 +1,28 @@
+# [1.2.0](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.1.1...v1.2.0) (2023-05-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ethers to v6.1.0 ([45ce96f](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/45ce96fd09c2410eed0e0f50511658880cfc87f9))
+* **deps:** update dependency ethers to v6.2.0 ([d4222c0](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/d4222c0be4ac9a5439d7cfaa05ea9fc532c81d54))
+* **deps:** update dependency ethers to v6.2.2 ([ad52aeb](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/ad52aeb656bd87465e7d4697785265c091b487f9))
+* **deps:** update dependency ethers to v6.2.3 ([bddb60c](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/bddb60c3fbe18973c7d0497bbd1c54902c9945cb))
+* **deps:** update dependency ethers to v6.3.0 ([432d17c](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/432d17cf9b51adee0d7811ca353c43b24019c231))
+* **deps:** update dependency ethers to v6.4.0 ([1602625](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/160262512a97e811d4ff8fbcccde1bd4c4619259))
+* **deps:** update dependency joi to v17.8.4 ([3469703](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/3469703590bedd8a0306f241ce4b2b69747fed4b))
+* **deps:** update dependency joi to v17.9.0 ([649ddf6](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/649ddf607a5051588f994a6b74fd340c4186576b))
+* **deps:** update dependency joi to v17.9.1 ([5b943e7](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/5b943e72388ffb3da3102f888439c20bb12c0174))
+* **deps:** update dependency joi to v17.9.2 ([f3a221f](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/f3a221f3b100db7e2bed9cf03a4069f88c576735))
+* **deps:** update dependency sharp to ^0.32.0 ([32d44b2](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/32d44b2e4c14c5226389856f48d91bcab962d4ba))
+* **deps:** update dependency sharp to v0.32.1 ([764ec67](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/764ec67a321df731630e8fa998dec3c0c5b5542b))
+* **deps:** update dependency twitter-api-v2 to v1.14.2 ([b16710c](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/b16710c1ede22976ef5753b4b9f5a67040e4dade))
+* **deps:** update dependency twitter-api-v2 to v1.14.3 ([d6c276c](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/d6c276c0f7c56778008369f8a5f9957582fc2cbd))
+
+
+### Features
+
+* add seaport 1.5 ([acdf55e](https://github.com/kenryu42/ethereum-nft-sales-bot/commit/acdf55e012151e50f4c43c2017baaaf59d92713c)), closes [#146](https://github.com/kenryu42/ethereum-nft-sales-bot/issues/146)
+
 ## [1.1.1](https://github.com/kenryu42/ethereum-nft-sales-bot/compare/v1.1.0...v1.1.1) (2023-03-06)
 
 
